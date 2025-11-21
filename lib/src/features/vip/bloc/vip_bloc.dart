@@ -1,0 +1,54 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
+
+import '../../../core/utils.dart';
+
+part 'vip_event.dart';
+part 'vip_state.dart';
+
+class VipBloc extends Bloc<VipEvent, VipState> {
+  VipBloc() : super(VipState()) {
+    on<VipEvent>(
+      (event, emit) => switch (event) {
+        CheckVip() => _checkVip(event, emit),
+      },
+    );
+  }
+
+  void _checkVip(
+    CheckVip event,
+    Emitter<VipState> emit,
+  ) async {
+    if (isIOS()) {
+      emit(state.copyWith(loading: true));
+
+      try {
+        final customerInfo = await Purchases.getCustomerInfo().timeout(
+          const Duration(seconds: 10),
+        );
+
+        final offerings = await Purchases.getOfferings().timeout(
+          const Duration(seconds: 10),
+        );
+
+        final offering = offerings.getOffering('paywall_1');
+
+        emit(state.copyWith(
+          loading: false,
+          isVip: customerInfo.entitlements.active.isNotEmpty,
+          offering: offering,
+        ));
+      } catch (e) {
+        logger(e);
+        emit(state.copyWith(loading: false));
+      }
+    } else {
+      emit(state.copyWith(
+        isVip: true,
+        loading: false,
+        offering: null,
+      ));
+    }
+  }
+}
