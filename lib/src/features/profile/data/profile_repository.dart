@@ -2,15 +2,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/constants.dart';
 
-abstract interface class SettingsRepository {
-  const SettingsRepository();
+abstract interface class ProfileRepository {
+  const ProfileRepository();
 
   String getCurrency();
   Future<void> setCurrency(String currency);
 }
 
-final class SettingsRepositoryImpl implements SettingsRepository {
-  SettingsRepositoryImpl({required SharedPreferences prefs}) : _prefs = prefs;
+final class ProfileRepositoryImpl implements ProfileRepository {
+  ProfileRepositoryImpl({required SharedPreferences prefs}) : _prefs = prefs;
 
   final SharedPreferences _prefs;
 

@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/widgets/button.dart';
-import '../../../core/widgets/svg_widget.dart';
 import '../../invoice/bloc/invoice_bloc.dart';
 import '../../item/bloc/item_bloc.dart';
 import '../../item/models/item.dart';
-import '../../settings/data/settings_repository.dart';
-import '../../settings/screens/settings_screen.dart';
+import '../../profile/data/profile_repository.dart';
 
 class TotalIncome extends StatelessWidget {
   const TotalIncome({super.key});
@@ -45,7 +41,7 @@ class TotalIncome extends StatelessWidget {
                   builder: (context, state) {
                     if (state is InvoiceLoaded) {
                       final currency =
-                          context.read<SettingsRepository>().getCurrency();
+                          context.read<ProfileRepository>().getCurrency();
 
                       final sorted = state.invoices.where((element) {
                         return element.paymentMethod.isNotEmpty;
@@ -91,12 +87,6 @@ class TotalIncome extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          Button(
-            child: const SvgWidget(Assets.settings),
-            onPressed: () {
-              context.push(SettingsScreen.routePath);
-            },
           ),
         ],
       ),

@@ -6,7 +6,7 @@ import '../../../core/widgets/appbar.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/search_field.dart';
 import '../../invoice/bloc/invoice_bloc.dart';
-import '../data/settings_repository.dart';
+import '../data/profile_repository.dart';
 
 class CurrencyData {
   final String symbol;
@@ -187,7 +187,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
   void onCurrency(String value) async {
     currency = value;
     setState(() {});
-    await context.read<SettingsRepository>().setCurrency(value);
+    await context.read<ProfileRepository>().setCurrency(value);
     if (mounted) {
       context.read<InvoiceBloc>().add(GetInvoices());
     }
@@ -196,7 +196,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
   @override
   void initState() {
     super.initState();
-    currency = context.read<SettingsRepository>().getCurrency();
+    currency = context.read<ProfileRepository>().getCurrency();
     filteredCurrencies = allCurrencies;
   }
 

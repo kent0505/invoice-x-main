@@ -85,7 +85,12 @@ class _ItemsScreenState extends State<ItemsScreen> {
                       }).toList();
 
                 return sorted.isEmpty
-                    ? const NoData()
+                    ? NoData(
+                        description:
+                            'You haven’t created any items yet. Tap the button below to create your first one.',
+                        buttonTitle: 'Create item',
+                        onPressed: () {},
+                      )
                     : ListView.builder(
                         padding: const EdgeInsets.all(16),
                         itemCount: sorted.length,

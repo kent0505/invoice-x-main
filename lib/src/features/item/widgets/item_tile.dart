@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/widgets/button.dart';
-import '../../settings/data/settings_repository.dart';
+import '../../profile/data/profile_repository.dart';
 import '../models/item.dart';
 
 class ItemTile extends StatelessWidget {
@@ -18,7 +18,7 @@ class ItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currency = context.read<SettingsRepository>().getCurrency();
+    final currency = context.read<ProfileRepository>().getCurrency();
 
     return Button(
       onPressed: onPressed,

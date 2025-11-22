@@ -1,40 +1,60 @@
 import 'package:flutter/material.dart';
 
 import '../constants.dart';
+import '../my_colors.dart';
+import 'main_button.dart';
 
-class NoData extends StatefulWidget {
-  const NoData({super.key});
+class NoData extends StatelessWidget {
+  const NoData({
+    super.key,
+    required this.description,
+    required this.buttonTitle,
+    required this.onPressed,
+  });
 
-  @override
-  State<NoData> createState() => _NoDataState();
-}
-
-class _NoDataState extends State<NoData> {
-  double _opacity = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      setState(() {
-        _opacity = 1;
-      });
-    });
-  }
+  final String description;
+  final String buttonTitle;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     return Center(
-      child: AnimatedOpacity(
-        duration: const Duration(milliseconds: 400),
-        opacity: _opacity,
-        child: const Text(
-          'Empty',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontFamily: AppFonts.w600,
-          ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'There is nothing',
+              style: TextStyle(
+                color: colors.text,
+                fontSize: 16,
+                fontFamily: AppFonts.w700,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              description,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: colors.text2,
+                fontSize: 14,
+                fontFamily: AppFonts.w400,
+              ),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                MainButton(
+                  title: buttonTitle,
+                  onPressed: onPressed,
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

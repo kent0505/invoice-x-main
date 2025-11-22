@@ -9,7 +9,7 @@ abstract final class AppFonts {
 abstract final class Constants {
   static const double appBarHeight = 60;
   static const double navBarHeight = 74;
-  static const double mainButtonWidth = 186;
+  static const double mainButtonWidth = 168;
   static const int milliseconds = 400;
 }
 
@@ -17,7 +17,8 @@ abstract final class Assets {
   static const addImage = 'assets/icons/add_image.svg';
   static const add = 'assets/icons/add.svg';
   static const back = 'assets/icons/back.svg';
-  static const calendar = 'assets/icons/calendar.svg';
+  static const checked = 'assets/icons/checked.svg';
+  static const close = 'assets/icons/close.svg';
   static const delete = 'assets/icons/delete.svg';
   static const edit = 'assets/icons/edit.svg';
   static const internet = 'assets/icons/internet.svg';
@@ -31,9 +32,9 @@ abstract final class Assets {
   static const paid2 = 'assets/icons/paid2.svg';
   static const paid3 = 'assets/icons/paid3.svg';
   static const paid4 = 'assets/icons/paid4.svg';
-  static const prev = 'assets/icons/prev.svg';
+  static const person = 'assets/icons/person.svg';
   static const print = 'assets/icons/print.svg';
-  static const right = 'assets/icons/right.svg';
+  static const search = 'assets/icons/search.svg';
   static const settings = 'assets/icons/settings.svg';
   static const share = 'assets/icons/share.svg';
   static const star = 'assets/icons/star.svg';
@@ -80,6 +81,9 @@ abstract final class Identifiers {
 }
 
 abstract final class Urls {
-  static const String privacy = 'https://instagram.com';
-  static const String terms = 'https://rezka.ag';
+  static const String privacy =
+      'https://docs.google.com/document/d/13WZ7lio-8L5SXEA00rpU28H1bpckcBx_4PLjzTeHqg0/edit?usp=sharing';
+  static const String terms =
+      'https://docs.google.com/document/d/123xMfvJu0xCYnm8-mYv9YcCIhBr5NqFhwP7fewTeNvI/edit?usp=sharing';
+  static const String contactUs = 'https://forms.gle/eG28LimZKZVWbhd7A';
 }

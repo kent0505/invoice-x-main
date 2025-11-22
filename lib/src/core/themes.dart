@@ -39,10 +39,15 @@ class Themes {
       // SCAFFOLD
       scaffoldBackgroundColor: colors.bg,
 
+      appBarTheme: AppBarTheme(
+        backgroundColor: colors.bg,
+        elevation: 0,
+      ),
+
       // DIALOG
       dialogTheme: DialogThemeData(
         // insetPadding: EdgeInsets.zero,
-        insetPadding: const EdgeInsets.symmetric(horizontal: 46),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 50),
         backgroundColor: colors.tertiary2,
         elevation: 0,
         shape: RoundedRectangleBorder(

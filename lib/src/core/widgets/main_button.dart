@@ -31,6 +31,7 @@ class MainButton extends StatelessWidget {
       height: 58,
       width: width,
       margin: EdgeInsets.symmetric(horizontal: horizontal),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       decoration: BoxDecoration(
         color: color ?? (active ? colors.accent : colors.tertiary2),
         borderRadius: BorderRadius.circular(20),

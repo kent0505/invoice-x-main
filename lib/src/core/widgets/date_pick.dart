@@ -96,7 +96,7 @@ class _DatePickState extends State<DatePick> {
                 Button(
                   onPressed: () => _changeMonth(-1),
                   child: const SvgWidget(
-                    Assets.prev,
+                    Assets.back,
                     color: Color(0xffFF4400),
                   ),
                 ),

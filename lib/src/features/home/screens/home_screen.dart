@@ -2,10 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../core/constants.dart';
+import '../../../core/widgets/button.dart';
+import '../../../core/widgets/svg_widget.dart';
+import '../../client/screens/clients_tab.dart';
 import '../../internet/bloc/internet_bloc.dart';
-import '../../internet/widgets/no_internet.dart';
+import '../../internet/widgets/no_internet_dialog.dart';
+import '../../invoice/screens/invoices_tab.dart';
+import '../../profile/screens/profile_tab.dart';
 import '../../vip/bloc/vip_bloc.dart';
 import '../../vip/screens/vip_screen.dart';
+import '../widgets/home_appbar.dart';
 import '../widgets/nav_bar.dart';
 import '../bloc/home_bloc.dart';
 
@@ -38,18 +45,41 @@ class HomeScreen extends StatelessWidget {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        body: BlocBuilder<InternetBloc, bool>(
+        appBar: HomeAppbar(
+          title: switch (index) {
+            0 => 'Invoices',
+            1 => 'Clients',
+            2 => 'Profile',
+            _ => '',
+          },
+          right: index == 0
+              ? Button(
+                  onPressed: () {},
+                  child: const SvgWidget(Assets.search),
+                )
+              : null,
+        ),
+        body: BlocConsumer<InternetBloc, bool>(
+          listener: (context, hasConnection) {
+            if (!hasConnection) {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) {
+                  return const NoInternetDialog();
+                },
+              );
+            }
+          },
           builder: (context, hasConnection) {
-            return hasConnection
-                ? IndexedStack(
-                    index: index,
-                    children: const [
-                      Center(child: Text('1')),
-                      Center(child: Text('2')),
-                      Center(child: Text('3')),
-                    ],
-                  )
-                : const NoInternet();
+            return IndexedStack(
+              index: index,
+              children: const [
+                InvoicesTab(),
+                ClientsTab(),
+                ProfileTab(),
+              ],
+            );
           },
         ),
         bottomNavigationBar: const NavBar(),

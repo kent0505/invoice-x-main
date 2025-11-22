@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../features/client/models/client.dart';
 import 'widgets/snack_widget.dart';
@@ -73,6 +74,29 @@ Future<Client> getContact(BuildContext context) async {
     );
   }
   return Client(id: 0, billTo: '', name: '', phone: '', email: '', address: '');
+}
+
+Future<void> launchURL(
+  BuildContext context,
+  String url,
+) async {
+  try {
+    final uri = Uri.parse(url);
+    if (!await launchUrl(
+      uri,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw Exception('Could not launch $uri');
+    }
+  } catch (e) {
+    logger(e);
+    if (context.mounted) {
+      SnackWidget.show(
+        context,
+        message: e.toString(),
+      );
+    }
+  }
 }
 
 extension FirstWhereOrNullExtension<T> on Iterable<T> {

@@ -28,7 +28,12 @@ class BusinessScreen extends StatelessWidget {
             child: BlocBuilder<BusinessBloc, List<Business>>(
               builder: (context, businesses) {
                 return businesses.isEmpty
-                    ? const NoData()
+                    ? NoData(
+                        description:
+                            'You haven’t created any business account yet. Tap the button below to create your first one.',
+                        buttonTitle: 'Create business account',
+                        onPressed: () {},
+                      )
                     : ListView.builder(
                         padding: const EdgeInsets.all(16),
                         itemCount: businesses.length,

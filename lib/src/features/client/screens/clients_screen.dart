@@ -76,7 +76,12 @@ class _ClientsScreenState extends State<ClientsScreen> {
                       }).toList();
 
                 return sorted.isEmpty
-                    ? const NoData()
+                    ? NoData(
+                        description:
+                            'You haven’t created any clients yet. Tap the button below to create your first one.',
+                        buttonTitle: 'Create client',
+                        onPressed: () {},
+                      )
                     : ListView.builder(
                         padding: const EdgeInsets.all(16),
                         itemCount: sorted.length,

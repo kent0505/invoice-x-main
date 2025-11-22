@@ -15,7 +15,7 @@ import '../../business/models/business.dart';
 import '../../client/bloc/client_bloc.dart';
 import '../../item/bloc/item_bloc.dart';
 import '../../item/models/item.dart';
-import '../../settings/data/settings_repository.dart';
+import '../../profile/data/profile_repository.dart';
 import '../bloc/invoice_bloc.dart';
 import '../models/invoice.dart';
 import '../screens/invoice_details_screen.dart';
@@ -38,7 +38,7 @@ class InvoiceTile extends StatelessWidget {
       },
     );
 
-    final currency = context.read<SettingsRepository>().getCurrency();
+    final currency = context.read<ProfileRepository>().getCurrency();
 
     return Slidable(
       closeOnScroll: true,

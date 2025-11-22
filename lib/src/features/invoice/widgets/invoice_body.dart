@@ -10,7 +10,7 @@ import '../../business/models/business.dart';
 import '../../client/models/client.dart';
 import '../../item/models/item.dart';
 import '../../item/widgets/item_field.dart';
-import '../../settings/data/settings_repository.dart';
+import '../../profile/data/profile_repository.dart';
 import '../bloc/invoice_bloc.dart';
 import 'photos_list.dart';
 import '../models/photo.dart';
@@ -85,7 +85,7 @@ class InvoiceBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currency = context.read<SettingsRepository>().getCurrency();
+    final currency = context.read<ProfileRepository>().getCurrency();
     final uniqueInvoiceIDs = <int>{};
     final uniqueItems = <Item>[];
 

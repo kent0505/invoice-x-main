@@ -19,7 +19,7 @@ import '../../../core/widgets/svg_widget.dart';
 import '../../business/bloc/business_bloc.dart';
 import '../../client/bloc/client_bloc.dart';
 import '../../item/bloc/item_bloc.dart';
-import '../../settings/data/settings_repository.dart';
+import '../../profile/data/profile_repository.dart';
 import '../widgets/invoice_template.dart';
 import '../widgets/photos_list.dart';
 import '../bloc/invoice_bloc.dart';
@@ -171,7 +171,7 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final currency = context.read<SettingsRepository>().getCurrency();
+    final currency = context.read<ProfileRepository>().getCurrency();
 
     double subtotal = 0;
     for (final item in invoice.items) {
@@ -310,7 +310,7 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
                               _Data(
                                 title: 'Marked as Paid',
                                 data: formatTimestamp(invoice.paymentDate),
-                                asset: Assets.calendar,
+                                asset: Assets.add,
                               ),
                               const _Divider(),
                             ],
