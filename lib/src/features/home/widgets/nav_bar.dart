@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/my_colors.dart';
 import '../../../core/widgets/svg_widget.dart';
 import '../../../core/widgets/button.dart';
 import '../bloc/home_bloc.dart';

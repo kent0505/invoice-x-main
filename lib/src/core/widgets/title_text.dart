@@ -3,21 +3,35 @@ import 'package:flutter/material.dart';
 import '../constants.dart';
 
 class TitleText extends StatelessWidget {
-  const TitleText({super.key, required this.title});
+  const TitleText({
+    super.key,
+    required this.title,
+    this.left = 0,
+  });
 
   final String title;
+  final double left;
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: Text(
-        title,
-        style: const TextStyle(
-          color: Color(0xff7D81A3),
-          fontSize: 14,
-          fontFamily: AppFonts.w400,
-        ),
+      padding: EdgeInsets.only(
+        bottom: 8,
+        left: left,
+      ),
+      child: Row(
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              color: colors.text,
+              fontSize: 12,
+              fontFamily: AppFonts.w500,
+            ),
+          ),
+        ],
       ),
     );
   }

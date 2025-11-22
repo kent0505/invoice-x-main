@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../data/invoice_repository.dart';
+import '../data/photo_repository.dart';
 import '../models/invoice.dart';
 import '../models/photo.dart';
 
@@ -9,10 +10,14 @@ part 'invoice_event.dart';
 part 'invoice_state.dart';
 
 class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
-  final InvoiceRepository _repository;
+  final InvoiceRepository _invoiceRepository;
+  final PhotoRepository _photoRepository;
 
-  InvoiceBloc({required InvoiceRepository repository})
-      : _repository = repository,
+  InvoiceBloc({
+    required InvoiceRepository invoiceRepository,
+    required PhotoRepository photoRepository,
+  })  : _invoiceRepository = invoiceRepository,
+        _photoRepository = photoRepository,
         super(InvoiceInitial()) {
     on<InvoiceEvent>(
       (event, emit) => switch (event) {
@@ -28,8 +33,8 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     GetInvoices event,
     Emitter<InvoiceState> emit,
   ) async {
-    final invoices = await _repository.getInvoices();
-    final photos = await _repository.getPhotos();
+    final invoices = await _invoiceRepository.getInvoices();
+    final photos = await _photoRepository.getPhotos();
     emit(InvoiceLoaded(
       invoices: invoices,
       photos: photos,
@@ -40,8 +45,8 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     AddInvoice event,
     Emitter<InvoiceState> emit,
   ) async {
-    await _repository.addInvoice(event.invoice);
-    await _repository.addPhotos(event.photos);
+    await _invoiceRepository.addInvoice(event.invoice);
+    await _photoRepository.addPhotos(event.photos);
     add(GetInvoices());
   }
 
@@ -49,9 +54,9 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     EditInvoice event,
     Emitter<InvoiceState> emit,
   ) async {
-    await _repository.editInvoice(event.invoice);
-    await _repository.deletePhotos(event.invoice);
-    await _repository.addPhotos(event.invoice.photos);
+    await _invoiceRepository.editInvoice(event.invoice);
+    await _photoRepository.deletePhotos(event.invoice);
+    await _photoRepository.addPhotos(event.invoice.photos);
     add(GetInvoices());
   }
 
@@ -59,9 +64,9 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     DeleteInvoice event,
     Emitter<InvoiceState> emit,
   ) async {
-    await _repository.deleteInvoice(event.invoice);
-    await _repository.deleteItems(event.invoice);
-    await _repository.deletePhotos(event.invoice);
+    await _invoiceRepository.deleteInvoice(event.invoice);
+    await _invoiceRepository.deleteItems(event.invoice);
+    await _photoRepository.deletePhotos(event.invoice);
     add(GetInvoices());
   }
 }

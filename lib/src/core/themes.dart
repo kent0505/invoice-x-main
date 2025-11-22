@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'constants.dart';
 
-import 'my_colors.dart';
-
 class Themes {
   final bool isDark;
 
@@ -46,7 +44,6 @@ class Themes {
 
       // DIALOG
       dialogTheme: DialogThemeData(
-        // insetPadding: EdgeInsets.zero,
         insetPadding: const EdgeInsets.symmetric(horizontal: 50),
         backgroundColor: colors.tertiary2,
         elevation: 0,
@@ -71,36 +68,27 @@ class Themes {
       // TEXTFIELD
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: colors.tertiary2,
+        fillColor: colors.tertiary1,
         contentPadding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 16,
+          vertical: 10,
+          horizontal: 12,
         ),
         hintStyle: TextStyle(
           color: colors.text2,
-          fontSize: 16,
-          fontFamily: AppFonts.w500,
+          fontSize: 14,
+          fontFamily: AppFonts.w400,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            width: 1,
-            color: colors.tertiary3,
-          ),
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Colors.transparent),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            width: 1,
-            color: colors.tertiary3,
-          ),
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Colors.transparent),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(
-            width: 1,
-            color: colors.tertiary3,
-          ),
+          borderRadius: BorderRadius.circular(16),
+          borderSide: const BorderSide(color: Colors.transparent),
         ),
       ),
       extensions: [colors],

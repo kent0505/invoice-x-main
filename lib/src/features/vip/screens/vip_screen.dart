@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/my_colors.dart';
 import '../../../core/utils.dart';
 import '../../../core/widgets/dialog_widget.dart';
 import '../../../core/widgets/main_button.dart';

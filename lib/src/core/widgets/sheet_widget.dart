@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+
+import '../constants.dart';
+
+class SheetWidget extends StatelessWidget {
+  const SheetWidget({super.key, required this.child});
+
+  final Widget child;
+
+  static void show({
+    required BuildContext context,
+    required Widget child,
+  }) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      builder: (context) {
+        return SheetWidget(child: child);
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: colors.bg,
+        borderRadius: const BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      child: Column(
+        children: [
+          Container(
+            height: 5,
+            width: 36,
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            decoration: BoxDecoration(
+              color: colors.tertiary3,
+              borderRadius: BorderRadius.circular(5),
+            ),
+          ),
+          child,
+        ],
+      ),
+    );
+  }
+}
+
+class SheetTitle extends StatelessWidget {
+  const SheetTitle({super.key, required this.title});
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
+    return Text(
+      title,
+      style: TextStyle(
+        color: colors.text,
+        fontSize: 18,
+        fontFamily: AppFonts.w600,
+      ),
+    );
+  }
+}

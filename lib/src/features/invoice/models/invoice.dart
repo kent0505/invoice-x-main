@@ -3,7 +3,7 @@ import '../../client/models/client.dart';
 import '../../item/models/item.dart';
 import 'photo.dart';
 
-class Invoice {
+final class Invoice {
   Invoice({
     this.id = 0,
     required this.number,

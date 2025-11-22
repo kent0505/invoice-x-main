@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../core/constants.dart';
 import '../../../core/widgets/appbar.dart';
+import '../../../core/widgets/field.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/no_data.dart';
-import '../../../core/widgets/search_field.dart';
 import '../bloc/client_bloc.dart';
 import '../models/client.dart';
 import '../widgets/client_tile.dart';
@@ -58,9 +59,11 @@ class _ClientsScreenState extends State<ClientsScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: SearchField(
+            child: Field(
               controller: searchController,
               onChanged: onSearch,
+              hintText: 'Search client',
+              asset: Assets.search,
             ),
           ),
           Expanded(

@@ -9,10 +9,7 @@ abstract interface class InvoiceRepository {
   const InvoiceRepository();
 
   Future<List<Invoice>> getInvoices();
-  Future<List<Photo>> getPhotos();
   Future<void> addInvoice(Invoice invoice);
-  Future<void> addPhotos(List<Photo> photos);
-  Future<void> deletePhotos(Invoice invoice);
   Future<void> editInvoice(Invoice invoice);
   Future<void> deleteInvoice(Invoice invoice);
   Future<void> deleteItems(Invoice invoice);
@@ -28,17 +25,6 @@ final class InvoiceRepositoryImpl implements InvoiceRepository {
     try {
       final maps = await _db.query(Invoice.table);
       return maps.map((map) => Invoice.fromMap(map)).toList();
-    } catch (e) {
-      logger(e);
-      return [];
-    }
-  }
-
-  @override
-  Future<List<Photo>> getPhotos() async {
-    try {
-      final maps = await _db.query(Photo.table);
-      return maps.map((map) => Photo.fromMap(map)).toList();
     } catch (e) {
       logger(e);
       return [];
@@ -79,33 +65,6 @@ final class InvoiceRepositoryImpl implements InvoiceRepository {
     try {
       await _db.delete(
         Invoice.table,
-        where: 'id = ?',
-        whereArgs: [invoice.id],
-      );
-    } catch (e) {
-      logger(e);
-    }
-  }
-
-  @override
-  Future<void> addPhotos(List<Photo> photos) async {
-    try {
-      for (final photo in photos) {
-        await _db.insert(
-          Photo.table,
-          photo.toMap(),
-        );
-      }
-    } catch (e) {
-      logger(e);
-    }
-  }
-
-  @override
-  Future<void> deletePhotos(Invoice invoice) async {
-    try {
-      await _db.delete(
-        Photo.table,
         where: 'id = ?',
         whereArgs: [invoice.id],
       );

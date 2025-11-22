@@ -1,3 +1,5 @@
+export './my_colors.dart';
+
 abstract final class AppFonts {
   static const w400 = 'w400';
   static const w500 = 'w500';

@@ -1,35 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/widgets/appbar.dart';
 import '../../../core/widgets/button.dart';
-import '../../../core/widgets/search_field.dart';
+import '../../../core/widgets/field.dart';
+import '../../../core/widgets/sheet_widget.dart';
+import '../../../core/widgets/svg_widget.dart';
+import '../../../core/widgets/title_text.dart';
 import '../../invoice/bloc/invoice_bloc.dart';
 import '../data/profile_repository.dart';
 
 class CurrencyData {
+  const CurrencyData(
+    this.symbol,
+    this.countryCode,
+    this.name,
+  );
+
   final String symbol;
   final String countryCode;
   final String name;
-
-  const CurrencyData(this.symbol, this.countryCode, this.name);
 }
 
-class CurrencyScreen extends StatefulWidget {
-  const CurrencyScreen({super.key});
-
-  static const routePath = '/CurrencyScreen';
+class CurrencySheet extends StatefulWidget {
+  const CurrencySheet({super.key});
 
   @override
-  State<CurrencyScreen> createState() => _CurrencyScreenState();
+  State<CurrencySheet> createState() => _CurrencySheetState();
 }
 
-class _CurrencyScreenState extends State<CurrencyScreen> {
-  String currency = '';
-  String searchQuery = '';
-  late List<CurrencyData> filteredCurrencies;
-  final TextEditingController _searchController = TextEditingController();
+class _CurrencySheetState extends State<CurrencySheet> {
+  final searchController = TextEditingController();
 
   List<CurrencyData> allCurrencies = [
     const CurrencyData('\$', 'USD', 'US Dollar'),
@@ -69,7 +71,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
     const CurrencyData('AU\$', 'AUD', 'Australian Dollar'),
     const CurrencyData('NZ\$', 'NZD', 'New Zealand Dollar'),
     const CurrencyData('CHF', 'CHF', 'Swiss Franc'),
-    const CurrencyData('\$', 'MXN', 'Mexican Peso'),
+    const CurrencyData('M\$', 'MXN', 'Mexican Peso'),
     const CurrencyData('﷼', 'SAR', 'Saudi Riyal'),
     const CurrencyData('\$', 'ARS', 'Argentine Peso'),
     const CurrencyData('BYN', 'BYN', 'Belarusian Ruble'),
@@ -126,22 +128,22 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
     const CurrencyData('﷼', 'MAD', 'Moroccan Dirham'),
     const CurrencyData('MT', 'MZN', 'Mozambican Metical'),
     const CurrencyData('K', 'MMK', 'Myanmar Kyat'),
-    const CurrencyData('\$', 'NAD', 'Namibian Dollar'),
+    const CurrencyData('N\$', 'NAD', 'Namibian Dollar'),
     const CurrencyData('₨', 'NPR', 'Nepalese Rupee'),
-    const CurrencyData('\$', 'NIO', 'Nicaraguan Córdoba'),
+    const CurrencyData('C\$', 'NIO', 'Nicaraguan Córdoba'),
     const CurrencyData('kr', 'NOK', 'Norwegian Krone'),
     const CurrencyData('﷼', 'OMR', 'Omani Rial'),
-    const CurrencyData('\$', 'PAB', 'Panamanian Balboa'),
+    const CurrencyData('B/.', 'PAB', 'Panamanian Balboa'),
     const CurrencyData('K', 'PGK', 'Papua New Guinean Kina'),
     const CurrencyData('S/.', 'PEN', 'Peruvian Nuevo Sol'),
     const CurrencyData('﷼', 'QAR', 'Qatari Rial'),
     const CurrencyData('₨', 'SCR', 'Seychellois Rupee'),
     const CurrencyData('Le', 'SLL', 'Sierra Leonean Leone'),
-    const CurrencyData('\$', 'SBD', 'Solomon Islands Dollar'),
+    const CurrencyData('SI\$', 'SBD', 'Solomon Islands Dollar'),
     const CurrencyData('S', 'SOS', 'Somali Shilling'),
     const CurrencyData('Rs', 'LKR', 'Sri Lankan Rupee'),
     const CurrencyData('£', 'SDP', 'Sudanese Pound'),
-    const CurrencyData('\$', 'SRD', 'Surinamese Dollar'),
+    const CurrencyData('Sr\$', 'SRD', 'Surinamese Dollar'),
     const CurrencyData('E', 'SZL', 'Swazi Lilangeni'),
     const CurrencyData('kr', 'SEK', 'Swedish Krona'),
     const CurrencyData('CHF', 'CHF', 'Swiss Franc'),
@@ -150,7 +152,7 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
     const CurrencyData('TSh', 'TZS', 'Tanzanian Shilling'),
     const CurrencyData('฿', 'THB', 'Thai Baht'),
     const CurrencyData('T\$', 'TOP', 'Tongan Paʻanga'),
-    const CurrencyData('\$', 'TTD', 'Trinidad and Tobago Dollar'),
+    const CurrencyData('TT\$', 'TTD', 'Trinidad and Tobago Dollar'),
     const CurrencyData('DT', 'TND', 'Tunisian Dinar'),
     const CurrencyData('₼', 'TMT', 'Turkmenistani Manat'),
     const CurrencyData('USh', 'UGX', 'Ugandan Shilling'),
@@ -160,116 +162,92 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
     const CurrencyData('VT', 'VUV', 'Vanuatu Vatu'),
     const CurrencyData('Bs', 'VEF', 'Venezuelan Bolívar'),
     const CurrencyData('₫', 'VND', 'Vietnamese Dong'),
-    const CurrencyData('\$', 'XCD', 'East Caribbean Dollar'),
+    const CurrencyData('EC\$', 'XCD', 'East Caribbean Dollar'),
     const CurrencyData('CFA', 'XAF', 'Central African CFA Franc'),
     const CurrencyData('﷼', 'YER', 'Yemeni Rial'),
     const CurrencyData('ZK', 'ZMW', 'Zambian Kwacha'),
     const CurrencyData('Z\$', 'ZWL', 'Zimbabwean Dollar'),
   ];
 
-  void _filterCurrencies(String query) {
-    setState(() {
-      searchQuery = query;
-      if (query.isEmpty) {
-        filteredCurrencies = allCurrencies;
-      } else {
-        filteredCurrencies = allCurrencies.where((currency) {
-          return currency.name.toLowerCase().contains(query.toLowerCase()) ||
-              currency.countryCode
-                  .toLowerCase()
-                  .contains(query.toLowerCase()) ||
-              currency.symbol.toLowerCase().contains(query.toLowerCase());
-        }).toList();
-      }
-    });
+  void onSearch(String _) {
+    setState(() {});
   }
 
-  void onCurrency(String value) async {
-    currency = value;
+  void onCurrency(CurrencyData value) async {
+    await context.read<ProfileRepository>().setCurrency(value.symbol);
     setState(() {});
-    await context.read<ProfileRepository>().setCurrency(value);
     if (mounted) {
       context.read<InvoiceBloc>().add(GetInvoices());
     }
   }
 
   @override
-  void initState() {
-    super.initState();
-    currency = context.read<ProfileRepository>().getCurrency();
-    filteredCurrencies = allCurrencies;
-  }
-
-  @override
   void dispose() {
-    _searchController.dispose();
+    searchController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const Appbar(title: 'Currency'),
-      body: Column(
+    final colors = Theme.of(context).extension<MyColors>()!;
+
+    final query = searchController.text.toLowerCase();
+
+    final currencies = query.isEmpty
+        ? allCurrencies
+        : allCurrencies.where((element) {
+            final name = element.name.toLowerCase();
+            final country = element.countryCode.toLowerCase();
+
+            return name.contains(query) || country.contains(query);
+          }).toList();
+
+    return Expanded(
+      child: Column(
         children: [
+          Row(
+            children: [
+              const SizedBox(width: 16),
+              const SheetTitle(title: 'Currency'),
+              const Spacer(),
+              Button(
+                onPressed: () {
+                  context.pop();
+                },
+                child: SvgWidget(
+                  Assets.close,
+                  color: colors.text2,
+                ),
+              ),
+              const SizedBox(width: 16),
+            ],
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(
+              vertical: 8,
               horizontal: 16,
-            ).copyWith(bottom: 16),
-            child: SearchField(
-              controller: _searchController,
-              onChanged: _filterCurrencies,
+            ),
+            child: Field(
+              controller: searchController,
+              onChanged: onSearch,
+              hintText: 'Search currency',
+              asset: Assets.search,
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(16),
-          //   child: TextField(
-          //     controller: _searchController,
-          //     style: const TextStyle(
-          //       color: Colors.black,
-          //       fontSize: 16,
-          //       fontFamily: AppFonts.w400,
-          //     ),
-          //     decoration: InputDecoration(
-          //       filled: true,
-          //       fillColor: Color(0xff787880).withValues(alpha: 0.12),
-          //       prefixIcon: Icon(
-          //         Icons.search_rounded,
-          //         color: Color(0xff3C3C43).withValues(alpha: 0.6),
-          //       ),
-          //       hintText: 'Search',
-          //       hintStyle: TextStyle(
-          //         color: Color(0xff3C3C43).withValues(alpha: 0.6),
-          //         fontSize: 16,
-          //         fontFamily: AppFonts.w400,
-          //       ),
-          //       contentPadding: const EdgeInsets.symmetric(
-          //         vertical: 8,
-          //         horizontal: 16,
-          //       ),
-          //       focusedBorder: OutlineInputBorder(
-          //         borderRadius: BorderRadius.circular(10),
-          //         borderSide: const BorderSide(color: Colors.transparent),
-          //       ),
-          //       enabledBorder: OutlineInputBorder(
-          //         borderRadius: BorderRadius.circular(10),
-          //         borderSide: const BorderSide(color: Colors.transparent),
-          //       ),
-          //     ),
-          //     onTapOutside: (event) {
-          //       FocusManager.instance.primaryFocus?.unfocus();
-          //     },
-          //     onChanged: _filterCurrencies,
-          //   ),
-          // ),
+          const SizedBox(height: 8),
+          const TitleText(
+            title: 'List of currencies',
+            left: 16,
+          ),
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: filteredCurrencies.length,
+              itemCount: currencies.length,
               itemBuilder: (context, index) {
+                final currencyData = currencies[index];
+
                 return _CurrencyTile(
-                  currencyData: filteredCurrencies[index],
-                  current: currency,
+                  currencyData: currencyData,
                   onPressed: onCurrency,
                 );
               },
@@ -284,27 +262,29 @@ class _CurrencyScreenState extends State<CurrencyScreen> {
 class _CurrencyTile extends StatelessWidget {
   const _CurrencyTile({
     required this.currencyData,
-    required this.current,
     required this.onPressed,
   });
 
   final CurrencyData currencyData;
-  final String current;
-  final void Function(String) onPressed;
+  final void Function(CurrencyData) onPressed;
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
+    final currency = context.read<ProfileRepository>().getCurrency();
+
     return Button(
       onPressed: () {
-        onPressed(currencyData.symbol);
+        onPressed(currencyData);
       },
       child: Container(
         height: 44,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           border: Border(
             bottom: BorderSide(
-              width: 0.5,
-              color: Color(0xff7D81A3),
+              width: 1,
+              color: colors.tertiary3,
             ),
           ),
         ),
@@ -317,28 +297,29 @@ class _CurrencyTile extends StatelessWidget {
                     width: 40,
                     child: Text(
                       currencyData.symbol,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontFamily: AppFonts.w400,
+                      style: TextStyle(
+                        color: colors.text,
+                        fontSize: 16,
+                        fontFamily: AppFonts.w500,
                       ),
                     ),
                   ),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Text(
                       currencyData.name,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        fontFamily: AppFonts.w400,
+                      style: TextStyle(
+                        color: colors.text,
+                        fontSize: 16,
+                        fontFamily: AppFonts.w500,
                       ),
                     ),
                   ),
                   Text(
                     currencyData.countryCode,
-                    style: const TextStyle(
-                      color: Color(0xff7D81A3),
-                      fontSize: 12,
+                    style: TextStyle(
+                      color: colors.text2,
+                      fontSize: 14,
                       fontFamily: AppFonts.w400,
                     ),
                   ),
@@ -346,10 +327,10 @@ class _CurrencyTile extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 8),
-            if (currencyData.symbol == current)
-              const Icon(
-                Icons.check,
-                color: Color(0xffFF4400),
+            if (currencyData.symbol == currency)
+              SvgWidget(
+                Assets.checked,
+                color: colors.accent,
               ),
           ],
         ),

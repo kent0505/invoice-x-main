@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/my_colors.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/svg_widget.dart';
 

@@ -1,4 +1,4 @@
-class Photo {
+final class Photo {
   Photo({
     this.id = 0,
     required this.path,

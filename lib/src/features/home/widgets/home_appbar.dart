@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/my_colors.dart';
 
 class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
   const HomeAppbar({

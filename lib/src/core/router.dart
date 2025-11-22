@@ -25,7 +25,6 @@ import '../features/item/screens/edit_item_screen.dart';
 import '../features/item/screens/items_screen.dart';
 import '../features/onboard/screens/onboard_screen.dart';
 import '../features/pro/screens/pro_page.dart';
-import '../features/profile/screens/currency_screen.dart';
 import '../features/splash/screens/splash_screen.dart';
 
 final routerConfig = GoRouter(
@@ -52,13 +51,6 @@ final routerConfig = GoRouter(
       builder: (context, state) => ProScreen(
         identifier: state.extra as String,
       ),
-    ),
-
-    // settings
-
-    GoRoute(
-      path: CurrencyScreen.routePath,
-      builder: (context, state) => const CurrencyScreen(),
     ),
 
     // invoice

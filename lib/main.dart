@@ -19,6 +19,7 @@ import 'src/features/home/bloc/home_bloc.dart';
 import 'src/features/internet/bloc/internet_bloc.dart';
 import 'src/features/invoice/bloc/invoice_bloc.dart';
 import 'src/features/invoice/data/invoice_repository.dart';
+import 'src/features/invoice/data/photo_repository.dart';
 import 'src/features/invoice/models/invoice.dart';
 import 'src/features/invoice/models/photo.dart';
 import 'src/features/item/bloc/item_bloc.dart';
@@ -88,6 +89,9 @@ void main() async {
         RepositoryProvider<InvoiceRepository>(
           create: (context) => InvoiceRepositoryImpl(db: db),
         ),
+        RepositoryProvider<PhotoRepository>(
+          create: (context) => PhotoRepositoryImpl(db: db),
+        ),
         RepositoryProvider<BusinessRepository>(
           create: (context) => BusinessRepositoryImpl(db: db),
         ),
@@ -109,7 +113,8 @@ void main() async {
           ),
           BlocProvider(
             create: (context) => InvoiceBloc(
-              repository: context.read<InvoiceRepository>(),
+              invoiceRepository: context.read<InvoiceRepository>(),
+              photoRepository: context.read<PhotoRepository>(),
             ),
           ),
           BlocProvider(
