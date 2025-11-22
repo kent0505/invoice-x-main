@@ -3,14 +3,12 @@ import 'package:flutter/material.dart';
 import '../../../core/constants.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../business/widgets/business_field.dart';
-import 'client_bill_to.dart';
 import 'client_import_contact.dart';
 
 class ClientBody extends StatelessWidget {
   const ClientBody({
     super.key,
     required this.active,
-    required this.billToController,
     required this.nameController,
     required this.phoneController,
     required this.emailController,
@@ -21,7 +19,6 @@ class ClientBody extends StatelessWidget {
   });
 
   final bool active;
-  final TextEditingController billToController;
   final TextEditingController nameController;
   final TextEditingController phoneController;
   final TextEditingController emailController;
@@ -38,7 +35,6 @@ class ClientBody extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              ClientBillTo(controller: billToController),
               const SizedBox(height: 20),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8),

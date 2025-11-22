@@ -24,10 +24,9 @@ class EditClientScreen extends StatefulWidget {
 }
 
 class _EditClientScreenState extends State<EditClientScreen> {
-  final billToController = TextEditingController();
   final nameController = TextEditingController();
-  final phoneController = TextEditingController();
   final emailController = TextEditingController();
+  final phoneController = TextEditingController();
   final addressController = TextEditingController();
 
   bool active = true;
@@ -43,8 +42,8 @@ class _EditClientScreenState extends State<EditClientScreen> {
   void onContact() async {
     await getContact(context).then((value) {
       nameController.text = value.name;
-      phoneController.text = value.phone;
       emailController.text = value.email;
+      phoneController.text = value.phone;
       addressController.text = value.address;
       checkActive('');
     });
@@ -65,10 +64,9 @@ class _EditClientScreenState extends State<EditClientScreen> {
 
   void onEdit() {
     final client = widget.client;
-    client.billTo = billToController.text;
     client.name = nameController.text;
-    client.phone = phoneController.text;
     client.email = emailController.text;
+    client.phone = phoneController.text;
     client.address = addressController.text;
     context.read<ClientBloc>().add(EditClient(client: client));
     context.pop();
@@ -77,19 +75,17 @@ class _EditClientScreenState extends State<EditClientScreen> {
   @override
   void initState() {
     super.initState();
-    billToController.text = widget.client.billTo;
     nameController.text = widget.client.name;
-    phoneController.text = widget.client.phone;
     emailController.text = widget.client.email;
+    phoneController.text = widget.client.phone;
     addressController.text = widget.client.address;
   }
 
   @override
   void dispose() {
-    billToController.dispose();
     nameController.dispose();
-    phoneController.dispose();
     emailController.dispose();
+    phoneController.dispose();
     addressController.dispose();
     super.dispose();
   }
@@ -107,10 +103,9 @@ class _EditClientScreenState extends State<EditClientScreen> {
       ),
       body: ClientBody(
         active: active,
-        billToController: billToController,
         nameController: nameController,
-        phoneController: phoneController,
         emailController: emailController,
+        phoneController: phoneController,
         addressController: addressController,
         onContact: onContact,
         onContinue: onEdit,

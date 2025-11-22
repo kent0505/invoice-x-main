@@ -40,6 +40,12 @@ class Themes {
       appBarTheme: AppBarTheme(
         backgroundColor: colors.bg,
         elevation: 0,
+        centerTitle: true,
+        titleTextStyle: TextStyle(
+          color: colors.text,
+          fontSize: 18,
+          fontFamily: AppFonts.w600,
+        ),
       ),
 
       // DIALOG

@@ -18,10 +18,9 @@ class CreateClientScreen extends StatefulWidget {
 }
 
 class _CreateClientScreenState extends State<CreateClientScreen> {
-  final billToController = TextEditingController();
   final nameController = TextEditingController();
-  final phoneController = TextEditingController();
   final emailController = TextEditingController();
+  final phoneController = TextEditingController();
   final addressController = TextEditingController();
 
   bool active = false;
@@ -37,8 +36,8 @@ class _CreateClientScreenState extends State<CreateClientScreen> {
   void onContact() async {
     await getContact(context).then((value) {
       nameController.text = value.name;
-      phoneController.text = value.phone;
       emailController.text = value.email;
+      phoneController.text = value.phone;
       addressController.text = value.address;
       checkActive('');
     });
@@ -48,10 +47,9 @@ class _CreateClientScreenState extends State<CreateClientScreen> {
     context.read<ClientBloc>().add(
           AddClient(
             client: Client(
-              billTo: billToController.text,
               name: nameController.text,
-              phone: phoneController.text,
               email: emailController.text,
+              phone: phoneController.text,
               address: addressController.text,
             ),
           ),
@@ -61,10 +59,9 @@ class _CreateClientScreenState extends State<CreateClientScreen> {
 
   @override
   void dispose() {
-    billToController.dispose();
     nameController.dispose();
-    phoneController.dispose();
     emailController.dispose();
+    phoneController.dispose();
     addressController.dispose();
     super.dispose();
   }
@@ -73,10 +70,9 @@ class _CreateClientScreenState extends State<CreateClientScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: const Appbar(title: 'New Client'),
+      appBar: const Appbar(title: 'Create new client'),
       body: ClientBody(
         active: active,
-        billToController: billToController,
         nameController: nameController,
         phoneController: phoneController,
         emailController: emailController,

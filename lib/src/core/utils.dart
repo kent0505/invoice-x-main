@@ -58,7 +58,6 @@ Future<Client> getContact(BuildContext context) async {
     if (contact != null) {
       return Client(
         id: 0,
-        billTo: '',
         name: '${contact.name.first} ${contact.name.last}',
         phone: contact.phones.isNotEmpty ? contact.phones[0].number : '',
         email: contact.emails.isNotEmpty ? contact.emails[0].address : '',
@@ -73,7 +72,7 @@ Future<Client> getContact(BuildContext context) async {
       message: 'Contact permission not granted',
     );
   }
-  return Client(id: 0, billTo: '', name: '', phone: '', email: '', address: '');
+  return Client(id: 0, name: '', phone: '', email: '', address: '');
 }
 
 Future<void> launchURL(

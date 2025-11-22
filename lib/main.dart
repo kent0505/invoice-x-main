@@ -9,6 +9,7 @@ import 'package:uuid/uuid.dart';
 import 'src/core/constants.dart';
 import 'src/core/router.dart';
 import 'src/core/themes.dart';
+import 'src/core/utils.dart';
 import 'src/features/business/bloc/business_bloc.dart';
 import 'src/features/business/data/business_repository.dart';
 import 'src/features/business/models/business.dart';
@@ -46,11 +47,13 @@ void main() async {
   // await prefs.clear();
 
   final path = join(await getDatabasesPath(), 'data.db');
+  // await deleteDatabase(path);
 
   final db = await openDatabase(
     path,
     version: 1,
     onCreate: (db, version) async {
+      logger('CREATE');
       await db.execute(Invoice.create);
       await db.execute(Photo.create);
       await db.execute(Business.create);
