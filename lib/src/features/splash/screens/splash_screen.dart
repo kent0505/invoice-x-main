@@ -71,6 +71,8 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     return Scaffold(
       body: Center(
         child: ScaleTransition(
@@ -82,7 +84,10 @@ class _SplashScreenState extends State<SplashScreen>
               borderRadius: BorderRadius.circular(30),
               color: const Color(0xff007144),
             ),
-            child: const SvgWidget(Assets.logo),
+            child: SvgWidget(
+              Assets.logo,
+              color: colors.bg,
+            ),
           ),
         ),
       ),

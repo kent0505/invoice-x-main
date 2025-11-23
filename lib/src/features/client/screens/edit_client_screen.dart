@@ -7,15 +7,17 @@ import '../../../core/utils.dart';
 import '../../../core/widgets/appbar.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/dialog_widget.dart';
+import '../../../core/widgets/field.dart';
+import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/svg_widget.dart';
+import '../../../core/widgets/title_text.dart';
 import '../bloc/client_bloc.dart';
 import '../models/client.dart';
-import '../widgets/client_body.dart';
 
 class EditClientScreen extends StatefulWidget {
   const EditClientScreen({super.key, required this.client});
 
-  final Client client;
+  final Client? client;
 
   static const routePath = '/EditClientScreen';
 
@@ -52,10 +54,10 @@ class _EditClientScreenState extends State<EditClientScreen> {
   void onDelete() {
     DialogWidget.show(
       context,
-      title: 'Delete?',
+      title: 'Delete client?',
       delete: true,
       onPressed: () {
-        context.read<ClientBloc>().add(DeleteClient(client: widget.client));
+        context.read<ClientBloc>().add(DeleteClient(client: widget.client!));
         context.pop();
         context.pop();
       },
@@ -63,22 +65,36 @@ class _EditClientScreenState extends State<EditClientScreen> {
   }
 
   void onEdit() {
-    final client = widget.client;
-    client.name = nameController.text;
-    client.email = emailController.text;
-    client.phone = phoneController.text;
-    client.address = addressController.text;
-    context.read<ClientBloc>().add(EditClient(client: client));
+    if (widget.client == null) {
+      context.read<ClientBloc>().add(
+            AddClient(
+              client: Client(
+                name: nameController.text,
+                email: emailController.text,
+                phone: phoneController.text,
+                address: addressController.text,
+              ),
+            ),
+          );
+    } else {
+      widget.client!.name = nameController.text;
+      widget.client!.email = emailController.text;
+      widget.client!.phone = phoneController.text;
+      widget.client!.address = addressController.text;
+      context.read<ClientBloc>().add(EditClient(client: widget.client!));
+    }
     context.pop();
   }
 
   @override
   void initState() {
     super.initState();
-    nameController.text = widget.client.name;
-    emailController.text = widget.client.email;
-    phoneController.text = widget.client.phone;
-    addressController.text = widget.client.address;
+    if (widget.client != null) {
+      nameController.text = widget.client!.name;
+      emailController.text = widget.client!.email;
+      phoneController.text = widget.client!.phone;
+      addressController.text = widget.client!.address;
+    }
   }
 
   @override
@@ -97,24 +113,87 @@ class _EditClientScreenState extends State<EditClientScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: Appbar(
-        title: 'Edit Client',
-        right: Button(
-          onPressed: onDelete,
-          child: SvgWidget(
-            Assets.delete,
-            color: colors.text,
-          ),
-        ),
+        title: widget.client == null ? 'Create new client' : 'Edit client',
+        right: widget.client == null
+            ? null
+            : Button(
+                onPressed: onDelete,
+                child: SvgWidget(
+                  Assets.delete,
+                  color: colors.text,
+                ),
+              ),
       ),
-      body: ClientBody(
-        active: active,
-        nameController: nameController,
-        phoneController: phoneController,
-        emailController: emailController,
-        addressController: addressController,
-        onContact: onContact,
-        onContinue: onEdit,
-        onChanged: checkActive,
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                const TitleText(title: 'Name'),
+                Field(
+                  hintText: 'Client’s full name',
+                  controller: nameController,
+                  onChanged: checkActive,
+                ),
+                const SizedBox(height: 16),
+                const TitleText(
+                  title: 'E-mail',
+                  additional: 'Optional',
+                ),
+                Field(
+                  hintText: 'E-Mail',
+                  controller: emailController,
+                ),
+                const SizedBox(height: 16),
+                const TitleText(
+                  title: 'Phone number',
+                  additional: 'Optional',
+                ),
+                Field(
+                  hintText: '+XX XXX XXX XXX',
+                  controller: phoneController,
+                  fieldType: FieldType.phone,
+                ),
+                const SizedBox(height: 16),
+                const TitleText(
+                  title: 'Address',
+                  additional: 'Optional',
+                ),
+                Field(
+                  hintText: 'Client’s address',
+                  controller: addressController,
+                  fieldType: FieldType.multiline,
+                ),
+              ],
+            ),
+          ),
+          MainButtonWrapper(
+            children: [
+              SizedBox(
+                height: 58,
+                child: Button(
+                  onPressed: onContact,
+                  child: Center(
+                    child: Text(
+                      'Import from contacts',
+                      style: TextStyle(
+                        color: colors.accent,
+                        fontSize: 16,
+                        fontFamily: AppFonts.w700,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              MainButton(
+                title: 'Save',
+                active: active,
+                onPressed: onEdit,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

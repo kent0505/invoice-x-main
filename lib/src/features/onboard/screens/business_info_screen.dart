@@ -126,10 +126,11 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
                                   dashPattern: [21, 21],
                                   color: colors.tertiary3,
                                 ),
-                                child: const Center(
+                                child: Center(
                                   child: SvgWidget(
                                     Assets.add,
                                     height: 60,
+                                    color: colors.accent,
                                   ),
                                 ),
                               ),

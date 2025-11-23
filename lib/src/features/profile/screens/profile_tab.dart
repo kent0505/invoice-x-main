@@ -11,7 +11,8 @@ import '../../../core/widgets/sheet_widget.dart';
 import '../../../core/widgets/svg_widget.dart';
 import '../../../core/widgets/title_text.dart';
 import '../../business/bloc/business_bloc.dart';
-import '../../client/screens/clients_tab.dart';
+import '../../business/screens/business_screen.dart';
+import '../../client/screens/clients_screen.dart';
 import '../../item/widgets/items_list.dart';
 import '../widgets/currency_list.dart';
 
@@ -33,9 +34,7 @@ class ProfileTab extends StatelessWidget {
             SheetWidget.show(
               context: context,
               title: 'Business',
-              child: ListView(
-                children: const [],
-              ),
+              child: const BusinessScreen(),
             );
           },
         ),
@@ -46,7 +45,7 @@ class ProfileTab extends StatelessWidget {
             SheetWidget.show(
               context: context,
               title: 'Clients',
-              child: const ClientsTab(),
+              child: const ClientsScreen(),
             );
           },
         ),
@@ -133,8 +132,11 @@ class _Account extends StatelessWidget {
                       color: colors.tertiary4,
                       shape: BoxShape.circle,
                     ),
-                    child: const Center(
-                      child: SvgWidget(Assets.person),
+                    child: Center(
+                      child: SvgWidget(
+                        Assets.person,
+                        color: colors.accent,
+                      ),
                     ),
                   )
                 : ClipRRect(
@@ -203,9 +205,12 @@ class _Tile extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             if (hasIcon)
-              const RotatedBox(
+              RotatedBox(
                 quarterTurns: 2,
-                child: SvgWidget(Assets.back),
+                child: SvgWidget(
+                  Assets.back,
+                  color: colors.text,
+                ),
               ),
           ],
         ),

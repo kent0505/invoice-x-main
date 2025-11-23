@@ -15,20 +15,12 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
         super(BusinessState()) {
     on<BusinessEvent>(
       (event, emit) => switch (event) {
-        SetDefaultBusiness() => _setDefaultBusiness(event, emit),
         GetBusiness() => _getBusiness(event, emit),
         AddBusiness() => _addBusiness(event, emit),
         EditBusiness() => _editBusiness(event, emit),
         DeleteBusiness() => _deleteBusiness(event, emit),
       },
     );
-  }
-
-  void _setDefaultBusiness(
-    SetDefaultBusiness event,
-    Emitter<BusinessState> emit,
-  ) async {
-    emit(state.copyWith(defaultBusiness: event.business));
   }
 
   void _getBusiness(
@@ -41,8 +33,11 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
 
     final businesses = await _repository.getBusiness();
 
+    final defaultBusiness = businesses.isEmpty ? null : businesses.first;
+
     emit(state.copyWith(
-      businesses: businesses,
+      businesses: businesses.reversed.toList(),
+      defaultBusiness: defaultBusiness,
       loading: false,
     ));
   }
@@ -56,10 +51,6 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
     final business = event.business;
 
     await _repository.addBusiness(business);
-
-    if (state.businesses.isEmpty) {
-      add(SetDefaultBusiness(business: business));
-    }
 
     add(GetBusiness());
   }

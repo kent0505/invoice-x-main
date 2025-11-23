@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
 import 'button.dart';
 
 class SwitchButton extends StatelessWidget {
@@ -16,7 +17,7 @@ class SwitchButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 400),
+        duration: const Duration(milliseconds: Constants.milliseconds),
         height: 22,
         width: 40,
         decoration: BoxDecoration(
@@ -29,7 +30,7 @@ class SwitchButton extends StatelessWidget {
           child: Stack(
             children: [
               AnimatedPositioned(
-                duration: const Duration(milliseconds: 400),
+                duration: const Duration(milliseconds: Constants.milliseconds),
                 top: 3,
                 left: isActive ? 21 : 3,
                 child: Container(

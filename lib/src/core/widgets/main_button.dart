@@ -26,7 +26,7 @@ class MainButton extends StatelessWidget {
     final colors = Theme.of(context).extension<MyColors>()!;
 
     return AnimatedContainer(
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: Constants.milliseconds),
       height: 58,
       width: width,
       margin: EdgeInsets.symmetric(horizontal: horizontal),
@@ -43,11 +43,7 @@ class MainButton extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                color: color == null
-                    ? active
-                        ? colors.bg
-                        : colors.text2
-                    : colors.text,
+                color: color == null ? colors.bg : colors.text,
                 fontSize: 16,
                 fontFamily: AppFonts.w700,
               ),

@@ -1,4 +1,4 @@
-class Business {
+final class Business {
   Business({
     this.id = 0,
     required this.name,

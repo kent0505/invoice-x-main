@@ -1,13 +1,9 @@
 import 'package:go_router/go_router.dart';
 
 import '../features/business/models/business.dart';
-import '../features/business/screens/business_screen.dart';
-import '../features/business/screens/create_business_screen.dart';
 import '../features/business/screens/edit_business_screen.dart';
 import '../features/business/screens/signature_screen.dart';
 import '../features/client/models/client.dart';
-import '../features/client/screens/clients_screen.dart';
-import '../features/client/screens/create_client_screen.dart';
 import '../features/client/screens/edit_client_screen.dart';
 import '../features/home/screens/home_screen.dart';
 import '../features/invoice/models/invoice.dart';
@@ -101,20 +97,11 @@ final routerConfig = GoRouter(
     ),
 
     // business
-    GoRoute(
-      path: BusinessScreen.routePath,
-      builder: (context, state) => BusinessScreen(
-        select: state.extra as bool,
-      ),
-    ),
-    GoRoute(
-      path: CreateBusinessScreen.routePath,
-      builder: (context, state) => const CreateBusinessScreen(),
-    ),
+
     GoRoute(
       path: EditBusinessScreen.routePath,
       builder: (context, state) => EditBusinessScreen(
-        business: state.extra as Business,
+        business: state.extra as Business?,
       ),
     ),
     GoRoute(
@@ -124,19 +111,9 @@ final routerConfig = GoRouter(
 
     // client
     GoRoute(
-      path: ClientsScreen.routePath,
-      builder: (context, state) => ClientsScreen(
-        select: state.extra as bool,
-      ),
-    ),
-    GoRoute(
-      path: CreateClientScreen.routePath,
-      builder: (context, state) => const CreateClientScreen(),
-    ),
-    GoRoute(
       path: EditClientScreen.routePath,
       builder: (context, state) => EditClientScreen(
-        client: state.extra as Client,
+        client: state.extra as Client?,
       ),
     ),
 

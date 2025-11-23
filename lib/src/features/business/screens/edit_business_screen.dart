@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 
+import '../../../core/constants.dart';
 import '../../../core/utils.dart';
 import '../../../core/widgets/appbar.dart';
+import '../../../core/widgets/button.dart';
+import '../../../core/widgets/dialog_widget.dart';
+import '../../../core/widgets/field.dart';
+import '../../../core/widgets/main_button.dart';
+import '../../../core/widgets/svg_widget.dart';
+import '../../../core/widgets/title_text.dart';
 import '../bloc/business_bloc.dart';
 import '../models/business.dart';
-import '../widgets/business_body.dart';
+import '../widgets/business_logo.dart';
 import 'signature_screen.dart';
 
 class EditBusinessScreen extends StatefulWidget {
   const EditBusinessScreen({super.key, required this.business});
 
-  final Business business;
+  final Business? business;
 
   static const routePath = '/EditBusinessScreen';
 
@@ -32,7 +39,7 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
   final accountNoController = TextEditingController();
   final vatController = TextEditingController();
 
-  XFile file = XFile('');
+  String imageLogo = '';
   String signature = '';
   bool active = true;
 
@@ -45,7 +52,8 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
   }
 
   void onAddLogo() async {
-    file = await pickImage();
+    final file = await pickImage();
+    imageLogo = file.path;
     checkActive('');
   }
 
@@ -61,37 +69,71 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
     );
   }
 
-  void onEdit() {
-    final business = widget.business;
-    business.name = nameController.text;
-    business.phone = phoneController.text;
-    business.email = emailController.text;
-    business.address = addressController.text;
-    business.bank = bankController.text;
-    business.iban = ibanController.text;
-    business.swift = swiftController.text;
-    business.accountNo = accountNoController.text;
-    business.vat = vatController.text;
-    business.imageLogo = file.path;
-    business.imageSignature = signature;
-    context.read<BusinessBloc>().add(EditBusiness(business: business));
+  void onDelete() {
+    DialogWidget.show(
+      context,
+      title: 'Delete business account?',
+      delete: true,
+      onPressed: () {
+        context
+            .read<BusinessBloc>()
+            .add(DeleteBusiness(business: widget.business!));
+        context.pop();
+        context.pop();
+      },
+    );
+  }
+
+  void onSave() {
+    if (widget.business == null) {
+      final business = Business(
+        name: nameController.text,
+        phone: phoneController.text,
+        email: emailController.text,
+        address: addressController.text,
+        bank: bankController.text,
+        swift: swiftController.text,
+        iban: ibanController.text,
+        accountNo: accountNoController.text,
+        vat: vatController.text,
+        imageLogo: imageLogo,
+        imageSignature: signature,
+      );
+      context.read<BusinessBloc>().add(AddBusiness(business: business));
+    } else {
+      final business = widget.business!;
+      business.name = nameController.text;
+      business.phone = phoneController.text;
+      business.email = emailController.text;
+      business.address = addressController.text;
+      business.bank = bankController.text;
+      business.iban = ibanController.text;
+      business.swift = swiftController.text;
+      business.accountNo = accountNoController.text;
+      business.vat = vatController.text;
+      business.imageLogo = imageLogo;
+      business.imageSignature = signature;
+      context.read<BusinessBloc>().add(EditBusiness(business: business));
+    }
     context.pop();
   }
 
   @override
   void initState() {
     super.initState();
-    file = XFile(widget.business.imageLogo);
-    signature = widget.business.imageSignature;
-    nameController.text = widget.business.name;
-    phoneController.text = widget.business.phone;
-    emailController.text = widget.business.email;
-    addressController.text = widget.business.address;
-    bankController.text = widget.business.bank;
-    swiftController.text = widget.business.swift;
-    ibanController.text = widget.business.iban;
-    accountNoController.text = widget.business.accountNo;
-    vatController.text = widget.business.vat;
+    if (widget.business != null) {
+      nameController.text = widget.business!.name;
+      phoneController.text = widget.business!.phone;
+      emailController.text = widget.business!.email;
+      addressController.text = widget.business!.address;
+      bankController.text = widget.business!.bank;
+      swiftController.text = widget.business!.swift;
+      ibanController.text = widget.business!.iban;
+      accountNoController.text = widget.business!.accountNo;
+      vatController.text = widget.business!.vat;
+      imageLogo = widget.business!.imageLogo;
+      signature = widget.business!.imageSignature;
+    }
   }
 
   @override
@@ -110,25 +152,137 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     return Scaffold(
-      appBar: const Appbar(title: 'Business'),
-      body: BusinessBody(
-        active: active,
-        file: file,
-        signature: signature,
-        nameController: nameController,
-        phoneController: phoneController,
-        emailController: emailController,
-        addressController: addressController,
-        bankController: bankController,
-        swiftController: swiftController,
-        ibanController: ibanController,
-        accountNoController: accountNoController,
-        vatController: vatController,
-        onAddLogo: onAddLogo,
-        onSignature: onSignature,
-        onSave: onEdit,
-        onChanged: checkActive,
+      appBar: Appbar(
+        title: widget.business == null ? 'Create new account' : 'Edit account',
+        right: widget.business == null
+            ? null
+            : Button(
+                onPressed: onDelete,
+                child: SvgWidget(
+                  Assets.delete,
+                  color: colors.text,
+                ),
+              ),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                BusinessLogo(
+                  imageLogo: imageLogo,
+                  onPressed: onAddLogo,
+                ),
+                const SizedBox(height: 16),
+                const TitleText(title: 'Name'),
+                Field(
+                  controller: nameController,
+                  hintText: 'Name',
+                  onChanged: checkActive,
+                ),
+                const SizedBox(height: 16),
+                const TitleText(
+                  title: 'E-mail',
+                  additional: 'Optional',
+                ),
+                Field(
+                  controller: emailController,
+                  hintText: 'E-Mail',
+                ),
+                const SizedBox(height: 16),
+                const TitleText(
+                  title: 'Phone number',
+                  additional: 'Optional',
+                ),
+                Field(
+                  controller: phoneController,
+                  hintText: 'Phone',
+                  fieldType: FieldType.phone,
+                ),
+                const SizedBox(height: 16),
+                const TitleText(
+                  title: 'Address',
+                  additional: 'Optional',
+                ),
+                Field(
+                  controller: addressController,
+                  hintText: 'Address',
+                ),
+                const SizedBox(height: 16),
+                const TitleText(
+                  title: 'Bank',
+                  additional: 'Optional',
+                ),
+                Field(
+                  controller: bankController,
+                  hintText: 'Bank',
+                ),
+                const SizedBox(height: 16),
+                const TitleText(
+                  title: 'Swift',
+                  additional: 'Optional',
+                ),
+                Field(
+                  controller: swiftController,
+                  hintText: 'Swift',
+                ),
+                const SizedBox(height: 16),
+                const TitleText(
+                  title: 'IBAN',
+                  additional: 'Optional',
+                ),
+                Field(
+                  controller: ibanController,
+                  hintText: 'IBAN',
+                ),
+                const SizedBox(height: 16),
+                const TitleText(
+                  title: 'Account No',
+                  additional: 'Optional',
+                ),
+                Field(
+                  controller: accountNoController,
+                  hintText: 'Account No',
+                ),
+                const SizedBox(height: 16),
+                const TitleText(
+                  title: 'VAT',
+                  additional: 'Optional',
+                ),
+                Field(
+                  controller: vatController,
+                  hintText: 'VAT',
+                ),
+                if (signature.isNotEmpty) ...[
+                  const SizedBox(height: 16),
+                  const TitleText(
+                    title: 'Signature',
+                    additional: 'Optional',
+                  ),
+                  SizedBox(child: SvgPicture.string(signature)),
+                ],
+              ],
+            ),
+          ),
+          MainButtonWrapper(
+            children: [
+              MainButton(
+                title: 'Create a signature',
+                color: colors.bg,
+                onPressed: onSignature,
+              ),
+              MainButton(
+                title: 'Save',
+                active: active,
+                onPressed: onSave,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

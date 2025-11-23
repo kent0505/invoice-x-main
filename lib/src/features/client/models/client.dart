@@ -1,4 +1,4 @@
-class Client {
+final class Client {
   Client({
     this.id = 0,
     required this.name,

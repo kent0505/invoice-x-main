@@ -3,22 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/widgets/appbar.dart';
 import '../../../core/widgets/field.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/no_data.dart';
+import '../../../core/widgets/title_text.dart';
 import '../bloc/client_bloc.dart';
-import '../models/client.dart';
 import '../widgets/client_tile.dart';
-import 'create_client_screen.dart';
 import 'edit_client_screen.dart';
 
 class ClientsScreen extends StatefulWidget {
-  const ClientsScreen({super.key, required this.select});
-
-  final bool select;
-
-  static const routePath = '/ClientsScreen';
+  const ClientsScreen({super.key});
 
   @override
   State<ClientsScreen> createState() => _ClientsScreenState();
@@ -27,21 +21,11 @@ class ClientsScreen extends StatefulWidget {
 class _ClientsScreenState extends State<ClientsScreen> {
   final searchController = TextEditingController();
 
-  void onSearch(String _) {
-    setState(() {});
-  }
-
-  void onClient(Client client) {
-    widget.select
-        ? context.pop(client)
-        : context.push(
-            EditClientScreen.routePath,
-            extra: client,
-          );
-  }
-
   void onCreate() {
-    context.push(CreateClientScreen.routePath);
+    context.push(
+      EditClientScreen.routePath,
+      extra: null,
+    );
   }
 
   @override
@@ -52,67 +36,83 @@ class _ClientsScreenState extends State<ClientsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: const Appbar(title: 'Clients'),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Field(
-              controller: searchController,
-              onChanged: onSearch,
-              hintText: 'Search client',
-              asset: Assets.search,
+    return BlocBuilder<ClientBloc, ClientState>(
+      builder: (context, state) {
+        final clients = state.clients;
+
+        final query = searchController.text.toLowerCase();
+
+        final sorted = query.isEmpty
+            ? clients
+            : clients.where((client) {
+                return client.name.toLowerCase().contains(query);
+              }).toList();
+
+        return Stack(
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 16,
+                  ),
+                  child: Field(
+                    controller: searchController,
+                    onChanged: (_) {
+                      setState(() {});
+                    },
+                    hintText: 'Search by client name...',
+                    asset: Assets.search,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const TitleText(
+                  title: 'All created clients',
+                  left: 16,
+                ),
+                Expanded(
+                  child: sorted.isEmpty
+                      ? NoData(
+                          description:
+                              'You haven’t created any clients yet. Tap the button below to create your first one.',
+                          buttonTitle: 'Create client',
+                          onPressed: onCreate,
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(16).copyWith(
+                            bottom: 100,
+                          ),
+                          itemCount: sorted.length,
+                          itemBuilder: (context, index) {
+                            final client = sorted[index];
+
+                            return ClientTile(
+                              client: client,
+                              onPressed: () {
+                                context.push(
+                                  EditClientScreen.routePath,
+                                  extra: client,
+                                );
+                              },
+                            );
+                          },
+                        ),
+                ),
+              ],
             ),
-          ),
-          Expanded(
-            child: BlocBuilder<ClientBloc, ClientState>(
-              builder: (context, state) {
-                final clients = state.clients;
-
-                final query = searchController.text.toLowerCase();
-
-                final sorted = query.isEmpty
-                    ? clients
-                    : clients.where((client) {
-                        return client.name.toLowerCase().contains(query);
-                      }).toList();
-
-                return sorted.isEmpty
-                    ? NoData(
-                        description:
-                            'You haven’t created any clients yet. Tap the button below to create your first one.',
-                        buttonTitle: 'Create client',
-                        onPressed: () {},
-                      )
-                    : ListView.builder(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: sorted.length,
-                        itemBuilder: (context, index) {
-                          final client = sorted[index];
-
-                          return ClientTile(
-                            client: client,
-                            onPressed: () {
-                              onClient(client);
-                            },
-                          );
-                        },
-                      );
-              },
-            ),
-          ),
-          MainButtonWrapper(
-            children: [
-              MainButton(
-                title: 'Create',
-                onPressed: onCreate,
+            if (sorted.isNotEmpty)
+              Positioned(
+                right: 10,
+                bottom: 10,
+                child: MainButton(
+                  title: 'Create client',
+                  onPressed: onCreate,
+                ),
               ),
-            ],
-          ),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 }

@@ -99,9 +99,11 @@ class _TemplateCard extends StatelessWidget {
     return Button(
       onPressed: () {
         invoice.template = id;
+
         context.read<InvoiceBloc>().add(EditInvoice(invoice: invoice));
+
         Future.delayed(
-          const Duration(milliseconds: 400),
+          const Duration(milliseconds: Constants.milliseconds),
           () {
             if (context.mounted) {
               context.pop();

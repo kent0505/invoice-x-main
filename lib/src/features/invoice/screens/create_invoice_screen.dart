@@ -10,7 +10,6 @@ import '../../business/models/business.dart';
 import '../../business/screens/business_screen.dart';
 import '../../business/screens/signature_screen.dart';
 import '../../client/models/client.dart';
-import '../../client/screens/clients_screen.dart';
 import '../../item/bloc/item_bloc.dart';
 import '../../item/models/item.dart';
 import '../../item/screens/items_screen.dart';
@@ -145,17 +144,17 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   }
 
   void onSelectClient() {
-    if (client == null) {
-      context.push<Client?>(ClientsScreen.routePath, extra: true).then((value) {
-        if (value != null) {
-          client = value;
-          setState(() {});
-        }
-      });
-    } else {
-      client = null;
-      setState(() {});
-    }
+    // if (client == null) {
+    //   context.push<Client?>(ClientsScreen.routePath, extra: true).then((value) {
+    //     if (value != null) {
+    //       client = value;
+    //       setState(() {});
+    //     }
+    //   });
+    // } else {
+    //   client = null;
+    //   setState(() {});
+    // }
   }
 
   void onSelectItems() async {

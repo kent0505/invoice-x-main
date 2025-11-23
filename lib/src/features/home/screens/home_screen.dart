@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/svg_widget.dart';
-import '../../client/screens/clients_tab.dart';
+import '../../client/screens/clients_screen.dart';
 import '../../internet/bloc/internet_bloc.dart';
 import '../../internet/widgets/no_internet_dialog.dart';
 import '../../invoice/screens/invoices_tab.dart';
@@ -25,6 +25,8 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     final index = context.watch<HomeBloc>().state;
 
     return BlocListener<VipBloc, VipState>(
@@ -55,7 +57,10 @@ class HomeScreen extends StatelessWidget {
           right: index == 0
               ? Button(
                   onPressed: () {},
-                  child: const SvgWidget(Assets.search),
+                  child: SvgWidget(
+                    Assets.search,
+                    color: colors.text2,
+                  ),
                 )
               : null,
         ),
@@ -76,7 +81,7 @@ class HomeScreen extends StatelessWidget {
               index: index,
               children: const [
                 InvoicesTab(),
-                ClientsTab(),
+                ClientsScreen(),
                 ProfileTab(),
               ],
             );

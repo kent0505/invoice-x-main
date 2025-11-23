@@ -23,6 +23,8 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     return AppBar(
       title: child ?? Text(title),
       leading: Padding(
@@ -39,7 +41,10 @@ class Appbar extends StatelessWidget implements PreferredSizeWidget {
               logger(e);
             }
           },
-          child: const SvgWidget(Assets.back),
+          child: SvgWidget(
+            Assets.back,
+            color: colors.text,
+          ),
         ),
       ),
       actions: [right ?? const SizedBox()],
