@@ -66,16 +66,10 @@ class MainButtonWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
-            blurRadius: 20,
-          ),
-        ],
-      ),
+      color: colors.bg,
       padding: const EdgeInsets.all(16).copyWith(
         bottom: 16 + MediaQuery.of(context).viewPadding.bottom,
       ),

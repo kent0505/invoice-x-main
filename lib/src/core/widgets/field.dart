@@ -70,7 +70,7 @@ class Field extends StatelessWidget {
         if (fieldType == FieldType.phone) _PhoneInputFormatter()
       ],
       textCapitalization: textCapitalization,
-      minLines: fieldType == FieldType.multiline ? 1 : 1,
+      minLines: fieldType == FieldType.multiline ? 4 : 1,
       maxLines: fieldType == FieldType.multiline ? 8 : 1,
       style: TextStyle(
         color: colors.text,

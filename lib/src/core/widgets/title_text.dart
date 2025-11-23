@@ -6,10 +6,12 @@ class TitleText extends StatelessWidget {
   const TitleText({
     super.key,
     required this.title,
+    this.additional = '',
     this.left = 0,
   });
 
   final String title;
+  final String additional;
   final double left;
 
   @override
@@ -22,6 +24,7 @@ class TitleText extends StatelessWidget {
         left: left,
       ),
       child: Row(
+        spacing: 4,
         children: [
           Text(
             title,
@@ -29,6 +32,14 @@ class TitleText extends StatelessWidget {
               color: colors.text,
               fontSize: 12,
               fontFamily: AppFonts.w500,
+            ),
+          ),
+          Text(
+            additional,
+            style: TextStyle(
+              color: colors.text2,
+              fontSize: 12,
+              fontFamily: AppFonts.w400,
             ),
           ),
         ],

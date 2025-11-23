@@ -50,15 +50,11 @@ class Themes {
 
       // DIALOG
       dialogTheme: DialogThemeData(
-        insetPadding: const EdgeInsets.symmetric(horizontal: 50),
-        backgroundColor: colors.tertiary2,
+        backgroundColor: colors.bg,
         elevation: 0,
-        shape: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(34)),
-          side: BorderSide(
-            width: 1,
-            color: colors.tertiary3,
-          ),
+        insetPadding: const EdgeInsets.symmetric(horizontal: 50),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
       ),
 

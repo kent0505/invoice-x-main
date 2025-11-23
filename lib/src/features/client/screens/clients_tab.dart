@@ -22,6 +22,10 @@ class ClientsTab extends StatefulWidget {
 class _ClientsTabState extends State<ClientsTab> {
   final searchController = TextEditingController();
 
+  void onCreateClient() {
+    context.push(CreateClientScreen.routePath);
+  }
+
   @override
   void dispose() {
     searchController.dispose();
@@ -39,7 +43,10 @@ class _ClientsTabState extends State<ClientsTab> {
         final sorted = query.isEmpty
             ? clients
             : clients.where((client) {
-                return client.name.toLowerCase().contains(query.toLowerCase());
+                final name = client.name.toLowerCase();
+                final email = client.email.toLowerCase();
+
+                return name.contains(query) || email.contains(query);
               }).toList();
 
         return Stack(
@@ -53,7 +60,7 @@ class _ClientsTabState extends State<ClientsTab> {
                 onChanged: (_) {
                   setState(() {});
                 },
-                hintText: 'Search client',
+                hintText: 'Search by client name...',
                 asset: Assets.search,
               ),
             ),
@@ -62,9 +69,7 @@ class _ClientsTabState extends State<ClientsTab> {
                     description:
                         'You haven’t created any clients yet. Tap the button below to create your first one.',
                     buttonTitle: 'Create client',
-                    onPressed: () {
-                      context.push(CreateClientScreen.routePath);
-                    },
+                    onPressed: onCreateClient,
                   )
                 : Padding(
                     padding: const EdgeInsets.only(top: 64),
@@ -92,7 +97,7 @@ class _ClientsTabState extends State<ClientsTab> {
                 bottom: 10,
                 child: MainButton(
                   title: 'Create client',
-                  onPressed: () {},
+                  onPressed: onCreateClient,
                 ),
               ),
           ],

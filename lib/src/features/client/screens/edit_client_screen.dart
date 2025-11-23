@@ -84,28 +84,33 @@ class _EditClientScreenState extends State<EditClientScreen> {
   @override
   void dispose() {
     nameController.dispose();
-    emailController.dispose();
     phoneController.dispose();
+    emailController.dispose();
     addressController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: Appbar(
         title: 'Edit Client',
         right: Button(
           onPressed: onDelete,
-          child: const SvgWidget(Assets.delete),
+          child: SvgWidget(
+            Assets.delete,
+            color: colors.text,
+          ),
         ),
       ),
       body: ClientBody(
         active: active,
         nameController: nameController,
-        emailController: emailController,
         phoneController: phoneController,
+        emailController: emailController,
         addressController: addressController,
         onContact: onContact,
         onContinue: onEdit,

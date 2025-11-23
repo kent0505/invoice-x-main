@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../core/constants.dart';
+import '../../../core/widgets/button.dart';
+import '../../../core/widgets/field.dart';
 import '../../../core/widgets/main_button.dart';
-import '../../business/widgets/business_field.dart';
-import 'client_import_contact.dart';
+import '../../../core/widgets/title_text.dart';
 
 class ClientBody extends StatelessWidget {
   const ClientBody({
@@ -29,62 +30,70 @@ class ClientBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     return Column(
       children: [
         Expanded(
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              const SizedBox(height: 20),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8),
-                child: Text(
-                  'Contacts',
-                  style: TextStyle(
-                    color: Color(0xff7D81A3),
-                    fontSize: 12,
-                    fontFamily: AppFonts.w400,
-                  ),
-                ),
+              const TitleText(title: 'Name'),
+              Field(
+                hintText: 'Client’s full name',
+                controller: nameController,
+                onChanged: onChanged,
               ),
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Column(
-                  children: [
-                    BusinessField(
-                      title: 'Name',
-                      controller: nameController,
-                      onChanged: onChanged,
-                    ),
-                    BusinessField(
-                      title: 'Address',
-                      controller: addressController,
-                    ),
-                    BusinessField(
-                      title: 'Phone',
-                      controller: phoneController,
-                      keyboardType: TextInputType.phone,
-                    ),
-                    BusinessField(
-                      title: 'E-Mail',
-                      controller: emailController,
-                      keyboardType: TextInputType.emailAddress,
-                    ),
-                  ],
-                ),
+              const SizedBox(height: 16),
+              const TitleText(
+                title: 'E-mail',
+                additional: 'Optional',
               ),
-              const SizedBox(height: 12),
-              ClientImportContact(onPressed: onContact),
+              Field(
+                hintText: 'E-Mail',
+                controller: emailController,
+              ),
+              const SizedBox(height: 16),
+              const TitleText(
+                title: 'Phone number',
+                additional: 'Optional',
+              ),
+              Field(
+                hintText: '+XX XXX XXX XXX',
+                controller: phoneController,
+                fieldType: FieldType.phone,
+              ),
+              const SizedBox(height: 16),
+              const TitleText(
+                title: 'Address',
+                additional: 'Optional',
+              ),
+              Field(
+                hintText: 'Client’s address',
+                controller: addressController,
+                fieldType: FieldType.multiline,
+              ),
             ],
           ),
         ),
         MainButtonWrapper(
           children: [
+            SizedBox(
+              height: 58,
+              child: Button(
+                onPressed: onContact,
+                child: Center(
+                  child: Text(
+                    'Import from contacts',
+                    style: TextStyle(
+                      color: colors.accent,
+                      fontSize: 16,
+                      fontFamily: AppFonts.w700,
+                    ),
+                  ),
+                ),
+              ),
+            ),
             MainButton(
               title: 'Continue',
               active: active,

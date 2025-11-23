@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../constants.dart';
-import 'button.dart';
+import 'main_button.dart';
 
 class DialogWidget extends StatelessWidget {
   const DialogWidget({
@@ -24,7 +24,7 @@ class DialogWidget extends StatelessWidget {
   }) {
     showDialog(
       context: context,
-      barrierColor: Colors.transparent,
+      barrierColor: Colors.black.withValues(alpha: 0.2),
       useSafeArea: false,
       builder: (context) {
         return DialogWidget(
@@ -38,24 +38,24 @@ class DialogWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     return Dialog(
       child: SizedBox(
-        width: 270,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               const SizedBox(height: 20),
               Text(
                 title,
-                textAlign: TextAlign.center,
                 maxLines: 5,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(
-                  color: Colors.black,
+                style: TextStyle(
+                  color: colors.text,
                   fontSize: 16,
-                  fontFamily: AppFonts.w600,
+                  fontFamily: AppFonts.w500,
                 ),
               ),
               const SizedBox(height: 20),
@@ -63,28 +63,27 @@ class DialogWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   if (delete) ...[
-                    _Button(
-                      title: 'No',
-                      color: Colors.black,
-                      fontFamily: AppFonts.w500,
-                      onPressed: () {
-                        context.pop();
-                      },
+                    Expanded(
+                      child: MainButton(
+                        title: 'Cancel',
+                        color: colors.bg,
+                        onPressed: () {
+                          context.pop();
+                        },
+                      ),
                     ),
-                    _Button(
-                      title: 'Yes',
-                      color: Colors.black,
-                      fontFamily: AppFonts.w500,
-                      onPressed: onPressed ??
-                          () {
-                            context.pop();
-                          },
+                    Expanded(
+                      child: MainButton(
+                        title: 'Yes',
+                        onPressed: onPressed ??
+                            () {
+                              context.pop();
+                            },
+                      ),
                     ),
                   ] else
-                    _Button(
+                    MainButton(
                       title: 'OK',
-                      color: Colors.black,
-                      fontFamily: AppFonts.w500,
                       onPressed: onPressed ??
                           () {
                             context.pop();
@@ -94,42 +93,6 @@ class DialogWidget extends StatelessWidget {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _Button extends StatelessWidget {
-  const _Button({
-    required this.title,
-    required this.color,
-    required this.fontFamily,
-    required this.onPressed,
-  });
-
-  final String title;
-  final Color color;
-  final String fontFamily;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Button(
-        onPressed: onPressed,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                color: color,
-                fontSize: 16,
-                fontFamily: fontFamily,
-              ),
-            ),
-          ],
         ),
       ),
     );
