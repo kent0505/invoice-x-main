@@ -5,13 +5,14 @@ import '../data/item_repository.dart';
 import '../models/item.dart';
 
 part 'item_event.dart';
+part 'item_state.dart';
 
-class ItemBloc extends Bloc<ItemEvent, List<Item>> {
+class ItemBloc extends Bloc<ItemEvent, ItemState> {
   final ItemRepository _repository;
 
   ItemBloc({required ItemRepository repository})
       : _repository = repository,
-        super([]) {
+        super(ItemState()) {
     on<ItemEvent>(
       (event, emit) => switch (event) {
         GetItems() => _getItems(event, emit),
@@ -25,42 +26,58 @@ class ItemBloc extends Bloc<ItemEvent, List<Item>> {
 
   void _getItems(
     GetItems event,
-    Emitter<List<Item>> emit,
+    Emitter<ItemState> emit,
   ) async {
+    if (!state.loading) {
+      emit(state.copyWith(loading: true));
+    }
+
     final items = await _repository.getItems();
-    emit(items);
+    emit(state.copyWith(items: items));
   }
 
   void _addItem(
     AddItem event,
-    Emitter<List<Item>> emit,
+    Emitter<ItemState> emit,
   ) async {
+    emit(state.copyWith(loading: true));
+
     await _repository.addItem(event.item);
+
     add(GetItems());
   }
 
   void _addItems(
     AddItems event,
-    Emitter<List<Item>> emit,
+    Emitter<ItemState> emit,
   ) async {
+    emit(state.copyWith(loading: true));
+
     await _repository.deleteItems(event.id);
     await _repository.addItems(event.items);
+
     add(GetItems());
   }
 
   void _editItem(
     EditItem event,
-    Emitter<List<Item>> emit,
+    Emitter<ItemState> emit,
   ) async {
+    emit(state.copyWith(loading: true));
+
     await _repository.editItem(event.item);
+
     add(GetItems());
   }
 
   void _deleteItem(
     DeleteItem event,
-    Emitter<List<Item>> emit,
+    Emitter<ItemState> emit,
   ) async {
+    emit(state.copyWith(loading: true));
+
     await _repository.deleteItem(event.item);
+
     add(GetItems());
   }
 }

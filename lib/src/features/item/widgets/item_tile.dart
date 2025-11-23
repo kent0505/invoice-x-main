@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/widgets/button.dart';
-import '../../profile/data/profile_repository.dart';
+import '../../../core/widgets/svg_widget.dart';
 import '../models/item.dart';
 
 class ItemTile extends StatelessWidget {
@@ -18,38 +17,49 @@ class ItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final currency = context.read<ProfileRepository>().getCurrency();
+    final colors = Theme.of(context).extension<MyColors>()!;
 
     return Button(
       onPressed: onPressed,
       child: Container(
-        height: 44,
-        decoration: const BoxDecoration(
-          border: Border(
-            bottom: BorderSide(
-              width: 0.5,
-              color: Color(0xff7D81A3),
-            ),
-          ),
+        height: 72,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: colors.tertiary1,
+          borderRadius: BorderRadius.circular(20),
         ),
         child: Row(
           children: [
             Expanded(
-              child: Text(
-                item.title,
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 14,
-                  fontFamily: AppFonts.w400,
-                ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    item.title,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: AppFonts.w400,
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    item.title,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontFamily: AppFonts.w400,
+                    ),
+                  ),
+                ],
               ),
             ),
-            Text(
-              '$currency${item.discountPrice}',
-              style: const TextStyle(
-                color: Color(0xff7D81A3),
-                fontSize: 14,
-                fontFamily: AppFonts.w400,
+            const SizedBox(width: 16),
+            RotatedBox(
+              quarterTurns: 2,
+              child: SvgWidget(
+                Assets.back,
+                color: colors.text,
               ),
             ),
           ],

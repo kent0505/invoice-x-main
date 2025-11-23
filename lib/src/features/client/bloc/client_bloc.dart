@@ -5,13 +5,14 @@ import '../data/client_repository.dart';
 import '../models/client.dart';
 
 part 'client_event.dart';
+part 'client_state.dart';
 
-class ClientBloc extends Bloc<ClientEvent, List<Client>> {
+class ClientBloc extends Bloc<ClientEvent, ClientState> {
   final ClientRepository _repository;
 
   ClientBloc({required ClientRepository repository})
       : _repository = repository,
-        super([]) {
+        super(ClientState()) {
     on<ClientEvent>(
       (event, emit) => switch (event) {
         GetClients() => _getClients(event, emit),
@@ -24,33 +25,46 @@ class ClientBloc extends Bloc<ClientEvent, List<Client>> {
 
   void _getClients(
     GetClients event,
-    Emitter<List<Client>> emit,
+    Emitter<ClientState> emit,
   ) async {
+    if (!state.loading) {
+      emit(state.copyWith(loading: true));
+    }
+
     final clients = await _repository.getClients();
-    emit(clients);
+    emit(state.copyWith(clients: clients.reversed.toList()));
   }
 
   void _addClient(
     AddClient event,
-    Emitter<List<Client>> emit,
+    Emitter<ClientState> emit,
   ) async {
+    emit(state.copyWith(loading: true));
+
     await _repository.addClient(event.client);
+
     add(GetClients());
   }
 
   void _editClient(
     EditClient event,
-    Emitter<List<Client>> emit,
+    Emitter<ClientState> emit,
   ) async {
+    emit(state.copyWith(loading: true));
+
     await _repository.editClient(event.client);
+
     add(GetClients());
   }
 
   void _deleteClient(
     DeleteClient event,
-    Emitter<List<Client>> emit,
+    Emitter<ClientState> emit,
   ) async {
+    emit(state.copyWith(loading: true));
+
     await _repository.deleteClient(event.client);
+
     add(GetClients());
   }
 }

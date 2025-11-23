@@ -60,9 +60,7 @@ final routerConfig = GoRouter(
     ),
     GoRoute(
       path: CreateInvoiceScreen.routePath,
-      builder: (context, state) => CreateInvoiceScreen(
-        isEstimate: state.extra as bool,
-      ),
+      builder: (context, state) => const CreateInvoiceScreen(),
     ),
     GoRoute(
       path: InvoiceDetailsScreen.routePath,

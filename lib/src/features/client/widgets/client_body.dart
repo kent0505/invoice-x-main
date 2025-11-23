@@ -95,7 +95,7 @@ class ClientBody extends StatelessWidget {
               ),
             ),
             MainButton(
-              title: 'Continue',
+              title: 'Save',
               active: active,
               onPressed: onContinue,
             ),

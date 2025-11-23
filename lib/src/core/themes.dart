@@ -41,6 +41,7 @@ class Themes {
         backgroundColor: colors.bg,
         elevation: 0,
         centerTitle: true,
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 16),
         titleTextStyle: TextStyle(
           color: colors.text,
           fontSize: 18,

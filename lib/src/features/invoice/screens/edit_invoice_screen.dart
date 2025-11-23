@@ -9,7 +9,6 @@ import '../../business/bloc/business_bloc.dart';
 import '../../business/models/business.dart';
 import '../../business/screens/business_screen.dart';
 import '../../business/screens/signature_screen.dart';
-import '../../client/bloc/client_bloc.dart';
 import '../../client/models/client.dart';
 import '../../client/screens/clients_screen.dart';
 import '../../item/bloc/item_bloc.dart';
@@ -234,15 +233,15 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
         .read<BusinessBloc>()
         .state
         .firstWhereOrNull((element) => element.id == widget.invoice.businessID);
-    client = context
-        .read<ClientBloc>()
-        .state
-        .firstWhereOrNull((element) => element.id == widget.invoice.clientID);
-    items = context
-        .read<ItemBloc>()
-        .state
-        .where((element) => element.invoiceID == widget.invoice.id)
-        .toList();
+    // client = context
+    //     .read<ClientBloc>()
+    //     .state
+    //     .firstWhereOrNull((element) => element.id == widget.invoice.clientID);
+    // items = context
+    //     .read<ItemBloc>()
+    //     .state
+    //     .where((element) => element.invoiceID == widget.invoice.id)
+    //     .toList();
 
     final state = context.read<InvoiceBloc>().state;
     if (state is InvoiceLoaded) {

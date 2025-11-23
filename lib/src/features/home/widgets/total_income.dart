@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants.dart';
 import '../../invoice/bloc/invoice_bloc.dart';
 import '../../item/bloc/item_bloc.dart';
-import '../../item/models/item.dart';
 import '../../profile/data/profile_repository.dart';
 
 class TotalIncome extends StatelessWidget {
@@ -47,9 +46,11 @@ class TotalIncome extends StatelessWidget {
                         return element.paymentMethod.isNotEmpty;
                       }).toList();
 
-                      return BlocBuilder<ItemBloc, List<Item>>(
-                        builder: (context, items) {
+                      return BlocBuilder<ItemBloc, ItemState>(
+                        builder: (context, state) {
                           double total = 0;
+
+                          final items = state.items;
 
                           for (final invoice in sorted) {
                             double invoiceSubtotal = 0;

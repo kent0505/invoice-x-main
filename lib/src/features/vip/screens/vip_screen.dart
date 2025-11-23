@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/utils.dart';
 import '../../../core/widgets/dialog_widget.dart';
 import '../../../core/widgets/main_button.dart';
 import '../bloc/vip_bloc.dart';
@@ -14,10 +14,15 @@ class VipScreen extends StatelessWidget {
 
   static const routePath = '/VipScreen';
 
+  static void configure(String userID) async {
+    await Purchases.configure(
+      PurchasesConfiguration('appl_XOzrSgcIeAVfozHHQbvIJjGyatM')
+        ..appUserID = userID,
+    );
+  }
+
   static void open(BuildContext context) {
-    if (isIOS()) {
-      context.push(VipScreen.routePath);
-    }
+    context.push(VipScreen.routePath);
   }
 
   @override

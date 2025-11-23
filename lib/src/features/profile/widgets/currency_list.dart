@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/field.dart';
-import '../../../core/widgets/sheet_widget.dart';
 import '../../../core/widgets/svg_widget.dart';
 import '../../../core/widgets/title_text.dart';
 import '../../invoice/bloc/invoice_bloc.dart';
@@ -23,14 +21,14 @@ class CurrencyData {
   final String name;
 }
 
-class CurrencySheet extends StatefulWidget {
-  const CurrencySheet({super.key});
+class CurrencyList extends StatefulWidget {
+  const CurrencyList({super.key});
 
   @override
-  State<CurrencySheet> createState() => _CurrencySheetState();
+  State<CurrencyList> createState() => _CurrencyListState();
 }
 
-class _CurrencySheetState extends State<CurrencySheet> {
+class _CurrencyListState extends State<CurrencyList> {
   final searchController = TextEditingController();
 
   List<CurrencyData> allCurrencies = [
@@ -169,10 +167,6 @@ class _CurrencySheetState extends State<CurrencySheet> {
     const CurrencyData('Z\$', 'ZWL', 'Zimbabwean Dollar'),
   ];
 
-  void onSearch(String _) {
-    setState(() {});
-  }
-
   void onCurrency(CurrencyData value) async {
     await context.read<ProfileRepository>().setCurrency(value.symbol);
     setState(() {});
@@ -189,8 +183,6 @@ class _CurrencySheetState extends State<CurrencySheet> {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).extension<MyColors>()!;
-
     final query = searchController.text.toLowerCase();
 
     final currencies = query.isEmpty
@@ -202,59 +194,42 @@ class _CurrencySheetState extends State<CurrencySheet> {
             return name.contains(query) || country.contains(query);
           }).toList();
 
-    return Expanded(
-      child: Column(
-        children: [
-          Row(
-            children: [
-              const SizedBox(width: 16),
-              const SheetTitle(title: 'Currency'),
-              const Spacer(),
-              Button(
-                onPressed: () {
-                  context.pop();
-                },
-                child: SvgWidget(
-                  Assets.close,
-                  color: colors.text2,
-                ),
-              ),
-              const SizedBox(width: 16),
-            ],
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8,
+            horizontal: 16,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              vertical: 8,
-              horizontal: 16,
-            ),
-            child: Field(
-              controller: searchController,
-              onChanged: onSearch,
-              hintText: 'Search currency',
-              asset: Assets.search,
-            ),
+          child: Field(
+            controller: searchController,
+            onChanged: (_) {
+              setState(() {});
+            },
+            hintText: 'Search currency',
+            asset: Assets.search,
           ),
-          const SizedBox(height: 8),
-          const TitleText(
-            title: 'List of currencies',
-            left: 16,
-          ),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: currencies.length,
-              itemBuilder: (context, index) {
-                final currencyData = currencies[index];
+        ),
+        const SizedBox(height: 8),
+        const TitleText(
+          title: 'List of currencies',
+          left: 16,
+        ),
+        Expanded(
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            itemCount: currencies.length,
+            itemBuilder: (context, index) {
+              final currencyData = currencies[index];
 
-                return _CurrencyTile(
-                  currencyData: currencyData,
-                  onPressed: onCurrency,
-                );
-              },
-            ),
+              return _CurrencyTile(
+                currencyData: currencyData,
+                onPressed: onCurrency,
+              );
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

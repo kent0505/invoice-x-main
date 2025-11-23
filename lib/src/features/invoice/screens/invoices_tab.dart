@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/widgets/main_button.dart';
@@ -7,6 +8,7 @@ import '../../../core/widgets/no_data.dart';
 import '../bloc/invoice_bloc.dart';
 import '../models/invoice.dart';
 import '../widgets/tab_widget.dart';
+import 'create_invoice_screen.dart';
 
 class InvoicesTab extends StatelessWidget {
   const InvoicesTab({super.key});
@@ -34,7 +36,9 @@ class InvoicesTab extends StatelessWidget {
                   bottom: 10,
                   child: MainButton(
                     title: 'Create invoice',
-                    onPressed: () {},
+                    onPressed: () {
+                      context.push(CreateInvoiceScreen.routePath);
+                    },
                   ),
                 ),
             ],
@@ -61,7 +65,9 @@ class _InvoicesList extends StatelessWidget {
             description:
                 'You haven’t created any invoices yet. Tap the button below to create your first one.',
             buttonTitle: 'Create invoice',
-            onPressed: () {},
+            onPressed: () {
+              context.push(CreateInvoiceScreen.routePath);
+            },
           )
         : ListView.builder(
             itemCount: invoices.length,

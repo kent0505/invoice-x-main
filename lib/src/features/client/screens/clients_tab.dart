@@ -6,8 +6,8 @@ import '../../../core/constants.dart';
 import '../../../core/widgets/field.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/no_data.dart';
+import '../../../core/widgets/title_text.dart';
 import '../bloc/client_bloc.dart';
-import '../models/client.dart';
 import '../widgets/client_tile.dart';
 import 'create_client_screen.dart';
 import 'edit_client_screen.dart';
@@ -34,9 +34,9 @@ class _ClientsTabState extends State<ClientsTab> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ClientBloc, List<Client>>(
-      builder: (context, clients) {
-        clients = clients.reversed.toList();
+    return BlocBuilder<ClientBloc, ClientState>(
+      builder: (context, state) {
+        final clients = state.clients;
 
         final query = searchController.text.toLowerCase();
 
@@ -51,46 +51,56 @@ class _ClientsTabState extends State<ClientsTab> {
 
         return Stack(
           children: [
-            Positioned(
-              top: 8,
-              left: 16,
-              right: 16,
-              child: Field(
-                controller: searchController,
-                onChanged: (_) {
-                  setState(() {});
-                },
-                hintText: 'Search by client name...',
-                asset: Assets.search,
-              ),
-            ),
-            sorted.isEmpty
-                ? NoData(
-                    description:
-                        'You haven’t created any clients yet. Tap the button below to create your first one.',
-                    buttonTitle: 'Create client',
-                    onPressed: onCreateClient,
-                  )
-                : Padding(
-                    padding: const EdgeInsets.only(top: 64),
-                    child: ListView.builder(
-                      padding: const EdgeInsets.all(16).copyWith(bottom: 100),
-                      itemCount: sorted.length,
-                      itemBuilder: (context, index) {
-                        final client = sorted[index];
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 16,
+                  ),
+                  child: Field(
+                    controller: searchController,
+                    onChanged: (_) {
+                      setState(() {});
+                    },
+                    hintText: 'Search by client name...',
+                    asset: Assets.search,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const TitleText(
+                  title: 'All created clients',
+                  left: 16,
+                ),
+                Expanded(
+                  child: sorted.isEmpty
+                      ? NoData(
+                          description:
+                              'You haven’t created any clients yet. Tap the button below to create your first one.',
+                          buttonTitle: 'Create client',
+                          onPressed: onCreateClient,
+                        )
+                      : ListView.builder(
+                          padding:
+                              const EdgeInsets.all(16).copyWith(bottom: 100),
+                          itemCount: sorted.length,
+                          itemBuilder: (context, index) {
+                            final client = sorted[index];
 
-                        return ClientTile(
-                          client: client,
-                          onPressed: () {
-                            context.push(
-                              EditClientScreen.routePath,
-                              extra: client,
+                            return ClientTile(
+                              client: client,
+                              onPressed: () {
+                                context.push(
+                                  EditClientScreen.routePath,
+                                  extra: client,
+                                );
+                              },
                             );
                           },
-                        );
-                      },
-                    ),
-                  ),
+                        ),
+                ),
+              ],
+            ),
             if (sorted.isNotEmpty)
               Positioned(
                 right: 10,

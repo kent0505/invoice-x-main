@@ -17,8 +17,6 @@ import '../../../core/widgets/button.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/svg_widget.dart';
 import '../../business/bloc/business_bloc.dart';
-import '../../client/bloc/client_bloc.dart';
-import '../../item/bloc/item_bloc.dart';
 import '../../profile/data/profile_repository.dart';
 import '../widgets/invoice_template.dart';
 import '../widgets/photos_list.dart';
@@ -149,15 +147,15 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
         .read<BusinessBloc>()
         .state
         .firstWhereOrNull((element) => element.id == widget.invoice.businessID);
-    invoice.client = context
-        .read<ClientBloc>()
-        .state
-        .firstWhereOrNull((element) => element.id == widget.invoice.clientID);
-    invoice.items = context
-        .read<ItemBloc>()
-        .state
-        .where((element) => element.invoiceID == widget.invoice.id)
-        .toList();
+    // invoice.client = context
+    //     .read<ClientBloc>()
+    //     .state
+    //     .firstWhereOrNull((element) => element.id == widget.invoice.clientID);
+    // invoice.items = context
+    //     .read<ItemBloc>()
+    //     .state
+    //     .where((element) => element.invoiceID == widget.invoice.id)
+    //     .toList();
 
     final state = context.read<InvoiceBloc>().state;
     if (state is InvoiceLoaded) {

@@ -26,9 +26,7 @@ import '../widgets/invoice_body.dart';
 import 'invoice_preview_screen.dart';
 
 class CreateInvoiceScreen extends StatefulWidget {
-  const CreateInvoiceScreen({super.key, required this.isEstimate});
-
-  final bool isEstimate;
+  const CreateInvoiceScreen({super.key});
 
   static const routePath = '/CreateInvoiceScreen';
 
@@ -93,7 +91,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
           clientID: 0,
           tax: '',
           imageSignature: hasSignature ? signature : '',
-          isEstimate: widget.isEstimate,
+          isEstimate: false,
           business: business,
           client: client,
           items: items,
@@ -226,7 +224,7 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
                 clientID: client!.id,
                 tax: '',
                 imageSignature: signature,
-                isEstimate: widget.isEstimate,
+                isEstimate: false,
               ),
               photos: photos,
             ),
@@ -262,11 +260,11 @@ class _CreateInvoiceScreenState extends State<CreateInvoiceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: InvoiceAppbar(
-        title: widget.isEstimate ? 'New estimate' : 'New invoice',
+        title: 'New invoice',
         onPreview: onPreview,
       ),
       body: InvoiceBody(
-        isEstimate: widget.isEstimate,
+        isEstimate: false,
         active:
             business != null && client != null && items.isNotEmpty && isTaxable
                 ? taxController.text.isNotEmpty

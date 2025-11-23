@@ -67,15 +67,16 @@ class _ClientsScreenState extends State<ClientsScreen> {
             ),
           ),
           Expanded(
-            child: BlocBuilder<ClientBloc, List<Client>>(
-              builder: (context, clients) {
-                clients = clients.reversed.toList();
-                final sorted = searchController.text.isEmpty
+            child: BlocBuilder<ClientBloc, ClientState>(
+              builder: (context, state) {
+                final clients = state.clients;
+
+                final query = searchController.text.toLowerCase();
+
+                final sorted = query.isEmpty
                     ? clients
                     : clients.where((client) {
-                        return client.name
-                            .toLowerCase()
-                            .contains(searchController.text.toLowerCase());
+                        return client.name.toLowerCase().contains(query);
                       }).toList();
 
                 return sorted.isEmpty

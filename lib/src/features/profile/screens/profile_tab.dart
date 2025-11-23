@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/utils.dart';
@@ -7,10 +6,9 @@ import '../../../core/widgets/button.dart';
 import '../../../core/widgets/sheet_widget.dart';
 import '../../../core/widgets/svg_widget.dart';
 import '../../../core/widgets/title_text.dart';
-import '../../business/screens/business_screen.dart';
-import '../../client/screens/clients_screen.dart';
-import '../../item/screens/items_screen.dart';
-import 'currency_sheet.dart';
+import '../../client/screens/clients_tab.dart';
+import '../../item/widgets/items_list.dart';
+import '../widgets/currency_list.dart';
 
 class ProfileTab extends StatelessWidget {
   const ProfileTab({super.key});
@@ -27,9 +25,12 @@ class ProfileTab extends StatelessWidget {
           title: 'Business Information',
           hasIcon: true,
           onPressed: () {
-            context.push(
-              BusinessScreen.routePath,
-              extra: false,
+            SheetWidget.show(
+              context: context,
+              title: 'Business',
+              child: ListView(
+                children: const [],
+              ),
             );
           },
         ),
@@ -37,9 +38,10 @@ class ProfileTab extends StatelessWidget {
           title: 'Clients',
           hasIcon: true,
           onPressed: () {
-            context.push(
-              ClientsScreen.routePath,
-              extra: false,
+            SheetWidget.show(
+              context: context,
+              title: 'Clients',
+              child: const ClientsTab(),
             );
           },
         ),
@@ -47,9 +49,10 @@ class ProfileTab extends StatelessWidget {
           title: 'Items',
           hasIcon: true,
           onPressed: () {
-            context.push(
-              ItemsScreen.routePath,
-              extra: false,
+            SheetWidget.show(
+              context: context,
+              title: 'Items',
+              child: const ItemsList(),
             );
           },
         ),
@@ -59,7 +62,8 @@ class ProfileTab extends StatelessWidget {
           onPressed: () {
             SheetWidget.show(
               context: context,
-              child: const CurrencySheet(),
+              title: 'Currency',
+              child: const CurrencyList(),
             );
           },
         ),

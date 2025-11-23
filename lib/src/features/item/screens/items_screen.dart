@@ -71,21 +71,23 @@ class _ItemsScreenState extends State<ItemsScreen> {
             ),
           ),
           Expanded(
-            child: BlocBuilder<ItemBloc, List<Item>>(
+            child: BlocBuilder<ItemBloc, ItemState>(
               builder: (context, items) {
-                items = items.where((element) {
-                  return element.invoiceID == 0;
-                }).toList();
+                // items = items.where((element) {
+                //   return element.invoiceID == 0;
+                // }).toList();
 
-                items = items.reversed.toList();
+                // items = items.reversed.toList();
 
-                final sorted = searchController.text.isEmpty
-                    ? items
-                    : items.where((client) {
-                        return client.title
-                            .toLowerCase()
-                            .contains(searchController.text.toLowerCase());
-                      }).toList();
+                // final sorted = searchController.text.isEmpty
+                //     ? items
+                //     : items.where((client) {
+                //         return client.title
+                //             .toLowerCase()
+                //             .contains(searchController.text.toLowerCase());
+                //       }).toList();
+
+                final sorted = [];
 
                 return sorted.isEmpty
                     ? NoData(

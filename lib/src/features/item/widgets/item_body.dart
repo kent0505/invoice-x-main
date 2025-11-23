@@ -127,7 +127,7 @@ class ItemBody extends StatelessWidget {
         MainButtonWrapper(
           children: [
             MainButton(
-              title: 'Continue',
+              title: 'Save',
               active: active,
               onPressed: onContinue,
             ),

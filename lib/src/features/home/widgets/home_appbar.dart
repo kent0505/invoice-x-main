@@ -20,7 +20,6 @@ class HomeAppbar extends StatelessWidget implements PreferredSizeWidget {
     final colors = Theme.of(context).extension<MyColors>()!;
 
     return AppBar(
-      actionsPadding: const EdgeInsets.symmetric(horizontal: 16),
       title: Text(
         title,
         style: TextStyle(

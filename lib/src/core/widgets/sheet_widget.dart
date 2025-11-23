@@ -1,14 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../constants.dart';
+import 'button.dart';
+import 'svg_widget.dart';
 
 class SheetWidget extends StatelessWidget {
-  const SheetWidget({super.key, required this.child});
+  const SheetWidget({
+    super.key,
+    required this.title,
+    required this.child,
+  });
 
+  final String title;
   final Widget child;
 
   static void show({
     required BuildContext context,
+    required String title,
     required Widget child,
   }) {
     showModalBottomSheet(
@@ -16,7 +25,10 @@ class SheetWidget extends StatelessWidget {
       isScrollControlled: true,
       useSafeArea: true,
       builder: (context) {
-        return SheetWidget(child: child);
+        return SheetWidget(
+          title: title,
+          child: child,
+        );
       },
     );
   }
@@ -43,7 +55,24 @@ class SheetWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(5),
             ),
           ),
-          child,
+          Row(
+            children: [
+              const SizedBox(width: 16),
+              SheetTitle(title: title),
+              const Spacer(),
+              Button(
+                onPressed: () {
+                  context.pop();
+                },
+                child: SvgWidget(
+                  Assets.close,
+                  color: colors.text2,
+                ),
+              ),
+              const SizedBox(width: 16),
+            ],
+          ),
+          Expanded(child: child),
         ],
       ),
     );

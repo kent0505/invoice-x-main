@@ -84,8 +84,8 @@ class _EditClientScreenState extends State<EditClientScreen> {
   @override
   void dispose() {
     nameController.dispose();
-    phoneController.dispose();
     emailController.dispose();
+    phoneController.dispose();
     addressController.dispose();
     super.dispose();
   }
