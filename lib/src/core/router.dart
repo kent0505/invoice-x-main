@@ -23,6 +23,7 @@ import '../features/item/models/item.dart';
 import '../features/item/screens/create_item_screen.dart';
 import '../features/item/screens/edit_item_screen.dart';
 import '../features/item/screens/items_screen.dart';
+import '../features/onboard/screens/business_info_screen.dart';
 import '../features/onboard/screens/onboard_screen.dart';
 import '../features/pro/screens/pro_page.dart';
 import '../features/splash/screens/splash_screen.dart';
@@ -35,14 +36,20 @@ final routerConfig = GoRouter(
       builder: (context, state) => const SplashScreen(),
     ),
     GoRoute(
-      path: OnboardScreen.routePath,
-      builder: (context, state) => const OnboardScreen(),
-    ),
-    GoRoute(
       path: HomeScreen.routePath,
       builder: (context, state) => HomeScreen(
         showPaywall: state.extra as bool,
       ),
+    ),
+
+    // onboard
+    GoRoute(
+      path: OnboardScreen.routePath,
+      builder: (context, state) => const OnboardScreen(),
+    ),
+    GoRoute(
+      path: BusinessInfoScreen.routePath,
+      builder: (context, state) => const BusinessInfoScreen(),
     ),
 
     // pro

@@ -28,7 +28,7 @@ class ImageWidget extends StatelessWidget {
   final int? cacheWidth;
   final int? cacheHeight;
 
-  Widget errorBuilder(
+  static Widget errorBuilder(
     BuildContext context,
     Object error,
     StackTrace? stackTrace,
@@ -38,7 +38,7 @@ class ImageWidget extends StatelessWidget {
     return const SizedBox();
   }
 
-  Widget frameBuilder(
+  static Widget frameBuilder(
     BuildContext context,
     Widget child,
     int? frame,

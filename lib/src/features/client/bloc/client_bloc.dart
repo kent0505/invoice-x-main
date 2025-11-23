@@ -32,7 +32,11 @@ class ClientBloc extends Bloc<ClientEvent, ClientState> {
     }
 
     final clients = await _repository.getClients();
-    emit(state.copyWith(clients: clients.reversed.toList()));
+
+    emit(state.copyWith(
+      clients: clients.reversed.toList(),
+      loading: false,
+    ));
   }
 
   void _addClient(

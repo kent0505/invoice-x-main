@@ -23,7 +23,6 @@ class EditBusinessScreen extends StatefulWidget {
 
 class _EditBusinessScreenState extends State<EditBusinessScreen> {
   final nameController = TextEditingController();
-  final businessNameController = TextEditingController();
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
   final addressController = TextEditingController();
@@ -65,7 +64,6 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
   void onEdit() {
     final business = widget.business;
     business.name = nameController.text;
-    business.businessName = businessNameController.text;
     business.phone = phoneController.text;
     business.email = emailController.text;
     business.address = addressController.text;
@@ -86,7 +84,6 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
     file = XFile(widget.business.imageLogo);
     signature = widget.business.imageSignature;
     nameController.text = widget.business.name;
-    businessNameController.text = widget.business.businessName;
     phoneController.text = widget.business.phone;
     emailController.text = widget.business.email;
     addressController.text = widget.business.address;
@@ -100,7 +97,6 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
   @override
   void dispose() {
     nameController.dispose();
-    businessNameController.dispose();
     phoneController.dispose();
     emailController.dispose();
     addressController.dispose();
@@ -121,7 +117,6 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
         file: file,
         signature: signature,
         nameController: nameController,
-        businessNameController: businessNameController,
         phoneController: phoneController,
         emailController: emailController,
         addressController: addressController,

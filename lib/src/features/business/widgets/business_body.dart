@@ -14,7 +14,6 @@ class BusinessBody extends StatelessWidget {
     required this.file,
     required this.signature,
     required this.nameController,
-    required this.businessNameController,
     required this.phoneController,
     required this.emailController,
     required this.addressController,
@@ -33,7 +32,6 @@ class BusinessBody extends StatelessWidget {
   final XFile file;
   final String signature;
   final TextEditingController nameController;
-  final TextEditingController businessNameController;
   final TextEditingController phoneController;
   final TextEditingController emailController;
   final TextEditingController addressController;

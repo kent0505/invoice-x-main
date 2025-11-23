@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -7,8 +6,7 @@ import '../../../core/constants.dart';
 import '../../../core/widgets/image_widget.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/svg_widget.dart';
-import '../../home/screens/home_screen.dart';
-import '../data/onboard_repository.dart';
+import 'business_info_screen.dart';
 
 class OnboardScreen extends StatefulWidget {
   const OnboardScreen({super.key});
@@ -32,13 +30,7 @@ class _OnboardScreenState extends State<OnboardScreen> {
 
   void onContinue() async {
     if (index == 2) {
-      await context.read<OnboardRepository>().removeOnboard();
-      if (mounted) {
-        context.replace(
-          HomeScreen.routePath,
-          extra: false,
-        );
-      }
+      context.replace(BusinessInfoScreen.routePath);
     } else {
       pageController.nextPage(
         duration: const Duration(milliseconds: 300),

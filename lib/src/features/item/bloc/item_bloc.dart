@@ -33,7 +33,11 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
     }
 
     final items = await _repository.getItems();
-    emit(state.copyWith(items: items));
+
+    emit(state.copyWith(
+      items: items,
+      loading: false,
+    ));
   }
 
   void _addItem(

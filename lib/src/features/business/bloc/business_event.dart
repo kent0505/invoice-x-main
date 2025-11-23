@@ -3,6 +3,12 @@ part of 'business_bloc.dart';
 @immutable
 sealed class BusinessEvent {}
 
+final class SetDefaultBusiness extends BusinessEvent {
+  SetDefaultBusiness({required this.business});
+
+  final Business business;
+}
+
 final class GetBusiness extends BusinessEvent {}
 
 final class AddBusiness extends BusinessEvent {

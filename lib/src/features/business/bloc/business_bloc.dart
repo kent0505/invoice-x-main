@@ -5,15 +5,17 @@ import '../data/business_repository.dart';
 import '../models/business.dart';
 
 part 'business_event.dart';
+part 'business_state.dart';
 
-class BusinessBloc extends Bloc<BusinessEvent, List<Business>> {
+class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
   final BusinessRepository _repository;
 
   BusinessBloc({required BusinessRepository repository})
       : _repository = repository,
-        super([]) {
+        super(BusinessState()) {
     on<BusinessEvent>(
       (event, emit) => switch (event) {
+        SetDefaultBusiness() => _setDefaultBusiness(event, emit),
         GetBusiness() => _getBusiness(event, emit),
         AddBusiness() => _addBusiness(event, emit),
         EditBusiness() => _editBusiness(event, emit),
@@ -22,35 +24,65 @@ class BusinessBloc extends Bloc<BusinessEvent, List<Business>> {
     );
   }
 
+  void _setDefaultBusiness(
+    SetDefaultBusiness event,
+    Emitter<BusinessState> emit,
+  ) async {
+    emit(state.copyWith(defaultBusiness: event.business));
+  }
+
   void _getBusiness(
     GetBusiness event,
-    Emitter<List<Business>> emit,
+    Emitter<BusinessState> emit,
   ) async {
+    if (!state.loading) {
+      emit(state.copyWith(loading: true));
+    }
+
     final businesses = await _repository.getBusiness();
-    emit(businesses);
+
+    emit(state.copyWith(
+      businesses: businesses,
+      loading: false,
+    ));
   }
 
   void _addBusiness(
     AddBusiness event,
-    Emitter<List<Business>> emit,
+    Emitter<BusinessState> emit,
   ) async {
-    await _repository.addBusiness(event.business);
+    emit(state.copyWith(loading: true));
+
+    final business = event.business;
+
+    await _repository.addBusiness(business);
+
+    if (state.businesses.isEmpty) {
+      add(SetDefaultBusiness(business: business));
+    }
+
     add(GetBusiness());
   }
 
   void _editBusiness(
     EditBusiness event,
-    Emitter<List<Business>> emit,
+    Emitter<BusinessState> emit,
   ) async {
+    emit(state.copyWith(loading: true));
+
     await _repository.editBusiness(event.business);
+
     add(GetBusiness());
   }
 
   void _deleteBusiness(
     DeleteBusiness event,
-    Emitter<List<Business>> emit,
+    Emitter<BusinessState> emit,
   ) async {
+    emit(state.copyWith(loading: true));
+
     await _repository.deleteBusiness(event.business);
+
     add(GetBusiness());
   }
 }

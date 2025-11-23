@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import '../../../core/utils.dart';
 import '../../../core/widgets/date_pick.dart';
 import '../../../core/widgets/dialog_widget.dart';
-import '../../business/bloc/business_bloc.dart';
 import '../../business/models/business.dart';
 import '../../business/screens/business_screen.dart';
 import '../../business/screens/signature_screen.dart';
@@ -229,10 +228,10 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
     hasSignature = widget.invoice.imageSignature.isNotEmpty;
     taxController.text = widget.invoice.tax;
     isTaxable = widget.invoice.tax.isNotEmpty;
-    business = context
-        .read<BusinessBloc>()
-        .state
-        .firstWhereOrNull((element) => element.id == widget.invoice.businessID);
+    // business = context
+    //     .read<BusinessBloc>()
+    //     .state
+    //     .firstWhereOrNull((element) => element.id == widget.invoice.businessID);
     // client = context
     //     .read<ClientBloc>()
     //     .state

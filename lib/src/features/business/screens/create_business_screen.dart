@@ -21,7 +21,6 @@ class CreateBusinessScreen extends StatefulWidget {
 
 class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
   final nameController = TextEditingController();
-  final businessNameController = TextEditingController();
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
   final addressController = TextEditingController();
@@ -63,7 +62,6 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
   void onSave() {
     final business = Business(
       name: nameController.text,
-      businessName: businessNameController.text,
       phone: phoneController.text,
       email: emailController.text,
       address: addressController.text,
@@ -82,7 +80,6 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
   @override
   void dispose() {
     nameController.dispose();
-    businessNameController.dispose();
     phoneController.dispose();
     emailController.dispose();
     addressController.dispose();
@@ -103,7 +100,6 @@ class _CreateBusinessScreenState extends State<CreateBusinessScreen> {
         file: file,
         signature: signature,
         nameController: nameController,
-        businessNameController: businessNameController,
         phoneController: phoneController,
         emailController: emailController,
         addressController: addressController,

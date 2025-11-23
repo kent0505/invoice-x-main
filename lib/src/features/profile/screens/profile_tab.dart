@@ -1,11 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/utils.dart';
 import '../../../core/widgets/button.dart';
+import '../../../core/widgets/image_widget.dart';
 import '../../../core/widgets/sheet_widget.dart';
 import '../../../core/widgets/svg_widget.dart';
 import '../../../core/widgets/title_text.dart';
+import '../../business/bloc/business_bloc.dart';
 import '../../client/screens/clients_tab.dart';
 import '../../item/widgets/items_list.dart';
 import '../widgets/currency_list.dart';
@@ -110,29 +115,51 @@ class _Account extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<MyColors>()!;
 
-    return Column(
-      children: [
-        Container(
-          height: 88,
-          width: 88,
-          decoration: BoxDecoration(
-            color: colors.tertiary4,
-            shape: BoxShape.circle,
-          ),
-          child: const Center(
-            child: SvgWidget(Assets.person),
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          'Account Name',
-          style: TextStyle(
-            color: colors.text,
-            fontSize: 20,
-            fontFamily: AppFonts.w600,
-          ),
-        ),
-      ],
+    return BlocBuilder<BusinessBloc, BusinessState>(
+      builder: (context, state) {
+        final isNull = state.defaultBusiness == null;
+
+        final imageLogo = isNull ? '' : state.defaultBusiness!.imageLogo;
+
+        final name = isNull ? 'Account Name' : state.defaultBusiness!.name;
+
+        return Column(
+          children: [
+            isNull
+                ? Container(
+                    height: 88,
+                    width: 88,
+                    decoration: BoxDecoration(
+                      color: colors.tertiary4,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(
+                      child: SvgWidget(Assets.person),
+                    ),
+                  )
+                : ClipRRect(
+                    borderRadius: BorderRadius.circular(164),
+                    child: Image.file(
+                      File(imageLogo),
+                      errorBuilder: ImageWidget.errorBuilder,
+                      frameBuilder: ImageWidget.frameBuilder,
+                      height: 88,
+                      width: 88,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+            const SizedBox(height: 8),
+            Text(
+              name,
+              style: TextStyle(
+                color: colors.text,
+                fontSize: 20,
+                fontFamily: AppFonts.w600,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -16,7 +16,6 @@ import '../../../core/utils.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/svg_widget.dart';
-import '../../business/bloc/business_bloc.dart';
 import '../../profile/data/profile_repository.dart';
 import '../widgets/invoice_template.dart';
 import '../widgets/photos_list.dart';
@@ -143,10 +142,10 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
     super.initState();
     invoice = widget.invoice;
 
-    invoice.business = context
-        .read<BusinessBloc>()
-        .state
-        .firstWhereOrNull((element) => element.id == widget.invoice.businessID);
+    // invoice.business = context
+    //     .read<BusinessBloc>()
+    //     .state
+    //     .firstWhereOrNull((element) => element.id == widget.invoice.businessID);
     // invoice.client = context
     //     .read<ClientBloc>()
     //     .state

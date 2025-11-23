@@ -6,7 +6,6 @@ import '../../../core/widgets/appbar.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/no_data.dart';
 import '../bloc/business_bloc.dart';
-import '../models/business.dart';
 import '../widgets/business_tile.dart';
 import 'create_business_screen.dart';
 import 'edit_business_screen.dart';
@@ -25,8 +24,10 @@ class BusinessScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: BlocBuilder<BusinessBloc, List<Business>>(
-              builder: (context, businesses) {
+            child: BlocBuilder<BusinessBloc, BusinessState>(
+              builder: (context, state) {
+                final businesses = state.businesses;
+
                 return businesses.isEmpty
                     ? NoData(
                         description:
