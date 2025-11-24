@@ -8,7 +8,6 @@ abstract interface class PhotoRepository {
   const PhotoRepository();
 
   Future<List<Photo>> getPhotos();
-
   Future<void> addPhotos(List<Photo> photos);
   Future<void> deletePhotos(Invoice invoice);
 }

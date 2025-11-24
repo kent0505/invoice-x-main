@@ -10,7 +10,6 @@ import '../../../core/widgets/no_data.dart';
 import '../bloc/item_bloc.dart';
 import '../models/item.dart';
 import '../widgets/item_tile.dart';
-import 'create_item_screen.dart';
 import 'edit_item_screen.dart';
 
 class ItemsScreen extends StatefulWidget {
@@ -42,7 +41,7 @@ class _ItemsScreenState extends State<ItemsScreen> {
 
   void onCreate() async {
     Item? item = await context.push<Item?>(
-      CreateItemScreen.routePath,
+      EditItemScreen.routePath,
       extra: widget.select,
     );
     if (widget.select && mounted) context.pop(item);

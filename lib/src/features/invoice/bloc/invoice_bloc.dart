@@ -65,7 +65,6 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     Emitter<InvoiceState> emit,
   ) async {
     await _invoiceRepository.deleteInvoice(event.invoice);
-    await _invoiceRepository.deleteItems(event.invoice);
     await _photoRepository.deletePhotos(event.invoice);
     add(GetInvoices());
   }

@@ -8,7 +8,7 @@ import '../../../core/widgets/no_data.dart';
 import '../bloc/invoice_bloc.dart';
 import '../models/invoice.dart';
 import '../widgets/tab_widget.dart';
-import 'create_invoice_screen.dart';
+import 'edit_invoice_screen.dart';
 
 class InvoicesTab extends StatelessWidget {
   const InvoicesTab({super.key});
@@ -37,7 +37,10 @@ class InvoicesTab extends StatelessWidget {
                   child: MainButton(
                     title: 'Create invoice',
                     onPressed: () {
-                      context.push(CreateInvoiceScreen.routePath);
+                      context.push(
+                        EditInvoiceScreen.routePath,
+                        extra: null,
+                      );
                     },
                   ),
                 ),
@@ -66,7 +69,10 @@ class _InvoicesList extends StatelessWidget {
                 'You haven’t created any invoices yet. Tap the button below to create your first one.',
             buttonTitle: 'Create invoice',
             onPressed: () {
-              context.push(CreateInvoiceScreen.routePath);
+              context.push(
+                EditInvoiceScreen.routePath,
+                extra: null,
+              );
             },
           )
         : ListView.builder(

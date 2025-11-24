@@ -59,7 +59,7 @@ class _SignatureScreenState extends State<SignatureScreen> {
     final colors = Theme.of(context).extension<MyColors>()!;
 
     return Scaffold(
-      appBar: const Appbar(title: 'Create a signsature'),
+      appBar: const Appbar(title: 'Create a signature'),
       body: Column(
         children: [
           Container(

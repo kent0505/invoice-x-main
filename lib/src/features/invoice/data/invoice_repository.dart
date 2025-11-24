@@ -1,7 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
 import '../../../core/utils.dart';
-import '../../item/models/item.dart';
 import '../models/invoice.dart';
 import '../models/photo.dart';
 
@@ -12,7 +11,7 @@ abstract interface class InvoiceRepository {
   Future<void> addInvoice(Invoice invoice);
   Future<void> editInvoice(Invoice invoice);
   Future<void> deleteInvoice(Invoice invoice);
-  Future<void> deleteItems(Invoice invoice);
+  // Future<void> deleteItems(Invoice invoice);
 }
 
 final class InvoiceRepositoryImpl implements InvoiceRepository {
@@ -73,12 +72,12 @@ final class InvoiceRepositoryImpl implements InvoiceRepository {
     }
   }
 
-  @override
-  Future<void> deleteItems(Invoice invoice) async {
-    await _db.delete(
-      Item.table,
-      where: 'invoiceID = ?',
-      whereArgs: [invoice.id],
-    );
-  }
+  // @override
+  // Future<void> deleteItems(Invoice invoice) async {
+  //   await _db.delete(
+  //     Item.table,
+  //     where: 'invoiceID = ?',
+  //     whereArgs: [invoice.id],
+  //   );
+  // }
 }

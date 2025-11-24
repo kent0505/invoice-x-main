@@ -11,9 +11,9 @@ import '../../../core/widgets/sheet_widget.dart';
 import '../../../core/widgets/svg_widget.dart';
 import '../../../core/widgets/title_text.dart';
 import '../../business/bloc/business_bloc.dart';
-import '../../business/screens/business_screen.dart';
-import '../../client/screens/clients_screen.dart';
-import '../../item/widgets/items_list.dart';
+import '../../business/screens/business_list.dart';
+import '../../client/screens/clients_list.dart';
+import '../../item/screens/items_list.dart';
 import '../widgets/currency_list.dart';
 
 class ProfileTab extends StatelessWidget {
@@ -34,7 +34,7 @@ class ProfileTab extends StatelessWidget {
             SheetWidget.show(
               context: context,
               title: 'Business',
-              child: const BusinessScreen(),
+              child: const BusinessList(),
             );
           },
         ),
@@ -45,7 +45,7 @@ class ProfileTab extends StatelessWidget {
             SheetWidget.show(
               context: context,
               title: 'Clients',
-              child: const ClientsScreen(),
+              child: const ClientsList(),
             );
           },
         ),
@@ -116,11 +116,11 @@ class _Account extends StatelessWidget {
 
     return BlocBuilder<BusinessBloc, BusinessState>(
       builder: (context, state) {
-        final isNull = state.defaultBusiness == null;
+        final isNull = state.businesses.isEmpty;
 
-        final imageLogo = isNull ? '' : state.defaultBusiness!.imageLogo;
+        final imageLogo = isNull ? '' : state.businesses.last.imageLogo;
 
-        final name = isNull ? 'Account Name' : state.defaultBusiness!.name;
+        final name = isNull ? 'Account Name' : state.businesses.last.name;
 
         return Column(
           children: [

@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/svg_widget.dart';
-import '../../client/screens/clients_screen.dart';
+import '../../client/screens/clients_list.dart';
 import '../../internet/bloc/internet_bloc.dart';
 import '../../internet/widgets/no_internet_dialog.dart';
 import '../../invoice/screens/invoices_tab.dart';
@@ -81,7 +81,7 @@ class HomeScreen extends StatelessWidget {
               index: index,
               children: const [
                 InvoicesTab(),
-                ClientsScreen(),
+                ClientsList(),
                 ProfileTab(),
               ],
             );

@@ -1,4 +1,4 @@
-class Item {
+final class Item {
   Item({
     this.id = 0,
     required this.title,

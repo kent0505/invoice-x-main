@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/svg_widget.dart';
+import '../../profile/data/profile_repository.dart';
 import '../models/item.dart';
 
 class ItemTile extends StatelessWidget {
@@ -19,10 +21,13 @@ class ItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<MyColors>()!;
 
+    final currency = context.read<ProfileRepository>().getCurrency();
+
     return Button(
       onPressed: onPressed,
       child: Container(
         height: 72,
+        margin: const EdgeInsets.only(bottom: 8),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: colors.tertiary1,
@@ -36,17 +41,19 @@ class ItemTile extends StatelessWidget {
                 children: [
                   Text(
                     item.title,
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontFamily: AppFonts.w400,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: colors.text,
+                      fontSize: 16,
+                      fontFamily: AppFonts.w500,
                     ),
                   ),
                   const Spacer(),
                   Text(
-                    item.title,
-                    style: const TextStyle(
-                      color: Colors.black,
+                    '$currency${item.discountPrice}',
+                    style: TextStyle(
+                      color: colors.text2,
                       fontSize: 14,
                       fontFamily: AppFonts.w400,
                     ),

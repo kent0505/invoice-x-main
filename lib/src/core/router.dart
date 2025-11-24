@@ -8,7 +8,6 @@ import '../features/client/screens/edit_client_screen.dart';
 import '../features/home/screens/home_screen.dart';
 import '../features/invoice/models/invoice.dart';
 import '../features/invoice/models/photo.dart';
-import '../features/invoice/screens/create_invoice_screen.dart';
 import '../features/invoice/screens/default_template_screen.dart';
 import '../features/invoice/screens/edit_invoice_screen.dart';
 import '../features/invoice/screens/invoice_customize_screen.dart';
@@ -16,7 +15,6 @@ import '../features/invoice/screens/invoice_details_screen.dart';
 import '../features/invoice/screens/invoice_preview_screen.dart';
 import '../features/invoice/screens/photo_screen.dart';
 import '../features/item/models/item.dart';
-import '../features/item/screens/create_item_screen.dart';
 import '../features/item/screens/edit_item_screen.dart';
 import '../features/item/screens/items_screen.dart';
 import '../features/onboard/screens/business_info_screen.dart';
@@ -62,10 +60,6 @@ final routerConfig = GoRouter(
       builder: (context, state) => const DefaultTemplateScreen(),
     ),
     GoRoute(
-      path: CreateInvoiceScreen.routePath,
-      builder: (context, state) => const CreateInvoiceScreen(),
-    ),
-    GoRoute(
       path: InvoiceDetailsScreen.routePath,
       builder: (context, state) => InvoiceDetailsScreen(
         invoice: state.extra as Invoice,
@@ -86,7 +80,7 @@ final routerConfig = GoRouter(
     GoRoute(
       path: EditInvoiceScreen.routePath,
       builder: (context, state) => EditInvoiceScreen(
-        invoice: state.extra as Invoice,
+        invoice: state.extra as Invoice?,
       ),
     ),
     GoRoute(
@@ -97,7 +91,6 @@ final routerConfig = GoRouter(
     ),
 
     // business
-
     GoRoute(
       path: EditBusinessScreen.routePath,
       builder: (context, state) => EditBusinessScreen(
@@ -125,15 +118,9 @@ final routerConfig = GoRouter(
       ),
     ),
     GoRoute(
-      path: CreateItemScreen.routePath,
-      builder: (context, state) => CreateItemScreen(
-        select: state.extra as bool,
-      ),
-    ),
-    GoRoute(
       path: EditItemScreen.routePath,
       builder: (context, state) => EditItemScreen(
-        item: state.extra as Item,
+        item: state.extra as Item?,
       ),
     ),
   ],

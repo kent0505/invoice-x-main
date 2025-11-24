@@ -33,11 +33,8 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
 
     final businesses = await _repository.getBusiness();
 
-    final defaultBusiness = businesses.isEmpty ? null : businesses.first;
-
     emit(state.copyWith(
       businesses: businesses.reversed.toList(),
-      defaultBusiness: defaultBusiness,
       loading: false,
     ));
   }
