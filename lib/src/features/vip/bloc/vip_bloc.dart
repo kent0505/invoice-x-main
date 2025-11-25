@@ -12,6 +12,7 @@ class VipBloc extends Bloc<VipEvent, VipState> {
     on<VipEvent>(
       (event, emit) => switch (event) {
         CheckVip() => _checkVip(event, emit),
+        CheckPurchased() => _checkPurchased(event, emit),
       },
     );
   }
@@ -44,11 +45,20 @@ class VipBloc extends Bloc<VipEvent, VipState> {
         emit(state.copyWith(loading: false));
       }
     } else {
+      // android
       emit(state.copyWith(
         isVip: true,
         loading: false,
         offering: null,
       ));
     }
+  }
+
+  void _checkPurchased(
+    CheckPurchased event,
+    Emitter<VipState> emit,
+  ) async {
+    final isVip = event.customerInfo.entitlements.active.isNotEmpty;
+    emit(state.copyWith(isVip: isVip));
   }
 }

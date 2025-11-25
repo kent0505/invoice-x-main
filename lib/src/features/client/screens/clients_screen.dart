@@ -7,25 +7,23 @@ import '../../../core/widgets/field.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/no_data.dart';
 import '../../../core/widgets/title_text.dart';
-import '../bloc/business_bloc.dart';
-import '../widgets/business_tile.dart';
-import 'edit_business_screen.dart';
+import '../bloc/client_bloc.dart';
+import '../widgets/client_tile.dart';
+import 'edit_client_screen.dart';
 
-class BusinessList extends StatefulWidget {
-  const BusinessList({super.key});
-
-  static const routePath = '/BusinessList';
+class ClientsScreen extends StatefulWidget {
+  const ClientsScreen({super.key});
 
   @override
-  State<BusinessList> createState() => _BusinessListState();
+  State<ClientsScreen> createState() => _ClientsScreenState();
 }
 
-class _BusinessListState extends State<BusinessList> {
+class _ClientsScreenState extends State<ClientsScreen> {
   final searchController = TextEditingController();
 
   void onCreate() {
     context.push(
-      EditBusinessScreen.routePath,
+      EditClientScreen.routePath,
       extra: null,
     );
   }
@@ -38,16 +36,16 @@ class _BusinessListState extends State<BusinessList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<BusinessBloc, BusinessState>(
+    return BlocBuilder<ClientBloc, ClientState>(
       builder: (context, state) {
-        final businesses = state.businesses;
+        final clients = state.clients;
 
         final query = searchController.text.toLowerCase();
 
         final sorted = query.isEmpty
-            ? businesses
-            : businesses.where((business) {
-                return business.name.toLowerCase().contains(query);
+            ? clients
+            : clients.where((client) {
+                return client.name.toLowerCase().contains(query);
               }).toList();
 
         return Stack(
@@ -64,21 +62,21 @@ class _BusinessListState extends State<BusinessList> {
                     onChanged: (_) {
                       setState(() {});
                     },
-                    hintText: 'Search by business name...',
+                    hintText: 'Search by client name...',
                     asset: Assets.search,
                   ),
                 ),
                 const SizedBox(height: 8),
                 const TitleText(
-                  title: 'All created accounts',
+                  title: 'All created clients',
                   left: 16,
                 ),
                 Expanded(
                   child: sorted.isEmpty
                       ? NoData(
                           description:
-                              'You haven’t created any business account yet. Tap the button below to create your first one.',
-                          buttonTitle: 'Create account',
+                              'You haven’t created any clients yet. Tap the button below to create your first one.',
+                          buttonTitle: 'Create client',
                           onPressed: onCreate,
                         )
                       : ListView.builder(
@@ -87,14 +85,14 @@ class _BusinessListState extends State<BusinessList> {
                           ),
                           itemCount: sorted.length,
                           itemBuilder: (context, index) {
-                            final business = sorted[index];
+                            final client = sorted[index];
 
-                            return BusinessTile(
-                              business: business,
+                            return ClientTile(
+                              client: client,
                               onPressed: () {
                                 context.push(
-                                  EditBusinessScreen.routePath,
-                                  extra: business,
+                                  EditClientScreen.routePath,
+                                  extra: client,
                                 );
                               },
                             );
@@ -108,7 +106,7 @@ class _BusinessListState extends State<BusinessList> {
                 right: 10,
                 bottom: 10,
                 child: MainButton(
-                  title: 'Create account',
+                  title: 'Create client',
                   onPressed: onCreate,
                 ),
               ),

@@ -21,7 +21,6 @@ import '../widgets/invoice_template.dart';
 import '../widgets/photos_list.dart';
 import '../bloc/invoice_bloc.dart';
 import '../models/invoice.dart';
-import '../widgets/invoice_appbar.dart';
 import '../widgets/invoice_pay.dart';
 import 'edit_invoice_screen.dart';
 import 'invoice_preview_screen.dart';
@@ -182,10 +181,10 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
     double total = subtotal + taxAmount;
 
     return Scaffold(
-      appBar: InvoiceAppbar(
-        title: '',
-        onPreview: onPreview,
-      ),
+      // appBar: InvoiceAppbar(
+      //   title: '',
+      //   onPreview: onPreview,
+      // ),
       body: Column(
         children: [
           Expanded(
@@ -352,11 +351,11 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
             children: [
               Row(
                 children: [
-                  _Button(
-                    title: 'Print',
-                    asset: Assets.print,
-                    onPressed: onPrint,
-                  ),
+                  // _Button(
+                  //   title: 'Print',
+                  //   asset: Assets.print,
+                  //   onPressed: onPrint,
+                  // ),
                   const Spacer(),
                   _Button(
                     title: 'Edit',

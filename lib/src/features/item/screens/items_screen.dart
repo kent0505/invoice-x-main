@@ -3,21 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/widgets/appbar.dart';
 import '../../../core/widgets/field.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/no_data.dart';
+import '../../../core/widgets/title_text.dart';
 import '../bloc/item_bloc.dart';
-import '../models/item.dart';
-import '../widgets/item_tile.dart';
 import 'edit_item_screen.dart';
+import '../widgets/item_tile.dart';
 
 class ItemsScreen extends StatefulWidget {
-  const ItemsScreen({super.key, required this.select});
-
-  final bool select;
-
-  static const routePath = '/ItemsScreen';
+  const ItemsScreen({super.key});
 
   @override
   State<ItemsScreen> createState() => _ItemsScreenState();
@@ -26,25 +21,11 @@ class ItemsScreen extends StatefulWidget {
 class _ItemsScreenState extends State<ItemsScreen> {
   final searchController = TextEditingController();
 
-  void onSearch(String _) {
-    setState(() {});
-  }
-
-  void onItem(Item item) {
-    widget.select
-        ? context.pop(item)
-        : context.push(
-            EditItemScreen.routePath,
-            extra: item,
-          );
-  }
-
-  void onCreate() async {
-    Item? item = await context.push<Item?>(
+  void onCreate() {
+    context.push(
       EditItemScreen.routePath,
-      extra: widget.select,
+      extra: null,
     );
-    if (widget.select && mounted) context.pop(item);
   }
 
   @override
@@ -55,73 +36,79 @@ class _ItemsScreenState extends State<ItemsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: const Appbar(title: 'Items'),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Field(
-              controller: searchController,
-              onChanged: onSearch,
-              hintText: 'Search currency',
-              asset: Assets.search,
+    return BlocBuilder<ItemBloc, ItemState>(
+      builder: (context, state) {
+        final query = searchController.text.toLowerCase();
+
+        final sorted = query.isEmpty
+            ? state.items
+            : state.items.where((element) {
+                return element.title.toLowerCase().contains(query);
+              }).toList();
+
+        return Stack(
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 16,
+                  ),
+                  child: Field(
+                    controller: searchController,
+                    onChanged: (_) {
+                      setState(() {});
+                    },
+                    hintText: 'Search by item name...',
+                    asset: Assets.search,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const TitleText(
+                  title: 'All created items',
+                  left: 16,
+                ),
+                Expanded(
+                  child: sorted.isEmpty
+                      ? NoData(
+                          description:
+                              'You haven’t created any items yet. Tap the button below to create your first one.',
+                          buttonTitle: 'Create item',
+                          onPressed: onCreate,
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          itemCount: sorted.length,
+                          itemBuilder: (context, index) {
+                            final item = sorted[index];
+
+                            return ItemTile(
+                              item: item,
+                              onPressed: () {
+                                context.push(
+                                  EditItemScreen.routePath,
+                                  extra: item,
+                                );
+                              },
+                            );
+                          },
+                        ),
+                ),
+              ],
             ),
-          ),
-          Expanded(
-            child: BlocBuilder<ItemBloc, ItemState>(
-              builder: (context, items) {
-                // items = items.where((element) {
-                //   return element.invoiceID == 0;
-                // }).toList();
-
-                // items = items.reversed.toList();
-
-                // final sorted = searchController.text.isEmpty
-                //     ? items
-                //     : items.where((client) {
-                //         return client.title
-                //             .toLowerCase()
-                //             .contains(searchController.text.toLowerCase());
-                //       }).toList();
-
-                final sorted = [];
-
-                return sorted.isEmpty
-                    ? NoData(
-                        description:
-                            'You haven’t created any items yet. Tap the button below to create your first one.',
-                        buttonTitle: 'Create item',
-                        onPressed: () {},
-                      )
-                    : ListView.builder(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: sorted.length,
-                        itemBuilder: (context, index) {
-                          final item = sorted[index];
-
-                          return ItemTile(
-                            item: item,
-                            onPressed: () {
-                              onItem(item);
-                            },
-                          );
-                        },
-                      );
-              },
-            ),
-          ),
-          MainButtonWrapper(
-            children: [
-              MainButton(
-                title: 'Create',
-                onPressed: onCreate,
+            if (sorted.isNotEmpty)
+              Positioned(
+                right: 10,
+                bottom: 10,
+                child: MainButton(
+                  title: 'Add item',
+                  onPressed: onCreate,
+                ),
               ),
-            ],
-          ),
-        ],
-      ),
+          ],
+        );
+      },
     );
   }
 }

@@ -5,8 +5,10 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/utils.dart';
+import '../../../core/widgets/appbar.dart';
+import '../../../core/widgets/button.dart';
 import '../../../core/widgets/date_pick.dart';
-import '../../../core/widgets/dialog_widget.dart';
+import '../../../core/widgets/field.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/switch_button.dart';
 import '../../../core/widgets/title_text.dart';
@@ -17,13 +19,11 @@ import '../../client/bloc/client_bloc.dart';
 import '../../client/models/client.dart';
 import '../../item/bloc/item_bloc.dart';
 import '../../item/models/item.dart';
-import '../../item/screens/items_screen.dart';
 import '../../onboard/data/onboard_repository.dart';
 import '../../profile/data/profile_repository.dart';
 import '../bloc/invoice_bloc.dart';
 import '../models/invoice.dart';
 import '../models/photo.dart';
-import '../widgets/invoice_appbar.dart';
 import '../widgets/invoice_dates.dart';
 import '../widgets/invoice_select_data.dart';
 import '../widgets/invoice_selected_data.dart';
@@ -150,17 +150,17 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
   }
 
   void onSelectBusiness() {
-    if (business == null) {
-      // context.push<Business?>(BusinessScreen.routePath).then((value) {
-      //   if (value != null) {
-      //     business = value;
-      //     setState(() {});
-      //   }
-      // });
-    } else {
-      business = null;
-      setState(() {});
-    }
+    // if (business == null) {
+    // context.push<Business?>(BusinessScreen.routePath).then((value) {
+    //   if (value != null) {
+    //     business = value;
+    //     setState(() {});
+    //   }
+    // });
+    // } else {
+    //   business = null;
+    //   setState(() {});
+    // }
   }
 
   void onSelectClient() {
@@ -178,33 +178,33 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
   }
 
   void onSelectItems() async {
-    final value = await context.push<Item?>(ItemsScreen.routePath, extra: true);
-    if (value == null) return;
-    final uniqueInvoiceIDs = <int>{};
-    final uniqueItems = <Item>[];
-    for (final item in items) {
-      if (uniqueInvoiceIDs.add(item.id)) {
-        uniqueItems.add(item);
-      }
-    }
-    final isInUniqueItems = uniqueItems.any((item) => item.id == value.id);
-    if (isInUniqueItems || uniqueItems.length < 10) {
-      items.add(
-        Item(
-          id: value.id,
-          title: value.title,
-          type: value.type,
-          price: value.price,
-          discountPrice: value.discountPrice,
-          invoiceID: widget.invoice?.id ?? id,
-        ),
-      );
-    } else {
-      if (mounted) {
-        DialogWidget.show(context, title: 'Max Items is 10');
-      }
-    }
-    setState(() {});
+    // final value = await context.push<Item?>(ItemsScreen.routePath, extra: true);
+    // if (value == null) return;
+    // final uniqueInvoiceIDs = <int>{};
+    // final uniqueItems = <Item>[];
+    // for (final item in items) {
+    //   if (uniqueInvoiceIDs.add(item.id)) {
+    //     uniqueItems.add(item);
+    //   }
+    // }
+    // final isInUniqueItems = uniqueItems.any((item) => item.id == value.id);
+    // if (isInUniqueItems || uniqueItems.length < 10) {
+    //   items.add(
+    //     Item(
+    //       id: value.id,
+    //       title: value.title,
+    //       type: value.type,
+    //       price: value.price,
+    //       discountPrice: value.discountPrice,
+    //       invoiceID: widget.invoice?.id ?? id,
+    //     ),
+    //   );
+    // } else {
+    //   if (mounted) {
+    //     DialogWidget.show(context, title: 'Max Items is 10');
+    //   }
+    // }
+    // setState(() {});
   }
 
   void onRemoveItem(Item item) {
@@ -323,6 +323,8 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     final currency = context.read<ProfileRepository>().getCurrency();
     final uniqueInvoiceIDs = <int>{};
     final uniqueItems = <Item>[];
@@ -342,42 +344,20 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
     double total = subtotal + taxAmount;
 
     return Scaffold(
-      appBar: InvoiceAppbar(
-        title: 'Edit invoice',
-        onPreview: onPreview,
+      appBar: Appbar(
+        title: widget.invoice == null ? 'Create invoice' : 'Edit invoice',
+        right: Button(
+          onPressed: onPreview,
+          child: Text(
+            'Preview',
+            style: TextStyle(
+              color: colors.accent,
+              fontSize: 14,
+              fontFamily: AppFonts.w400,
+            ),
+          ),
+        ),
       ),
-      // body: InvoiceBody(
-      //   isEstimate: widget.invoice.isEstimate,
-      //   active:
-      //       business != null && client != null && items.isNotEmpty && isTaxable
-      //           ? taxController.text.isNotEmpty
-      //           : true,
-      //   date: date,
-      //   dueDate: dueDate,
-      //   onDate: onDate,
-      //   onDueDate: onDueDate,
-      //   number: widget.invoice.number,
-      //   business: business,
-      //   onSelectBusiness: onSelectBusiness,
-      //   client: client,
-      //   onSelectClient: onSelectClient,
-      //   items: items,
-      //   onSelectItems: onSelectItems,
-      //   onRemoveItem: onRemoveItem,
-      //   hasSignature: hasSignature,
-      //   signature: signature,
-      //   onSignature: onSignature,
-      //   onAddSignature: onAddSignature,
-      //   photos: photos,
-      //   onAddPhotos: onAddPhotos,
-      //   onCreate: onSave,
-      //   isTaxable: isTaxable,
-      //   onTaxable: onTaxable,
-      //   taxController: taxController,
-      //   checkActive: (_) {
-      //     setState(() {});
-      //   },
-      // ),
       body: Column(
         children: [
           Expanded(
@@ -506,15 +486,15 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
                   ],
                 ),
                 const SizedBox(height: 6),
-                // if (isTaxable)
-                //   ItemField(
-                //     controller: taxController,
-                //     hintText: 'Tax %',
-                //     decimal: true,
-                //     onChanged: (_) {
-                //       setState(() {});
-                //     },
-                //   ),
+                if (isTaxable)
+                  Field(
+                    controller: taxController,
+                    hintText: 'Tax %',
+                    fieldType: FieldType.decimal,
+                    onChanged: (_) {
+                      setState(() {});
+                    },
+                  ),
                 const SizedBox(height: 16),
                 Row(
                   children: [
@@ -528,36 +508,22 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
                   ],
                 ),
                 const SizedBox(height: 16),
-                if (hasSignature) ...[
-                  SvgPicture.string(signature),
-                  const SizedBox(height: 16),
-                  MainButton(
-                    title: signature.isEmpty
-                        ? 'Create a signature'
-                        : 'Change signature',
-                    onPressed: onAddSignature,
-                  ),
-                ],
-                // if (isEstimate) ...[
-                //   const SizedBox(height: 16),
-                //   const TitleText(title: 'Photos'),
-                //   const SizedBox(height: 6),
-                //   InvoiceSelectData(
-                //     title: 'Add Photo',
-                //     onPressed: onAddPhotos,
-                //   ),
-                //   const SizedBox(height: 16),
-                //   BlocBuilder<InvoiceBloc, InvoiceState>(
-                //     builder: (context, state) {
-                //       return PhotosList(photos: photos);
-                //     },
-                //   ),
-                // ],
+                if (hasSignature) SvgPicture.string(signature),
               ],
             ),
           ),
           MainButtonWrapper(
             children: [
+              if (hasSignature) ...[
+                MainButton(
+                  title: signature.isEmpty
+                      ? 'Create a signature'
+                      : 'Change signature',
+                  color: colors.bg,
+                  onPressed: onAddSignature,
+                ),
+                const SizedBox(height: 16),
+              ],
               MainButton(
                 title: 'Save',
                 active: business != null &&

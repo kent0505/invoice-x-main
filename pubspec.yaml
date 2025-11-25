@@ -69,6 +69,3 @@ flutter:
     - family: w700
       fonts:
         - asset: assets/fonts/Poppins-Bold.ttf
-    - family: w800
-      fonts:
-        - asset: assets/fonts/Montserrat-ExtraBold.ttf

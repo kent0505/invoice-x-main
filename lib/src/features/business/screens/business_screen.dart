@@ -7,23 +7,23 @@ import '../../../core/widgets/field.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/no_data.dart';
 import '../../../core/widgets/title_text.dart';
-import '../bloc/client_bloc.dart';
-import '../widgets/client_tile.dart';
-import 'edit_client_screen.dart';
+import '../bloc/business_bloc.dart';
+import '../widgets/business_tile.dart';
+import 'edit_business_screen.dart';
 
-class ClientsList extends StatefulWidget {
-  const ClientsList({super.key});
+class BusinessScreen extends StatefulWidget {
+  const BusinessScreen({super.key});
 
   @override
-  State<ClientsList> createState() => _ClientsListState();
+  State<BusinessScreen> createState() => _BusinessScreenState();
 }
 
-class _ClientsListState extends State<ClientsList> {
+class _BusinessScreenState extends State<BusinessScreen> {
   final searchController = TextEditingController();
 
   void onCreate() {
     context.push(
-      EditClientScreen.routePath,
+      EditBusinessScreen.routePath,
       extra: null,
     );
   }
@@ -36,16 +36,16 @@ class _ClientsListState extends State<ClientsList> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ClientBloc, ClientState>(
+    return BlocBuilder<BusinessBloc, BusinessState>(
       builder: (context, state) {
-        final clients = state.clients;
+        final businesses = state.businesses;
 
         final query = searchController.text.toLowerCase();
 
         final sorted = query.isEmpty
-            ? clients
-            : clients.where((client) {
-                return client.name.toLowerCase().contains(query);
+            ? businesses
+            : businesses.where((business) {
+                return business.name.toLowerCase().contains(query);
               }).toList();
 
         return Stack(
@@ -62,21 +62,21 @@ class _ClientsListState extends State<ClientsList> {
                     onChanged: (_) {
                       setState(() {});
                     },
-                    hintText: 'Search by client name...',
+                    hintText: 'Search by business name...',
                     asset: Assets.search,
                   ),
                 ),
                 const SizedBox(height: 8),
                 const TitleText(
-                  title: 'All created clients',
+                  title: 'All created accounts',
                   left: 16,
                 ),
                 Expanded(
                   child: sorted.isEmpty
                       ? NoData(
                           description:
-                              'You haven’t created any clients yet. Tap the button below to create your first one.',
-                          buttonTitle: 'Create client',
+                              'You haven’t created any business account yet. Tap the button below to create your first one.',
+                          buttonTitle: 'Create account',
                           onPressed: onCreate,
                         )
                       : ListView.builder(
@@ -85,14 +85,14 @@ class _ClientsListState extends State<ClientsList> {
                           ),
                           itemCount: sorted.length,
                           itemBuilder: (context, index) {
-                            final client = sorted[index];
+                            final business = sorted[index];
 
-                            return ClientTile(
-                              client: client,
+                            return BusinessTile(
+                              business: business,
                               onPressed: () {
                                 context.push(
-                                  EditClientScreen.routePath,
-                                  extra: client,
+                                  EditBusinessScreen.routePath,
+                                  extra: business,
                                 );
                               },
                             );
@@ -106,7 +106,7 @@ class _ClientsListState extends State<ClientsList> {
                 right: 10,
                 bottom: 10,
                 child: MainButton(
-                  title: 'Create client',
+                  title: 'Create account',
                   onPressed: onCreate,
                 ),
               ),

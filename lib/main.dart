@@ -26,11 +26,10 @@ import 'src/features/invoice/models/photo.dart';
 import 'src/features/item/bloc/item_bloc.dart';
 import 'src/features/item/data/item_repository.dart';
 import 'src/features/item/models/item.dart';
-import 'src/features/pro/bloc/pro_bloc.dart';
-import 'src/features/pro/data/pro_repository.dart';
 import 'src/features/onboard/data/onboard_repository.dart';
 import 'src/features/profile/data/profile_repository.dart';
 import 'src/features/vip/bloc/vip_bloc.dart';
+import 'src/features/vip/screens/vip_screen.dart';
 
 // final colors = Theme.of(context).extension<MyColors>()!;
 
@@ -69,10 +68,7 @@ void main() async {
     await prefs.setString(Keys.userID, userID);
   }
 
-  // await Purchases.configure(
-  //   PurchasesConfiguration('appl_XOzrSgcIeAVfozHHQbvIJjGyatM')
-  //     ..appUserID = userID,
-  // );
+  await VipScreen.configure(userID);
 
   // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   // await FirebaseAnalytics.instance.setUserId(id: userID);
@@ -85,9 +81,6 @@ void main() async {
         ),
         RepositoryProvider<ProfileRepository>(
           create: (context) => ProfileRepositoryImpl(prefs: prefs),
-        ),
-        RepositoryProvider<ProRepository>(
-          create: (context) => ProRepositoryImpl(prefs: prefs),
         ),
         RepositoryProvider<InvoiceRepository>(
           create: (context) => InvoiceRepositoryImpl(db: db),
@@ -133,11 +126,6 @@ void main() async {
           BlocProvider(
             create: (context) => ItemBloc(
               repository: context.read<ItemRepository>(),
-            ),
-          ),
-          BlocProvider(
-            create: (context) => ProBloc(
-              repository: context.read<ProRepository>(),
             ),
           ),
         ],

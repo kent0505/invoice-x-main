@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/constants.dart';
+import '../constants.dart';
 
 class TabWidget extends StatefulWidget {
   const TabWidget({
@@ -52,7 +52,7 @@ class _TabWidgetState extends State<TabWidget>
           height: 40,
           width: 218,
           padding: const EdgeInsets.all(4),
-          margin: const EdgeInsets.only(bottom: 8),
+          margin: const EdgeInsets.symmetric(vertical: 8),
           decoration: BoxDecoration(
             color: colors.tertiary1,
             borderRadius: BorderRadius.circular(20),

@@ -11,86 +11,66 @@ class TotalIncome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.vertical(
-          bottom: Radius.circular(20),
+    final colors = Theme.of(context).extension<MyColors>()!;
+
+    final currency = context.read<ProfileRepository>().getCurrency();
+
+    return Column(
+      children: [
+        Text(
+          'Total Income',
+          style: TextStyle(
+            color: colors.text,
+            fontSize: 16,
+            fontFamily: AppFonts.w500,
+          ),
         ),
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 28,
-        vertical: 16,
-      ).copyWith(top: 16 + MediaQuery.of(context).viewPadding.top),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'Total Income',
-                  style: TextStyle(
-                    color: Color(0xff8E8E93),
-                    fontSize: 14,
-                  ),
-                ),
-                BlocBuilder<InvoiceBloc, InvoiceState>(
-                  builder: (context, state) {
-                    if (state is InvoiceLoaded) {
-                      final currency =
-                          context.read<ProfileRepository>().getCurrency();
+        const SizedBox(height: 4),
+        BlocBuilder<InvoiceBloc, InvoiceState>(
+          builder: (context, state) {
+            if (state is InvoiceLoaded) {
+              final sorted = state.invoices.where((element) {
+                return element.paymentMethod.isNotEmpty;
+              }).toList();
 
-                      final sorted = state.invoices.where((element) {
-                        return element.paymentMethod.isNotEmpty;
-                      }).toList();
+              return BlocBuilder<ItemBloc, ItemState>(
+                builder: (context, state) {
+                  double total = 0;
 
-                      return BlocBuilder<ItemBloc, ItemState>(
-                        builder: (context, state) {
-                          double total = 0;
+                  final items = state.items;
 
-                          final items = state.items;
+                  for (final invoice in sorted) {
+                    double invoiceSubtotal = 0;
 
-                          for (final invoice in sorted) {
-                            double invoiceSubtotal = 0;
-
-                            for (final item in items) {
-                              if (item.invoiceID == invoice.id) {
-                                invoiceSubtotal +=
-                                    double.tryParse(item.discountPrice) ?? 0;
-                              }
-                            }
-
-                            final taxPercent =
-                                double.tryParse(invoice.tax) ?? 0;
-                            final taxAmount =
-                                invoiceSubtotal * (taxPercent / 100);
-                            final invoiceTotal = invoiceSubtotal + taxAmount;
-                            total += invoiceTotal;
-                          }
-
-                          return Text(
-                            '$currency${total.toStringAsFixed(2)}',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 40,
-                              fontFamily: AppFonts.w800,
-                            ),
-                          );
-                        },
-                      );
+                    for (final item in items) {
+                      if (item.invoiceID == invoice.id) {
+                        invoiceSubtotal +=
+                            double.tryParse(item.discountPrice) ?? 0;
+                      }
                     }
 
-                    return const SizedBox();
-                  },
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+                    final taxPercent = double.tryParse(invoice.tax) ?? 0;
+                    final taxAmount = invoiceSubtotal * (taxPercent / 100);
+                    final invoiceTotal = invoiceSubtotal + taxAmount;
+                    total += invoiceTotal;
+                  }
+
+                  return Text(
+                    '$currency${total.toStringAsFixed(2)}',
+                    style: TextStyle(
+                      color: colors.text,
+                      fontSize: 32,
+                      fontFamily: AppFonts.w700,
+                    ),
+                  );
+                },
+              );
+            }
+
+            return const SizedBox();
+          },
+        ),
+      ],
     );
   }
 }

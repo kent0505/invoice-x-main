@@ -103,9 +103,12 @@ class _DatePickState extends State<DatePick> {
                 const SizedBox(width: 8),
                 Button(
                   onPressed: () => _changeMonth(1),
-                  child: const SvgWidget(
-                    Assets.next,
-                    color: Color(0xffFF4400),
+                  child: const RotatedBox(
+                    quarterTurns: 2,
+                    child: SvgWidget(
+                      Assets.back,
+                      color: Color(0xffFF4400),
+                    ),
                   ),
                 ),
               ],

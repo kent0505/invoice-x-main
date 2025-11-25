@@ -5,11 +5,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/constants.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/svg_widget.dart';
-import '../../client/screens/clients_list.dart';
+import '../../client/screens/clients_screen.dart';
 import '../../internet/bloc/internet_bloc.dart';
 import '../../internet/widgets/no_internet_dialog.dart';
-import '../../invoice/screens/invoices_tab.dart';
-import '../../profile/screens/profile_tab.dart';
+import '../../invoice/screens/invoices_screen.dart';
+import '../../profile/screens/profile_screen.dart';
 import '../../vip/bloc/vip_bloc.dart';
 import '../../vip/screens/vip_screen.dart';
 import '../widgets/home_appbar.dart';
@@ -80,9 +80,9 @@ class HomeScreen extends StatelessWidget {
             return IndexedStack(
               index: index,
               children: const [
-                InvoicesTab(),
-                ClientsList(),
-                ProfileTab(),
+                InvoicesScreen(),
+                ClientsScreen(),
+                ProfileScreen(),
               ],
             );
           },

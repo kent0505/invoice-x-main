@@ -5,46 +5,66 @@ import 'package:go_router/go_router.dart';
 import '../../../core/constants.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/no_data.dart';
+import '../../home/widgets/total_income.dart';
 import '../bloc/invoice_bloc.dart';
 import '../models/invoice.dart';
-import '../widgets/tab_widget.dart';
+import '../../../core/widgets/tab_widget.dart';
 import 'edit_invoice_screen.dart';
 
-class InvoicesTab extends StatelessWidget {
-  const InvoicesTab({super.key});
+class InvoicesScreen extends StatelessWidget {
+  const InvoicesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<InvoiceBloc, InvoiceState>(
       builder: (context, state) {
         if (state is InvoiceLoaded) {
-          final sorted = state.invoices;
+          final invoices = state.invoices;
 
-          return Stack(
-            children: [
-              TabWidget(
-                titles: const ['All', 'Unpaid', 'Paid'],
-                pages: [
-                  _InvoicesList(invoices: sorted),
-                  _InvoicesList(invoices: sorted),
-                  _InvoicesList(invoices: sorted),
-                ],
-              ),
-              if (sorted.isNotEmpty)
-                Positioned(
-                  right: 10,
-                  bottom: 10,
-                  child: MainButton(
-                    title: 'Create invoice',
-                    onPressed: () {
-                      context.push(
-                        EditInvoiceScreen.routePath,
-                        extra: null,
-                      );
-                    },
+          final unpaidInvoices = invoices.where((invoice) {
+            return invoice.paymentMethod.isEmpty;
+          }).toList();
+
+          final paidInvoices = invoices.where((invoice) {
+            return invoice.paymentMethod.isNotEmpty;
+          }).toList();
+
+          return NestedScrollView(
+            headerSliverBuilder: (_, __) => [
+              if (invoices.isNotEmpty)
+                const SliverAppBar(
+                  expandedHeight: 76,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: TotalIncome(),
                   ),
                 ),
             ],
+            body: Stack(
+              children: [
+                TabWidget(
+                  titles: const ['All', 'Unpaid', 'Paid'],
+                  pages: [
+                    _Sorted(invoices: invoices),
+                    _Sorted(invoices: unpaidInvoices),
+                    _Sorted(invoices: paidInvoices),
+                  ],
+                ),
+                if (invoices.isNotEmpty)
+                  Positioned(
+                    right: 10,
+                    bottom: 10,
+                    child: MainButton(
+                      title: 'Create invoice',
+                      onPressed: () {
+                        context.push(
+                          EditInvoiceScreen.routePath,
+                          extra: null,
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            ),
           );
         }
 
@@ -54,8 +74,8 @@ class InvoicesTab extends StatelessWidget {
   }
 }
 
-class _InvoicesList extends StatelessWidget {
-  const _InvoicesList({required this.invoices});
+class _Sorted extends StatelessWidget {
+  const _Sorted({required this.invoices});
 
   final List<Invoice> invoices;
 
@@ -78,6 +98,8 @@ class _InvoicesList extends StatelessWidget {
         : ListView.builder(
             itemCount: invoices.length,
             itemBuilder: (context, index) {
+              final invoice = invoices[index];
+
               return Container(
                 height: 72,
                 decoration: BoxDecoration(
@@ -90,7 +112,7 @@ class _InvoicesList extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            invoices[index].number.toString(),
+                            invoice.number.toString(),
                             style: TextStyle(
                               color: colors.text,
                               fontSize: 16,
@@ -102,8 +124,9 @@ class _InvoicesList extends StatelessWidget {
                             children: [
                               Container(
                                 height: 20,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
                                 decoration: BoxDecoration(
                                   color: colors.accent,
                                   borderRadius: BorderRadius.circular(10),
@@ -119,7 +142,7 @@ class _InvoicesList extends StatelessWidget {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                invoices[index].date.toString(),
+                                invoice.date.toString(),
                                 style: TextStyle(
                                   color: colors.text2,
                                   fontSize: 14,
