@@ -1,22 +1,23 @@
 final class Item {
   Item({
-    this.id = 0,
+    required this.id,
     required this.title,
     required this.type,
     required this.price,
     required this.discountPrice,
-    this.iid = 0,
+    this.iid = '',
   });
 
-  int id;
+  final String id;
   String title;
   String type;
   String price;
   String discountPrice;
-  int iid;
+  String iid;
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'title': title,
       'type': type,
       'price': price,
@@ -39,7 +40,7 @@ final class Item {
   static const table = 'items';
   static const create = '''
     CREATE TABLE IF NOT EXISTS $table (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id TEXT,
       title TEXT,
       type TEXT,
       price TEXT,

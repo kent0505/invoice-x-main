@@ -59,52 +59,49 @@ class _DatePickState extends State<DatePick> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     return Dialog(
-      elevation: 0,
       insetPadding: EdgeInsets.zero,
       child: Container(
         width: 340,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: colors.bg,
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
-              blurRadius: 10,
-            ),
-          ],
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(
               children: [
+                Button(
+                  onPressed: () => _changeMonth(-1),
+                  child: SvgWidget(
+                    Assets.back,
+                    color: colors.text,
+                  ),
+                ),
+                const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     DateFormat('MMMM yyyy').format(_current),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      fontFamily: AppFonts.w400,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: colors.text,
+                      fontSize: 18,
+                      fontFamily: AppFonts.w600,
                     ),
-                  ),
-                ),
-                Button(
-                  onPressed: () => _changeMonth(-1),
-                  child: const SvgWidget(
-                    Assets.back,
-                    color: Color(0xffFF4400),
                   ),
                 ),
                 const SizedBox(width: 8),
                 Button(
                   onPressed: () => _changeMonth(1),
-                  child: const RotatedBox(
+                  child: RotatedBox(
                     quarterTurns: 2,
                     child: SvgWidget(
                       Assets.back,
-                      color: Color(0xffFF4400),
+                      color: colors.text,
                     ),
                   ),
                 ),
@@ -112,13 +109,13 @@ class _DatePickState extends State<DatePick> {
             ),
             const Row(
               children: [
-                _Weekday('MON'),
-                _Weekday('TUE'),
-                _Weekday('WED'),
-                _Weekday('THU'),
-                _Weekday('FRI'),
-                _Weekday('SAT'),
-                _Weekday('SUN'),
+                _Weekday('Mon'),
+                _Weekday('Tue'),
+                _Weekday('Wed'),
+                _Weekday('Thu'),
+                _Weekday('Fri'),
+                _Weekday('Sat'),
+                _Weekday('Sun'),
               ],
             ),
             Column(
@@ -159,6 +156,8 @@ class _Day extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     final now = DateTime.now();
     final today =
         date.day == now.day && date.month == now.month && date.year == now.year;
@@ -175,9 +174,7 @@ class _Day extends StatelessWidget {
               height: 44,
               width: 44,
               decoration: BoxDecoration(
-                color: selected
-                    ? const Color(0xffFF4400).withValues(alpha: 0.12)
-                    : null,
+                color: selected ? colors.accent : null,
                 borderRadius: BorderRadius.circular(44),
               ),
               child: Center(
@@ -185,12 +182,14 @@ class _Day extends StatelessWidget {
                   date.day.toString(),
                   style: TextStyle(
                     color: date.month == current.month
-                        ? selected || today
-                            ? const Color(0xffFF4400)
-                            : Colors.black
-                        : Colors.transparent,
-                    fontSize: selected ? 24 : 20,
-                    fontFamily: selected ? AppFonts.w500 : AppFonts.w400,
+                        ? selected
+                            ? colors.bg
+                            : today
+                                ? colors.accent
+                                : colors.text
+                        : colors.text2,
+                    fontSize: 16,
+                    fontFamily: AppFonts.w500,
                   ),
                 ),
               ),
@@ -209,6 +208,8 @@ class _Weekday extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     return SizedBox(
       width: 44,
       height: 32,
@@ -216,9 +217,9 @@ class _Weekday extends StatelessWidget {
         child: Text(
           title,
           style: TextStyle(
-            color: const Color(0xff3C3C43).withValues(alpha: 0.3),
-            fontSize: 12,
-            fontFamily: AppFonts.w600,
+            color: colors.text2,
+            fontSize: 14,
+            fontFamily: AppFonts.w400,
           ),
         ),
       ),

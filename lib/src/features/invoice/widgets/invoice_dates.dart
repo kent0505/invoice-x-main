@@ -48,7 +48,7 @@ class InvoiceDates extends StatelessWidget {
               formatInvoiceNumber(number),
               textAlign: TextAlign.end,
               style: TextStyle(
-                color: colors.text2,
+                color: colors.text,
                 fontSize: 14,
                 fontFamily: AppFonts.w400,
               ),
@@ -74,6 +74,8 @@ class _Issued extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<MyColors>()!;
 
+    final active = date != 0;
+
     return Expanded(
       child: Button(
         onPressed: onPressed,
@@ -82,11 +84,11 @@ class _Issued extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Text(
-              date == 0 ? '-' : formatTimestamp(date),
+              active ? formatTimestamp(date) : '-',
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: colors.text2,
+                color: active ? colors.text : colors.text2,
                 fontSize: 14,
                 fontFamily: AppFonts.w400,
               ),

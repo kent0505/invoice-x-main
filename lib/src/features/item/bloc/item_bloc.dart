@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:invoice_app/src/core/utils.dart';
 
 import '../data/item_repository.dart';
 import '../models/item.dart';
@@ -16,9 +17,9 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
     on<ItemEvent>(
       (event, emit) => switch (event) {
         GetItems() => _getItems(event, emit),
-        AddItem() => _addItem(event, emit),
+        AddItems() => _addItem(event, emit),
         EditItem() => _editItem(event, emit),
-        DeleteItem() => _deleteItem(event, emit),
+        DeleteItems() => _deleteItem(event, emit),
       },
     );
   }
@@ -29,14 +30,19 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
   ) async {
     final items = await _repository.getItems();
 
+    logger('ITEMS = ${items.length}');
+
     emit(state.copyWith(items: items.reversed.toList()));
   }
 
   void _addItem(
-    AddItem event,
+    AddItems event,
     Emitter<ItemState> emit,
   ) async {
-    await _repository.addItem(event.item);
+    for (final item in event.items) {
+      item.iid = event.iid;
+      await _repository.addItem(item);
+    }
     add(GetItems());
   }
 
@@ -49,10 +55,13 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
   }
 
   void _deleteItem(
-    DeleteItem event,
+    DeleteItems event,
     Emitter<ItemState> emit,
   ) async {
-    await _repository.deleteItem(event.item);
+    await _repository.deleteItems(event.iid);
+    for (final item in event.items) {
+      await _repository.deleteItem(item);
+    }
     add(GetItems());
   }
 }

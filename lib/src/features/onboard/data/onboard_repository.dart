@@ -7,9 +7,8 @@ abstract interface class OnboardRepository {
 
   bool isOnboard();
   Future<void> removeOnboard();
-
-  int getTemplateID();
-  Future<void> setTemplatedID(int id);
+  int getTemplate();
+  Future<void> setTemplate(int template);
 }
 
 final class OnboardRepositoryImpl implements OnboardRepository {
@@ -28,12 +27,12 @@ final class OnboardRepositoryImpl implements OnboardRepository {
   }
 
   @override
-  int getTemplateID() {
-    return _prefs.getInt(Keys.templateID) ?? 1;
+  int getTemplate() {
+    return _prefs.getInt(Keys.template) ?? 1;
   }
 
   @override
-  Future<void> setTemplatedID(int id) async {
-    await _prefs.setInt(Keys.templateID, id);
+  Future<void> setTemplate(int template) async {
+    await _prefs.setInt(Keys.template, template);
   }
 }

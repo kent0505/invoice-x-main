@@ -5,10 +5,14 @@ sealed class ItemEvent {}
 
 final class GetItems extends ItemEvent {}
 
-final class AddItem extends ItemEvent {
-  AddItem({required this.item});
+final class AddItems extends ItemEvent {
+  AddItems({
+    required this.items,
+    this.iid = '',
+  });
 
-  final Item item;
+  final List<Item> items;
+  final String iid;
 }
 
 final class EditItem extends ItemEvent {
@@ -17,8 +21,12 @@ final class EditItem extends ItemEvent {
   final Item item;
 }
 
-final class DeleteItem extends ItemEvent {
-  DeleteItem({required this.item});
+final class DeleteItems extends ItemEvent {
+  DeleteItems({
+    this.items = const [],
+    this.iid = '',
+  });
 
-  final Item item;
+  final List<Item> items;
+  final String iid;
 }

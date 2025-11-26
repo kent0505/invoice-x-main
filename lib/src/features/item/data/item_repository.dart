@@ -1,6 +1,5 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../invoice/models/invoice.dart';
 import '../models/item.dart';
 
 abstract interface class ItemRepository {
@@ -10,8 +9,7 @@ abstract interface class ItemRepository {
   Future<void> addItem(Item item);
   Future<void> editItem(Item item);
   Future<void> deleteItem(Item item);
-  Future<void> addInvoiceItems(Invoice invoice);
-  Future<void> deleteInvoiceItems(Invoice invoice);
+  Future<void> deleteItems(String iid);
 }
 
 final class ItemRepositoryImpl implements ItemRepository {
@@ -55,21 +53,11 @@ final class ItemRepositoryImpl implements ItemRepository {
   }
 
   @override
-  Future<void> addInvoiceItems(Invoice invoice) async {
-    for (final item in invoice.items) {
-      await _db.insert(
-        Item.table,
-        item.toMap(),
-      );
-    }
-  }
-
-  @override
-  Future<void> deleteInvoiceItems(Invoice invoice) async {
+  Future<void> deleteItems(String iid) async {
     await _db.delete(
       Item.table,
       where: 'iid = ?',
-      whereArgs: [invoice.id],
+      whereArgs: [iid],
     );
   }
 }

@@ -1,14 +1,13 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../models/invoice.dart';
 import '../models/photo.dart';
 
 abstract interface class PhotoRepository {
   const PhotoRepository();
 
   Future<List<Photo>> getPhotos();
-  Future<void> addPhotos(Invoice invoice);
-  Future<void> deletePhotos(Invoice invoice);
+  Future<void> addPhoto(Photo photo);
+  Future<void> deletePhotos(String id);
 }
 
 final class PhotoRepositoryImpl implements PhotoRepository {
@@ -25,21 +24,19 @@ final class PhotoRepositoryImpl implements PhotoRepository {
   }
 
   @override
-  Future<void> addPhotos(Invoice invoice) async {
-    for (final photo in invoice.photos) {
-      await _db.insert(
-        Photo.table,
-        photo.toMap(),
-      );
-    }
+  Future<void> addPhoto(Photo photo) async {
+    await _db.insert(
+      Photo.table,
+      photo.toMap(),
+    );
   }
 
   @override
-  Future<void> deletePhotos(Invoice invoice) async {
+  Future<void> deletePhotos(String id) async {
     await _db.delete(
       Photo.table,
-      where: 'iid = ?',
-      whereArgs: [invoice.id],
+      where: 'id = ?',
+      whereArgs: [id],
     );
   }
 }

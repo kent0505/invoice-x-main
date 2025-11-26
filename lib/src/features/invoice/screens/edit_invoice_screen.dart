@@ -45,34 +45,16 @@ class EditInvoiceScreen extends StatefulWidget {
 }
 
 class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
-  int number = 0;
-  int date = 0;
-  int dueDate = 0;
-  Business? business;
-  Client? client;
-  List<Item> items = [];
-  List<Photo> photos = [];
-  String signature = '';
-  bool isTaxable = false;
+  late Invoice invoice;
 
   final taxController = TextEditingController();
-
-  void onTaxable() {
-    if (isTaxable) {
-      taxController.clear();
-      isTaxable = false;
-    } else {
-      isTaxable = true;
-    }
-    setState(() {});
-  }
 
   void onAddSignature() async {
     context.push<String?>(SignatureScreen.routePath).then(
       (value) {
         if (value != null) {
           setState(() {
-            signature = value;
+            invoice.signature = value;
           });
         }
       },
@@ -82,31 +64,17 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
   void onPreview() {
     context.push(
       InvoicePreviewScreen.routePath,
-      extra: Invoice(
-        number: widget.invoice?.number ?? number,
-        template: widget.invoice?.template ??
-            context.read<OnboardRepository>().getTemplateID(),
-        date: date,
-        dueDate: dueDate,
-        bid: 0,
-        cid: 0,
-        tax: taxController.text,
-        signature: signature,
-        business: business,
-        client: client,
-        items: items,
-        photos: photos,
-      ),
+      extra: invoice,
     );
   }
 
   void onDate() {
     DatePick.show(
       context,
-      DateTime.fromMillisecondsSinceEpoch(date),
+      DateTime.fromMillisecondsSinceEpoch(invoice.date),
     ).then((value) {
       setState(() {
-        date = value.millisecondsSinceEpoch;
+        invoice.date = value.millisecondsSinceEpoch;
       });
     });
   }
@@ -114,48 +82,52 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
   void onDueDate() {
     DatePick.show(
       context,
-      DateTime.fromMillisecondsSinceEpoch(getTimestamp()),
+      DateTime.fromMillisecondsSinceEpoch(
+        invoice.dueDate == 0 ? getTimestamp() : invoice.dueDate,
+      ),
     ).then((value) {
       setState(() {
-        dueDate = value.millisecondsSinceEpoch;
+        invoice.dueDate = value.millisecondsSinceEpoch;
       });
     });
   }
 
   void onSelectBusiness() {
-    if (business == null) {
+    if (invoice.business == null) {
       SheetWidget.show<Business?>(
         context: context,
         title: 'Select account',
         child: const BusinessScreen(select: true),
-      ).then((value) {
-        if (value != null) {
+      ).then((business) {
+        if (business != null) {
           setState(() {
-            business = value;
+            invoice.business = business;
+            invoice.bid = business.id;
           });
         }
       });
     } else {
-      business = null;
+      invoice.business = null;
       setState(() {});
     }
   }
 
   void onSelectClient() {
-    if (client == null) {
+    if (invoice.client == null) {
       SheetWidget.show<Client?>(
         context: context,
         title: 'Select client',
         child: const ClientsScreen(select: true),
-      ).then((value) {
-        if (value != null) {
+      ).then((client) {
+        if (client != null) {
           setState(() {
-            client = value;
+            invoice.client = client;
+            invoice.cid = client.id;
           });
         }
       });
     } else {
-      client = null;
+      invoice.client = null;
       setState(() {});
     }
   }
@@ -167,16 +139,16 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
       child: const ItemsScreen(select: true),
     );
     if (value == null) return;
-    final uniqueInvoiceIDs = <int>{};
+    final uniqueInvoiceIDs = <String>{};
     final uniqueItems = <Item>[];
-    for (final item in items) {
+    for (final item in invoice.items) {
       if (uniqueInvoiceIDs.add(item.id)) {
         uniqueItems.add(item);
       }
     }
     final isInUniqueItems = uniqueItems.any((item) => item.id == value.id);
     if (isInUniqueItems || uniqueItems.length < 10) {
-      items.add(
+      invoice.items.add(
         Item(
           id: value.id,
           title: value.title,
@@ -197,83 +169,96 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
   }
 
   void onRemoveItem(Item item) {
-    items.remove(item);
+    invoice.items.remove(item);
     setState(() {});
   }
 
   void onAddPhotos() async {
     final images = await pickImages();
     if (images.isNotEmpty) {
-      photos = [];
+      invoice.photos = [];
       for (final image in images.take(6)) {
-        photos.add(Photo(path: image.path));
+        invoice.photos.add(Photo(
+          id: invoice.id,
+          path: image.path,
+        ));
       }
     } else {
-      photos = [];
+      invoice.photos = [];
     }
     setState(() {});
   }
 
   void onSave() {
-    final invoice = Invoice(
-      id: widget.invoice?.id ?? 0,
-      number: widget.invoice?.number ?? number,
-      template: widget.invoice?.template ??
-          context.read<OnboardRepository>().getTemplateID(),
-      date: date,
-      dueDate: dueDate,
-      bid: business!.id,
-      cid: client!.id,
-      paymentDate: widget.invoice?.paymentDate ?? 0,
-      paymentMethod: widget.invoice?.paymentMethod ?? '',
-      tax: taxController.text,
-      signature: signature,
-      business: business,
-      client: client,
-      items: items,
-      photos: photos,
-    );
-
-    context.read<InvoiceBloc>().add(widget.invoice == null
-        ? AddInvoice(invoice: invoice)
-        : EditInvoice(invoice: invoice));
+    final invoiceBloc = context.read<InvoiceBloc>();
+    final itemBloc = context.read<ItemBloc>();
+    if (widget.invoice == null) {
+      invoiceBloc.add(AddInvoice(invoice: invoice));
+    } else {
+      itemBloc.add(DeleteItems(iid: invoice.id));
+      invoiceBloc.add(EditInvoice(invoice: invoice));
+    }
+    itemBloc.add(AddItems(
+      items: invoice.items,
+      iid: invoice.id,
+    ));
     context.pop();
+  }
+
+  void onDelete() {
+    DialogWidget.show(
+      context,
+      title: 'Delete invoice?',
+      delete: true,
+      onPressed: () {
+        context
+            .read<InvoiceBloc>()
+            .add(DeleteInvoice(invoice: widget.invoice!));
+        context.read<ItemBloc>().add(DeleteItems(items: invoice.items));
+        context.pop();
+        context.pop();
+      },
+    );
   }
 
   @override
   void initState() {
     super.initState();
 
-    final state = context.read<InvoiceBloc>().state;
+    taxController.text = widget.invoice?.tax ?? '';
 
-    if (widget.invoice == null) {
-      date = getTimestamp();
-      number = state.invoices.length + 1;
-    } else {
-      number = widget.invoice!.number;
-      date = widget.invoice!.date;
-      dueDate = widget.invoice!.dueDate;
-      signature = widget.invoice!.signature;
-      taxController.text = widget.invoice!.tax;
-      isTaxable = widget.invoice!.tax.isNotEmpty;
-      business = context
-          .read<BusinessBloc>()
-          .state
-          .businesses
-          .firstWhereOrNull((business) {
-        return business.id == widget.invoice!.bid;
-      });
-      client =
-          context.read<ClientBloc>().state.clients.firstWhereOrNull((client) {
-        return client.id == widget.invoice!.cid;
-      });
-      items = context.read<ItemBloc>().state.items.where((item) {
-        return item.iid == widget.invoice!.id;
-      }).toList();
-      photos = state.photos.where((photo) {
-        return photo.iid == widget.invoice!.id;
-      }).toList();
-    }
+    final template = context.read<OnboardRepository>().getTemplate();
+
+    final invoiceState = context.read<InvoiceBloc>().state;
+    final businessState = context.read<BusinessBloc>().state;
+    final clientState = context.read<ClientBloc>().state;
+    final itemState = context.read<ItemBloc>().state;
+
+    invoice = Invoice(
+      id: widget.invoice?.id ?? getID(),
+      number: widget.invoice?.number ?? invoiceState.invoices.length + 1,
+      template: widget.invoice?.template ?? template,
+      date: widget.invoice?.date ?? getTimestamp(),
+      dueDate: widget.invoice?.dueDate ?? 0,
+      bid: widget.invoice?.bid ?? 0,
+      cid: widget.invoice?.cid ?? 0,
+      paymentMethod: widget.invoice?.paymentMethod ?? '',
+      paymentDate: widget.invoice?.paymentDate ?? 0,
+      tax: taxController.text,
+      signature: widget.invoice?.signature ?? '',
+      business: businessState.businesses.firstWhereOrNull((business) {
+        return business.id == widget.invoice?.bid;
+      }),
+      client: clientState.clients.firstWhereOrNull((client) {
+        return client.id == widget.invoice?.cid;
+      }),
+      items: itemState.items.where((item) {
+        return item.iid == widget.invoice?.id;
+      }).toList(),
+      photos: invoiceState.photos.where((photo) {
+        return photo.id == widget.invoice?.id;
+      }).toList(),
+    );
   }
 
   @override
@@ -287,17 +272,9 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
     final colors = Theme.of(context).extension<MyColors>()!;
 
     final currency = context.read<ProfileRepository>().getCurrency();
-    final uniqueInvoiceIDs = <int>{};
-    final uniqueItems = <Item>[];
-
-    for (final item in items) {
-      if (uniqueInvoiceIDs.add(item.id)) {
-        uniqueItems.add(item);
-      }
-    }
 
     double subtotal = 0;
-    for (final item in items) {
+    for (final item in invoice.items) {
       subtotal += getItemPrice(item);
     }
     final taxPercent = double.tryParse(taxController.text) ?? 0;
@@ -340,32 +317,32 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
                   ],
                 ),
                 InvoiceDates(
-                  date: date,
-                  dueDate: dueDate,
-                  number: number,
+                  date: invoice.date,
+                  dueDate: invoice.dueDate,
+                  number: invoice.number,
                   onDate: onDate,
                   onDueDate: onDueDate,
                 ),
                 const SizedBox(height: 16),
                 const TitleText(title: 'Business account'),
-                business == null
+                invoice.business == null
                     ? InvoiceSelectData(
                         title: 'Choose Account',
                         onPressed: onSelectBusiness,
                       )
                     : InvoiceSelectedData(
-                        title: business!.name,
+                        title: invoice.business!.name,
                         onPressed: onSelectBusiness,
                       ),
                 const SizedBox(height: 16),
                 const TitleText(title: 'Client'),
-                client == null
+                invoice.client == null
                     ? InvoiceSelectData(
                         title: 'Add Client',
                         onPressed: onSelectClient,
                       )
                     : InvoiceSelectedData(
-                        title: client!.name,
+                        title: invoice.client!.name,
                         onPressed: onSelectClient,
                       ),
                 const SizedBox(height: 16),
@@ -375,22 +352,33 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
                     color: colors.tertiary1,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Column(
-                    children: List.generate(
-                      uniqueItems.length,
-                      (index) {
-                        return InvoiceSelectedData(
-                          title: uniqueItems[index].title,
-                          amount: items.where((element) {
-                            return element.id == uniqueItems[index].id;
-                          }).length,
-                          onPressed: () {
-                            onRemoveItem(uniqueItems[index]);
-                          },
-                        );
-                      },
-                    ),
-                  ),
+                  child: Builder(builder: (context) {
+                    final uniqueInvoiceIDs = <String>{};
+                    final uniqueItems = <Item>[];
+
+                    for (final item in invoice.items) {
+                      if (uniqueInvoiceIDs.add(item.id)) {
+                        uniqueItems.add(item);
+                      }
+                    }
+
+                    return Column(
+                      children: List.generate(
+                        uniqueItems.length,
+                        (index) {
+                          return InvoiceSelectedData(
+                            title: uniqueItems[index].title,
+                            amount: invoice.items.where((item) {
+                              return item.id == uniqueItems[index].id;
+                            }).length,
+                            onPressed: () {
+                              onRemoveItem(uniqueItems[index]);
+                            },
+                          );
+                        },
+                      ),
+                    );
+                  }),
                 ),
                 const SizedBox(height: 8),
                 InvoiceSelectData(
@@ -440,14 +428,15 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                if (signature.isNotEmpty) SvgPicture.string(signature),
+                if (invoice.signature.isNotEmpty)
+                  SvgPicture.string(invoice.signature),
               ],
             ),
           ),
           MainButtonWrapper(
             children: [
               MainButton(
-                title: signature.isEmpty
+                title: invoice.signature.isEmpty
                     ? 'Create a signature'
                     : 'Change signature',
                 color: colors.bg,
@@ -455,7 +444,9 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
               ),
               MainButton(
                 title: 'Save',
-                active: business != null && client != null && items.isNotEmpty,
+                active: invoice.business != null &&
+                    invoice.client != null &&
+                    invoice.items.isNotEmpty,
                 onPressed: onSave,
               ),
             ],

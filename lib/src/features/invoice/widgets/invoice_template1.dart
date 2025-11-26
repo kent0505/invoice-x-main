@@ -17,7 +17,7 @@ class InvoiceTemplate1 extends StatelessWidget {
   Widget build(BuildContext context) {
     const type = 'INVOICE';
 
-    final uniqueInvoiceIDs = <int>{};
+    final uniqueInvoiceIDs = <String>{};
     final uniqueItems = <Item>[];
     double subtotal = 0;
     double discount = 0;

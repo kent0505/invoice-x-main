@@ -54,7 +54,7 @@ abstract final class Keys {
   // static const String showCount = 'showCount'; // amount of displayed paywalls
   // static const String available = 'available'; // free create invoice amount
   static const String currency = 'currency';
-  static const String templateID = 'templateID';
+  static const String template = 'template';
   static const String userID = 'userID';
 }
 

@@ -19,17 +19,17 @@ class DefaultTemplateScreen extends StatefulWidget {
 }
 
 class _DefaultTemplateScreenState extends State<DefaultTemplateScreen> {
-  int id = 0;
+  int template = 0;
 
   void onTemplate(int value) {
     setState(() {
-      value == id ? id = 0 : id = value;
+      value == template ? template = 0 : template = value;
     });
   }
 
   void onSave() async {
     final repo = context.read<OnboardRepository>();
-    await repo.setTemplatedID(id);
+    await repo.setTemplate(template);
     await repo.removeOnboard();
     if (mounted) {
       context.replace(
@@ -56,62 +56,62 @@ class _DefaultTemplateScreenState extends State<DefaultTemplateScreen> {
               childAspectRatio: 1 / 1.414,
               children: [
                 _TemplateCard(
-                  id: 1,
-                  current: id,
+                  template: 1,
+                  current: template,
                   asset: Assets.template1,
                   onPressed: onTemplate,
                 ),
                 _TemplateCard(
-                  id: 2,
-                  current: id,
+                  template: 2,
+                  current: template,
                   asset: Assets.template2,
                   onPressed: onTemplate,
                 ),
                 _TemplateCard(
-                  id: 3,
-                  current: id,
+                  template: 3,
+                  current: template,
                   asset: Assets.template3,
                   onPressed: onTemplate,
                 ),
                 _TemplateCard(
-                  id: 4,
-                  current: id,
+                  template: 4,
+                  current: template,
                   asset: Assets.template4,
                   onPressed: onTemplate,
                 ),
                 _TemplateCard(
-                  id: 5,
-                  current: id,
+                  template: 5,
+                  current: template,
                   asset: Assets.template5,
                   onPressed: onTemplate,
                 ),
                 _TemplateCard(
-                  id: 6,
-                  current: id,
+                  template: 6,
+                  current: template,
                   asset: Assets.template6,
                   onPressed: onTemplate,
                 ),
                 _TemplateCard(
-                  id: 7,
-                  current: id,
+                  template: 7,
+                  current: template,
                   asset: Assets.template7,
                   onPressed: onTemplate,
                 ),
                 _TemplateCard(
-                  id: 8,
-                  current: id,
+                  template: 8,
+                  current: template,
                   asset: Assets.template8,
                   onPressed: onTemplate,
                 ),
                 _TemplateCard(
-                  id: 9,
-                  current: id,
+                  template: 9,
+                  current: template,
                   asset: Assets.template9,
                   onPressed: onTemplate,
                 ),
                 _TemplateCard(
-                  id: 10,
-                  current: id,
+                  template: 10,
+                  current: template,
                   asset: Assets.template10,
                   onPressed: onTemplate,
                 ),
@@ -122,7 +122,7 @@ class _DefaultTemplateScreenState extends State<DefaultTemplateScreen> {
             children: [
               MainButton(
                 title: 'Save',
-                active: id != 0,
+                active: template != 0,
                 onPressed: onSave,
               ),
             ],
@@ -135,13 +135,13 @@ class _DefaultTemplateScreenState extends State<DefaultTemplateScreen> {
 
 class _TemplateCard extends StatelessWidget {
   const _TemplateCard({
-    required this.id,
+    required this.template,
     required this.current,
     required this.asset,
     required this.onPressed,
   });
 
-  final int id;
+  final int template;
   final int current;
   final String asset;
   final void Function(int) onPressed;
@@ -150,7 +150,7 @@ class _TemplateCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Button(
       onPressed: () {
-        onPressed(id);
+        onPressed(template);
       },
       child: Stack(
         children: [
@@ -160,7 +160,7 @@ class _TemplateCard extends StatelessWidget {
             width: double.infinity,
             height: double.infinity,
           ),
-          if (id == current)
+          if (template == current)
             const Center(
               child: Icon(
                 Icons.check_circle,

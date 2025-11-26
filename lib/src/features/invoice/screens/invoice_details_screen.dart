@@ -136,7 +136,7 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
     final state = context.read<InvoiceBloc>().state;
 
     invoice.photos = state.photos.where((photo) {
-      return photo.iid == invoice.id;
+      return photo.id == invoice.id;
     }).toList();
   }
 

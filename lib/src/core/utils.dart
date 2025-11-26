@@ -6,6 +6,7 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:uuid/uuid.dart';
 
 import '../features/client/models/client.dart';
 import '../features/item/models/item.dart';
@@ -15,6 +16,10 @@ void logger(Object message) => developer.log(message.toString());
 
 bool isIOS() {
   return Platform.isIOS;
+}
+
+String getID() {
+  return const Uuid().v4();
 }
 
 int getTimestamp() {

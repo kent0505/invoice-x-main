@@ -46,7 +46,8 @@ class _ItemsScreenState extends State<ItemsScreen> {
         final query = searchController.text.toLowerCase();
 
         final items = state.items.where((item) {
-          return item.iid == 0;
+          return item.iid.isEmpty;
+          // return true;
         }).toList();
 
         final sorted = query.isEmpty

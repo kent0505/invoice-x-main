@@ -1,18 +1,16 @@
 final class Photo {
   Photo({
-    this.id = 0,
+    required this.id,
     required this.path,
-    this.iid = 0,
   });
 
-  int id = 0;
-  String path;
-  int iid;
+  final String id;
+  final String path;
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'path': path,
-      'iid': iid,
     };
   }
 
@@ -20,16 +18,14 @@ final class Photo {
     return Photo(
       id: map['id'],
       path: map['path'],
-      iid: map['iid'],
     );
   }
 
   static const table = 'photos';
   static const create = '''
     CREATE TABLE IF NOT EXISTS $table (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      path TEXT,
-      iid INTEGER
+      id TEXT,
+      path TEXT
     )
     ''';
 }

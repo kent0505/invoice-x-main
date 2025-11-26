@@ -111,6 +111,7 @@ class _Sorted extends StatelessWidget {
                 ),
                 child: Button(
                   onPressed: () {
+                    // context.read<InvoiceBloc>().add(DeleteInvoice(invoice: invoice ));
                     context.push(
                       EditInvoiceScreen.routePath,
                       extra: invoice,

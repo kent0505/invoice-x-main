@@ -5,7 +5,7 @@ import 'photo.dart';
 
 final class Invoice {
   Invoice({
-    this.id = 0,
+    required this.id,
     required this.number,
     required this.template,
     required this.date,
@@ -16,14 +16,16 @@ final class Invoice {
     this.paymentMethod = '',
     required this.tax,
     required this.signature,
+
+    //
     this.business,
     this.client,
     this.items = const [],
     this.photos = const [],
   });
 
-  int id;
-  int number;
+  final String id;
+  final int number;
   int template;
   int date;
   int dueDate;
@@ -41,6 +43,7 @@ final class Invoice {
 
   Map<String, dynamic> toMap() {
     return {
+      'id': id,
       'number': number,
       'template': template,
       'date': date,
@@ -73,7 +76,7 @@ final class Invoice {
   static const table = 'invoices';
   static const create = '''
     CREATE TABLE IF NOT EXISTS $table (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      id TEXT,
       number INTEGER,
       template INTEGER,
       date INTEGER,

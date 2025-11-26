@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
+import '../../../core/utils.dart';
 import '../../../core/widgets/appbar.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/dialog_widget.dart';
@@ -54,7 +55,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
       title: 'Delete item?',
       delete: true,
       onPressed: () {
-        context.read<ItemBloc>().add(DeleteItem(item: widget.item!));
+        context.read<ItemBloc>().add(DeleteItems(items: [widget.item!]));
         context.pop();
         context.pop();
       },
@@ -64,12 +65,13 @@ class _EditItemScreenState extends State<EditItemScreen> {
   void onSave() {
     if (widget.item == null) {
       final item = Item(
+        id: getID(),
         title: titleController.text,
         type: typeController.text,
         price: priceController.text,
         discountPrice: discountPriceController.text,
       );
-      context.read<ItemBloc>().add(AddItem(item: item));
+      context.read<ItemBloc>().add(AddItems(items: [item]));
     } else {
       final item = widget.item!;
       item.title = titleController.text;
