@@ -80,45 +80,24 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
   }
 
   void onPreview() {
-    if (widget.invoice == null) {
-      context.push(
-        InvoicePreviewScreen.routePath,
-        extra: Invoice(
-          number: number,
-          template: context.read<OnboardRepository>().getTemplateID(),
-          date: date,
-          dueDate: dueDate,
-          bid: 0,
-          cid: 0,
-          tax: '',
-          signature: signature,
-          business: business,
-          client: client,
-          items: items,
-          photos: photos,
-        ),
-      );
-    } else {
-      final invoice = widget.invoice!;
-      context.push(
-        InvoicePreviewScreen.routePath,
-        extra: Invoice(
-          id: invoice.id,
-          number: invoice.number,
-          template: invoice.template,
-          date: date,
-          dueDate: dueDate,
-          bid: 0,
-          cid: 0,
-          tax: taxController.text,
-          signature: signature,
-          business: business,
-          client: client,
-          items: items,
-          photos: photos,
-        ),
-      );
-    }
+    context.push(
+      InvoicePreviewScreen.routePath,
+      extra: Invoice(
+        number: widget.invoice?.number ?? number,
+        template: widget.invoice?.template ??
+            context.read<OnboardRepository>().getTemplateID(),
+        date: date,
+        dueDate: dueDate,
+        bid: 0,
+        cid: 0,
+        tax: taxController.text,
+        signature: signature,
+        business: business,
+        client: client,
+        items: items,
+        photos: photos,
+      ),
+    );
   }
 
   void onDate() {

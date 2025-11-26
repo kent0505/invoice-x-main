@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:purchases_ui_flutter/purchases_ui_flutter.dart';
 
 import '../../../core/utils.dart';
@@ -15,11 +16,12 @@ class VipScreen extends StatelessWidget {
   static const routePath = '/VipScreen';
 
   static Future<void> configure(String userID) async {
-    logger(userID);
-    // await Purchases.configure(
-    //   PurchasesConfiguration('appl_XOzrSgcIeAVfozHHQbvIJjGyatM')
-    //     ..appUserID = userID,
-    // );
+    if (isIOS()) {
+      await Purchases.configure(
+        PurchasesConfiguration('appl_XOzrSgcIeAVfozHHQbvIJjGyatM')
+          ..appUserID = userID,
+      );
+    }
   }
 
   static void open(BuildContext context) {
