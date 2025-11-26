@@ -27,24 +27,15 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
     GetBusiness event,
     Emitter<BusinessState> emit,
   ) async {
-    if (!state.loading) {
-      emit(state.copyWith(loading: true));
-    }
-
     final businesses = await _repository.getBusiness();
 
-    emit(state.copyWith(
-      businesses: businesses.reversed.toList(),
-      loading: false,
-    ));
+    emit(state.copyWith(businesses: businesses.reversed.toList()));
   }
 
   void _addBusiness(
     AddBusiness event,
     Emitter<BusinessState> emit,
   ) async {
-    emit(state.copyWith(loading: true));
-
     final business = event.business;
 
     await _repository.addBusiness(business);
@@ -56,8 +47,6 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
     EditBusiness event,
     Emitter<BusinessState> emit,
   ) async {
-    emit(state.copyWith(loading: true));
-
     await _repository.editBusiness(event.business);
 
     add(GetBusiness());
@@ -67,8 +56,6 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
     DeleteBusiness event,
     Emitter<BusinessState> emit,
   ) async {
-    emit(state.copyWith(loading: true));
-
     await _repository.deleteBusiness(event.business);
 
     add(GetBusiness());

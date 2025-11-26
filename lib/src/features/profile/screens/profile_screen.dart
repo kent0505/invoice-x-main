@@ -118,7 +118,7 @@ class _Account extends StatelessWidget {
       builder: (context, state) {
         final isNull = state.businesses.isEmpty;
 
-        final imageLogo = isNull ? '' : state.businesses.last.imageLogo;
+        final imageLogo = isNull ? '' : state.businesses.last.image;
 
         final name = isNull ? 'Account Name' : state.businesses.last.name;
 

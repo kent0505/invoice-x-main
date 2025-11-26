@@ -17,7 +17,6 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
       (event, emit) => switch (event) {
         GetItems() => _getItems(event, emit),
         AddItem() => _addItem(event, emit),
-        AddInvoiceItems() => _addInvoiceItems(event, emit),
         EditItem() => _editItem(event, emit),
         DeleteItem() => _deleteItem(event, emit),
       },
@@ -28,38 +27,16 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
     GetItems event,
     Emitter<ItemState> emit,
   ) async {
-    if (!state.loading) {
-      emit(state.copyWith(loading: true));
-    }
-
     final items = await _repository.getItems();
 
-    emit(state.copyWith(
-      items: items.reversed.toList(),
-      loading: false,
-    ));
+    emit(state.copyWith(items: items.reversed.toList()));
   }
 
   void _addItem(
     AddItem event,
     Emitter<ItemState> emit,
   ) async {
-    emit(state.copyWith(loading: true));
-
     await _repository.addItem(event.item);
-
-    add(GetItems());
-  }
-
-  void _addInvoiceItems(
-    AddInvoiceItems event,
-    Emitter<ItemState> emit,
-  ) async {
-    emit(state.copyWith(loading: true));
-
-    await _repository.deleteInvoiceItems(event.id);
-    await _repository.addInvoiceItems(event.items);
-
     add(GetItems());
   }
 
@@ -67,10 +44,7 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
     EditItem event,
     Emitter<ItemState> emit,
   ) async {
-    emit(state.copyWith(loading: true));
-
     await _repository.editItem(event.item);
-
     add(GetItems());
   }
 
@@ -78,10 +52,7 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
     DeleteItem event,
     Emitter<ItemState> emit,
   ) async {
-    emit(state.copyWith(loading: true));
-
     await _repository.deleteItem(event.item);
-
     add(GetItems());
   }
 }

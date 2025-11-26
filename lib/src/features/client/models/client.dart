@@ -8,7 +8,6 @@ final class Client {
   });
 
   int id;
-
   String name;
   String email;
   String phone;

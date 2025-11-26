@@ -11,16 +11,6 @@ final class AddItem extends ItemEvent {
   final Item item;
 }
 
-final class AddInvoiceItems extends ItemEvent {
-  AddInvoiceItems({
-    required this.id,
-    required this.items,
-  });
-
-  final int id;
-  final List<Item> items;
-}
-
 final class EditItem extends ItemEvent {
   EditItem({required this.item});
 

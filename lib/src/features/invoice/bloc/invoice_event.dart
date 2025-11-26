@@ -6,13 +6,9 @@ sealed class InvoiceEvent {}
 final class GetInvoices extends InvoiceEvent {}
 
 final class AddInvoice extends InvoiceEvent {
-  AddInvoice({
-    required this.invoice,
-    this.photos = const [],
-  });
+  AddInvoice({required this.invoice});
 
   final Invoice invoice;
-  final List<Photo> photos;
 }
 
 final class EditInvoice extends InvoiceEvent {

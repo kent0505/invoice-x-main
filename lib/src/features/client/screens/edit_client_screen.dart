@@ -33,21 +33,21 @@ class _EditClientScreenState extends State<EditClientScreen> {
 
   bool active = true;
 
-  void checkActive(String _) {
+  void onChanged(String _) {
     setState(() {
-      active = checkControllers([
-        nameController,
-      ]);
+      active = nameController.text.isNotEmpty;
     });
   }
 
   void onContact() async {
-    await getContact(context).then((value) {
-      nameController.text = value.name;
-      emailController.text = value.email;
-      phoneController.text = value.phone;
-      addressController.text = value.address;
-      checkActive('');
+    await getContact(context).then((client) {
+      if (client != null) {
+        nameController.text = client.name;
+        emailController.text = client.email;
+        phoneController.text = client.phone;
+        addressController.text = client.address;
+        onChanged('');
+      }
     });
   }
 
@@ -134,7 +134,7 @@ class _EditClientScreenState extends State<EditClientScreen> {
                 Field(
                   hintText: 'Client’s full name',
                   controller: nameController,
-                  onChanged: checkActive,
+                  onChanged: onChanged,
                 ),
                 const SizedBox(height: 16),
                 const TitleText(

@@ -15,7 +15,7 @@ class InvoiceTemplate1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final type = invoice.isEstimate ? 'ESTIMATE' : 'INVOICE';
+    const type = 'INVOICE';
 
     final uniqueInvoiceIDs = <int>{};
     final uniqueItems = <Item>[];
@@ -45,7 +45,7 @@ class InvoiceTemplate1 extends StatelessWidget {
               child: Row(
                 children: [
                   ImageWidget(
-                    invoice.business?.imageLogo ?? '',
+                    invoice.business?.image ?? '',
                     file: true,
                     height: 100,
                     width: 100,
@@ -88,9 +88,9 @@ class InvoiceTemplate1 extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         '$type TO:',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.black,
                           fontSize: 14,
                           fontFamily: AppFonts.w700,
@@ -120,9 +120,9 @@ class InvoiceTemplate1 extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         '$type FROM:',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.black,
                           fontSize: 14,
                           fontFamily: AppFonts.w700,
@@ -209,8 +209,7 @@ class InvoiceTemplate1 extends StatelessWidget {
                     }
                   }
 
-                  final price =
-                      double.tryParse(uniqueItems[index].discountPrice) ?? 0;
+                  final price = getItemPrice(uniqueItems[index]);
 
                   return Container(
                     height: 20,
@@ -306,9 +305,9 @@ class InvoiceTemplate1 extends StatelessWidget {
                           children: [
                             const Spacer(),
                             SvgPicture.string(
-                              invoice.imageSignature.isEmpty
-                                  ? invoice.business?.imageSignature ?? ''
-                                  : invoice.imageSignature,
+                              invoice.signature.isEmpty
+                                  ? invoice.business?.signature ?? ''
+                                  : invoice.signature,
                               height: 40,
                               width: 40,
                             ),

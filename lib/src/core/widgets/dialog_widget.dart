@@ -24,7 +24,6 @@ class DialogWidget extends StatelessWidget {
   }) {
     showDialog(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.2),
       useSafeArea: false,
       builder: (context) {
         return DialogWidget(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/widgets/button.dart';
+import '../../../core/widgets/svg_widget.dart';
 
 class InvoiceSelectedData extends StatelessWidget {
   const InvoiceSelectedData({
@@ -17,11 +18,13 @@ class InvoiceSelectedData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     return Container(
-      height: 40,
+      height: 44,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(6),
+        color: colors.tertiary1,
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: [
@@ -48,10 +51,9 @@ class InvoiceSelectedData extends StatelessWidget {
           const SizedBox(width: 16),
           Button(
             onPressed: onPressed,
-            minSize: 40,
-            child: const Icon(
-              Icons.close_rounded,
-              color: Color(0xffFF4400),
+            child: SvgWidget(
+              Assets.close,
+              color: colors.accent,
             ),
           ),
         ],

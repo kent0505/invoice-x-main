@@ -69,4 +69,6 @@ abstract final class Urls {
   static const String terms =
       'https://docs.google.com/document/d/123xMfvJu0xCYnm8-mYv9YcCIhBr5NqFhwP7fewTeNvI/edit?usp=sharing';
   static const String contactUs = 'https://forms.gle/eG28LimZKZVWbhd7A';
+  static const String printerAppPromo =
+      'https://smart-printer.onelink.me/Dw8z/icsdzbwp';
 }

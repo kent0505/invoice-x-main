@@ -39,22 +39,19 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
   final accountNoController = TextEditingController();
   final vatController = TextEditingController();
 
-  String imageLogo = '';
+  String image = '';
   String signature = '';
   bool active = true;
 
-  void checkActive(String _) {
+  void onChanged(String _) {
     setState(() {
-      active = checkControllers([
-        nameController,
-      ]);
+      active = nameController.text.isNotEmpty;
     });
   }
 
   void onAddLogo() async {
-    final file = await pickImage();
-    imageLogo = file.path;
-    checkActive('');
+    image = await pickImage();
+    onChanged('');
   }
 
   void onSignature() async {
@@ -96,8 +93,8 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
         iban: ibanController.text,
         accountNo: accountNoController.text,
         vat: vatController.text,
-        imageLogo: imageLogo,
-        imageSignature: signature,
+        image: image,
+        signature: signature,
       );
       context.read<BusinessBloc>().add(AddBusiness(business: business));
     } else {
@@ -111,8 +108,8 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
       business.swift = swiftController.text;
       business.accountNo = accountNoController.text;
       business.vat = vatController.text;
-      business.imageLogo = imageLogo;
-      business.imageSignature = signature;
+      business.image = image;
+      business.signature = signature;
       context.read<BusinessBloc>().add(EditBusiness(business: business));
     }
     context.pop();
@@ -131,8 +128,8 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
       ibanController.text = widget.business!.iban;
       accountNoController.text = widget.business!.accountNo;
       vatController.text = widget.business!.vat;
-      imageLogo = widget.business!.imageLogo;
-      signature = widget.business!.imageSignature;
+      image = widget.business!.image;
+      signature = widget.business!.signature;
     }
   }
 
@@ -174,7 +171,7 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
               padding: const EdgeInsets.all(16),
               children: [
                 BusinessLogo(
-                  imageLogo: imageLogo,
+                  image: image,
                   onPressed: onAddLogo,
                 ),
                 const SizedBox(height: 16),
@@ -182,7 +179,7 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
                 Field(
                   controller: nameController,
                   hintText: 'Name',
-                  onChanged: checkActive,
+                  onChanged: onChanged,
                 ),
                 const SizedBox(height: 16),
                 const TitleText(

@@ -111,6 +111,7 @@ void main() async {
             create: (context) => InvoiceBloc(
               invoiceRepository: context.read<InvoiceRepository>(),
               photoRepository: context.read<PhotoRepository>(),
+              itemRepository: context.read<ItemRepository>(),
             ),
           ),
           BlocProvider(

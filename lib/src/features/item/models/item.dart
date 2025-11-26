@@ -5,7 +5,7 @@ final class Item {
     required this.type,
     required this.price,
     required this.discountPrice,
-    this.invoiceID = 0,
+    this.iid = 0,
   });
 
   int id;
@@ -13,7 +13,7 @@ final class Item {
   String type;
   String price;
   String discountPrice;
-  int invoiceID;
+  int iid;
 
   Map<String, dynamic> toMap() {
     return {
@@ -21,7 +21,7 @@ final class Item {
       'type': type,
       'price': price,
       'discountPrice': discountPrice,
-      'invoiceID': invoiceID,
+      'iid': iid,
     };
   }
 
@@ -32,7 +32,7 @@ final class Item {
       type: map['type'],
       price: map['price'],
       discountPrice: map['discountPrice'],
-      invoiceID: map['invoiceID'],
+      iid: map['iid'],
     );
   }
 
@@ -44,7 +44,7 @@ final class Item {
       type TEXT,
       price TEXT,
       discountPrice TEXT,
-      invoiceID INTEGER
+      iid INTEGER
     )
     ''';
 }

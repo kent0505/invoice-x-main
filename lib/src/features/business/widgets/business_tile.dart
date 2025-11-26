@@ -34,7 +34,7 @@ class BusinessTile extends StatelessWidget {
         onPressed: onPressed,
         child: Row(
           children: [
-            business.imageLogo.isEmpty
+            business.image.isEmpty
                 ? Container(
                     height: 44,
                     width: 44,
@@ -53,7 +53,7 @@ class BusinessTile extends StatelessWidget {
                 : ClipRRect(
                     borderRadius: BorderRadius.circular(22),
                     child: Image.file(
-                      File(business.imageLogo),
+                      File(business.image),
                       frameBuilder: ImageWidget.frameBuilder,
                       errorBuilder: ImageWidget.errorBuilder,
                       height: 44,

@@ -1,7 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/utils.dart';
 
 abstract interface class OnboardRepository {
   const OnboardRepository();
@@ -35,7 +34,6 @@ final class OnboardRepositoryImpl implements OnboardRepository {
 
   @override
   Future<void> setTemplatedID(int id) async {
-    logger(id);
     await _prefs.setInt(Keys.templateID, id);
   }
 }

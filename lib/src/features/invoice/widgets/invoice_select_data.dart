@@ -16,26 +16,30 @@ class InvoiceSelectData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     return Container(
-      height: 40,
+      height: 44,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(6),
+        color: colors.tertiary1,
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Button(
         onPressed: onPressed,
-        minSize: 40,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SvgWidget(Assets.add),
-            const SizedBox(width: 10),
+            SvgWidget(
+              Assets.add,
+              color: colors.accent,
+            ),
+            const SizedBox(width: 4),
             Text(
               title,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-                fontFamily: AppFonts.w600,
+              style: TextStyle(
+                color: colors.accent,
+                fontSize: 16,
+                fontFamily: AppFonts.w700,
               ),
             ),
           ],

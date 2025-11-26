@@ -28,29 +28,33 @@ class BusinessInfoScreen extends StatefulWidget {
 }
 
 class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
-  String imageLogo = '';
-
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final addressController = TextEditingController();
 
+  String image = '';
+
   bool active = false;
 
-  void onPickImage() async {
-    final file = await pickImage();
+  void onChanged(String _) {
     setState(() {
-      imageLogo = file.path;
+      active = nameController.text.isNotEmpty;
     });
+  }
+
+  void onPickImage() async {
+    image = await pickImage();
+    setState(() {});
   }
 
   void onSave() async {
     final business = Business(
-      imageLogo: imageLogo,
       name: nameController.text,
       email: emailController.text,
       phone: phoneController.text,
       address: addressController.text,
+      image: image,
     );
 
     context.read<BusinessBloc>().add(AddBusiness(business: business));
@@ -61,12 +65,6 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
       HomeScreen.routePath,
       extra: false,
     );
-  }
-
-  void onChanged(String _) {
-    setState(() {
-      active = nameController.text.isNotEmpty;
-    });
   }
 
   @override
@@ -108,11 +106,11 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
                       child: SizedBox(
                         width: 164,
                         height: 164,
-                        child: imageLogo.isNotEmpty
+                        child: image.isNotEmpty
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(164),
                                 child: Image.file(
-                                  File(imageLogo),
+                                  File(image),
                                   errorBuilder: ImageWidget.errorBuilder,
                                   frameBuilder: ImageWidget.frameBuilder,
                                   height: 164,
@@ -161,6 +159,7 @@ class _BusinessInfoScreenState extends State<BusinessInfoScreen> {
                   Field(
                     controller: phoneController,
                     hintText: '+XX XXX XXX XXX',
+                    fieldType: FieldType.phone,
                   ),
                   const SizedBox(height: 16),
                   const TitleText(

@@ -3,14 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
-import '../../../core/utils.dart';
 import '../../../core/widgets/appbar.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/dialog_widget.dart';
 import '../../../core/widgets/field.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/svg_widget.dart';
-import '../../../core/widgets/switch_button.dart';
 import '../../../core/widgets/title_text.dart';
 import '../bloc/item_bloc.dart';
 import '../models/item.dart';
@@ -32,17 +30,15 @@ class _EditItemScreenState extends State<EditItemScreen> {
   final priceController = TextEditingController();
   final discountPriceController = TextEditingController();
 
-  bool active = true;
+  bool active = false;
   bool saveToItems = false;
-  bool hasDiscount = false;
 
-  void checkActive(String _) {
+  void onChanged(String _) {
     setState(() {
-      active = checkControllers([
+      active = [
         titleController,
         priceController,
-        if (hasDiscount) discountPriceController,
-      ]);
+      ].every((element) => element.text.isNotEmpty);
     });
   }
 
@@ -50,16 +46,6 @@ class _EditItemScreenState extends State<EditItemScreen> {
     setState(() {
       saveToItems = !saveToItems;
     });
-  }
-
-  void onHasDiscount() {
-    if (hasDiscount) {
-      discountPriceController.clear();
-      hasDiscount = false;
-    } else {
-      hasDiscount = true;
-    }
-    checkActive('');
   }
 
   void onDelete() {
@@ -81,9 +67,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
         title: titleController.text,
         type: typeController.text,
         price: priceController.text,
-        discountPrice: discountPriceController.text.isEmpty
-            ? priceController.text
-            : discountPriceController.text,
+        discountPrice: discountPriceController.text,
       );
       context.read<ItemBloc>().add(AddItem(item: item));
     } else {
@@ -105,7 +89,6 @@ class _EditItemScreenState extends State<EditItemScreen> {
       typeController.text = widget.item!.type;
       priceController.text = widget.item!.price;
       discountPriceController.text = widget.item!.discountPrice;
-      hasDiscount = widget.item!.discountPrice.isNotEmpty;
     }
   }
 
@@ -145,7 +128,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                 Field(
                   controller: titleController,
                   hintText: 'Full name',
-                  onChanged: checkActive,
+                  onChanged: onChanged,
                 ),
                 const SizedBox(height: 16),
                 const TitleText(title: 'Unit Price'),
@@ -153,7 +136,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                   controller: priceController,
                   hintText: '0',
                   fieldType: FieldType.decimal,
-                  onChanged: checkActive,
+                  onChanged: onChanged,
                 ),
                 const SizedBox(height: 16),
                 const TitleText(
@@ -165,28 +148,32 @@ class _EditItemScreenState extends State<EditItemScreen> {
                   hintText: 'Type',
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  children: [
-                    const Expanded(
-                      child: TitleText(
-                        title: 'Discount %',
-                        additional: 'Optional',
-                      ),
-                    ),
-                    SwitchButton(
-                      isActive: hasDiscount,
-                      onPressed: onHasDiscount,
-                    ),
-                  ],
+                const TitleText(
+                  title: 'Discount %',
+                  additional: 'Optional',
                 ),
-                const SizedBox(height: 6),
-                if (hasDiscount)
-                  Field(
-                    controller: discountPriceController,
-                    hintText: '0',
-                    fieldType: FieldType.decimal,
-                    onChanged: checkActive,
-                  ),
+                // Row(
+                //   children: [
+                //     const Expanded(
+                //       child: TitleText(
+                //         title: 'Discount %',
+                //         additional: 'Optional',
+                //       ),
+                //     ),
+                //     SwitchButton(
+                //       isActive: hasDiscount,
+                //       onPressed: onHasDiscount,
+                //     ),
+                //   ],
+                // ),
+                // const SizedBox(height: 6),
+                // if (hasDiscount)
+                Field(
+                  controller: discountPriceController,
+                  hintText: '0',
+                  fieldType: FieldType.decimal,
+                  onChanged: onChanged,
+                ),
               ],
             ),
           ),
@@ -204,18 +191,3 @@ class _EditItemScreenState extends State<EditItemScreen> {
     );
   }
 }
-
-   // if (select) ...[
-                //   const SizedBox(height: 16),
-                //   Row(
-                //     children: [
-                //       const Expanded(
-                //         child: TitleText(title: 'Save to Items catalog'),
-                //       ),
-                //       SwitchButton(
-                //         isActive: saveToItems,
-                //         onPressed: onSaveToItems,
-                //       ),
-                //     ],
-                //   ),
-                // ],

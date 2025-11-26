@@ -12,7 +12,12 @@ import 'edit_item_screen.dart';
 import '../widgets/item_tile.dart';
 
 class ItemsScreen extends StatefulWidget {
-  const ItemsScreen({super.key});
+  const ItemsScreen({
+    super.key,
+    this.select = false,
+  });
+
+  final bool select;
 
   @override
   State<ItemsScreen> createState() => _ItemsScreenState();
@@ -40,10 +45,14 @@ class _ItemsScreenState extends State<ItemsScreen> {
       builder: (context, state) {
         final query = searchController.text.toLowerCase();
 
+        final items = state.items.where((item) {
+          return item.iid == 0;
+        }).toList();
+
         final sorted = query.isEmpty
-            ? state.items
-            : state.items.where((element) {
-                return element.title.toLowerCase().contains(query);
+            ? items
+            : items.where((item) {
+                return item.title.toLowerCase().contains(query);
               }).toList();
 
         return Stack(
@@ -78,7 +87,9 @@ class _ItemsScreenState extends State<ItemsScreen> {
                           onPressed: onCreate,
                         )
                       : ListView.builder(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          padding: const EdgeInsets.all(16).copyWith(
+                            bottom: 100,
+                          ),
                           itemCount: sorted.length,
                           itemBuilder: (context, index) {
                             final item = sorted[index];
@@ -86,10 +97,12 @@ class _ItemsScreenState extends State<ItemsScreen> {
                             return ItemTile(
                               item: item,
                               onPressed: () {
-                                context.push(
-                                  EditItemScreen.routePath,
-                                  extra: item,
-                                );
+                                widget.select
+                                    ? context.pop(item)
+                                    : context.push(
+                                        EditItemScreen.routePath,
+                                        extra: item,
+                                      );
                               },
                             );
                           },

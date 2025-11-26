@@ -15,12 +15,12 @@ class SheetWidget extends StatelessWidget {
   final String title;
   final Widget child;
 
-  static void show({
+  static Future<T?> show<T>({
     required BuildContext context,
     required String title,
     required Widget child,
   }) {
-    showModalBottomSheet(
+    return showModalBottomSheet<T>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,

@@ -65,7 +65,8 @@ class InvoicePay extends StatelessWidget {
                           child: Center(
                             child: Text(
                               formatTimestamp(
-                                  DateTime.now().millisecondsSinceEpoch),
+                                DateTime.now().millisecondsSinceEpoch,
+                              ),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 12,
@@ -157,12 +158,10 @@ class InvoicePay extends StatelessWidget {
         child: Row(
           children: [
             const SizedBox(width: 8),
-            Expanded(
+            const Expanded(
               child: Text(
-                invoice.isEstimate
-                    ? 'Has Estimate Been Paid?'
-                    : 'Has Invoice Been Paid?',
-                style: const TextStyle(
+                'Has Invoice Been Paid?',
+                style: TextStyle(
                   color: Colors.black,
                   fontSize: 12,
                   fontFamily: AppFonts.w600,

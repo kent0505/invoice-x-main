@@ -12,7 +12,12 @@ import '../widgets/client_tile.dart';
 import 'edit_client_screen.dart';
 
 class ClientsScreen extends StatefulWidget {
-  const ClientsScreen({super.key});
+  const ClientsScreen({
+    super.key,
+    this.select = false,
+  });
+
+  final bool select;
 
   @override
   State<ClientsScreen> createState() => _ClientsScreenState();
@@ -90,10 +95,12 @@ class _ClientsScreenState extends State<ClientsScreen> {
                             return ClientTile(
                               client: client,
                               onPressed: () {
-                                context.push(
-                                  EditClientScreen.routePath,
-                                  extra: client,
-                                );
+                                widget.select
+                                    ? context.pop(client)
+                                    : context.push(
+                                        EditClientScreen.routePath,
+                                        extra: client,
+                                      );
                               },
                             );
                           },

@@ -18,7 +18,6 @@ class DatePick extends StatefulWidget {
   ) async {
     final d = await showDialog<DateTime>(
       context: context,
-      barrierColor: Colors.transparent,
       builder: (context) {
         return DatePick(date: date);
       },
@@ -62,15 +61,13 @@ class _DatePickState extends State<DatePick> {
   Widget build(BuildContext context) {
     return Dialog(
       elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
+      insetPadding: EdgeInsets.zero,
       child: Container(
         width: 340,
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.1),

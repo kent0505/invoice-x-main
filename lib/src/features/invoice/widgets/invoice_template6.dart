@@ -22,7 +22,7 @@ class InvoiceTemplate6 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final type = invoice.isEstimate ? 'ESTIMATE' : 'INVOICE';
+    const type = 'INVOICE';
 
     final uniqueInvoiceIDs = <int>{};
     final uniqueItems = <Item>[];
@@ -76,7 +76,7 @@ class InvoiceTemplate6 extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       ImageWidget(
-                        invoice.business?.imageLogo ?? '',
+                        invoice.business?.image ?? '',
                         file: true,
                         height: 130,
                         width: 130,
@@ -91,9 +91,9 @@ class InvoiceTemplate6 extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 10),
-                      Text(
+                      const Text(
                         '$type TO:',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.black,
                           fontSize: 12,
                           fontFamily: AppFonts.w600,
@@ -117,9 +117,9 @@ class InvoiceTemplate6 extends StatelessWidget {
                         data: invoice.client?.email ?? '',
                       ),
                       const SizedBox(height: 10),
-                      Text(
+                      const Text(
                         '$type FROM:',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.black,
                           fontSize: 12,
                           fontFamily: AppFonts.w600,
@@ -211,8 +211,7 @@ class InvoiceTemplate6 extends StatelessWidget {
                   }
                 }
 
-                final price =
-                    double.tryParse(uniqueItems[index].discountPrice) ?? 0;
+                final price = getItemPrice(uniqueItems[index]);
 
                 return Container(
                   height: 20,
@@ -322,9 +321,9 @@ class InvoiceTemplate6 extends StatelessWidget {
                       ),
                       const Spacer(),
                       SvgPicture.string(
-                        invoice.imageSignature.isEmpty
-                            ? invoice.business?.imageSignature ?? ''
-                            : invoice.imageSignature,
+                        invoice.signature.isEmpty
+                            ? invoice.business?.signature ?? ''
+                            : invoice.signature,
                         height: 40,
                       ),
                       const SizedBox(height: 10),

@@ -23,11 +23,13 @@ class InvoiceDates extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<MyColors>()!;
+
     return Container(
-      height: 40,
+      height: 44,
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(6),
+        color: colors.tertiary1,
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: [
@@ -45,9 +47,9 @@ class InvoiceDates extends StatelessWidget {
             child: Text(
               formatInvoiceNumber(number),
               textAlign: TextAlign.end,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 12,
+              style: TextStyle(
+                color: colors.text2,
+                fontSize: 14,
                 fontFamily: AppFonts.w400,
               ),
             ),
@@ -70,20 +72,24 @@ class _Issued extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Button(
-      onPressed: onPressed,
-      child: SizedBox(
-        width: 120,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: Text(
-            date == 0 ? '-' : formatTimestamp(date),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: Colors.black,
-              fontSize: 12,
-              fontFamily: AppFonts.w400,
+    final colors = Theme.of(context).extension<MyColors>()!;
+
+    return Expanded(
+      child: Button(
+        onPressed: onPressed,
+        child: SizedBox(
+          width: 120,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Text(
+              date == 0 ? '-' : formatTimestamp(date),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: colors.text2,
+                fontSize: 14,
+                fontFamily: AppFonts.w400,
+              ),
             ),
           ),
         ),

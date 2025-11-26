@@ -20,7 +20,7 @@ class InvoiceTemplate3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final type = invoice.isEstimate ? 'ESTIMATE' : 'INVOICE';
+    const type = 'INVOICE';
 
     final uniqueInvoiceIDs = <int>{};
     final uniqueItems = <Item>[];
@@ -74,7 +74,7 @@ class InvoiceTemplate3 extends StatelessWidget {
                   ),
                   const Spacer(),
                   ImageWidget(
-                    invoice.business?.imageLogo ?? '',
+                    invoice.business?.image ?? '',
                     file: true,
                     height: 100,
                     width: 100,
@@ -214,8 +214,7 @@ class InvoiceTemplate3 extends StatelessWidget {
                     }
                   }
 
-                  final price =
-                      double.tryParse(uniqueItems[index].discountPrice) ?? 0;
+                  final price = getItemPrice(uniqueItems[index]);
 
                   final color = index % 2 == 0 ? null : const Color(0xffEBEBEB);
 
@@ -313,9 +312,9 @@ class InvoiceTemplate3 extends StatelessWidget {
                       ),
                       const Spacer(),
                       SvgPicture.string(
-                        invoice.imageSignature.isEmpty
-                            ? invoice.business?.imageSignature ?? ''
-                            : invoice.imageSignature,
+                        invoice.signature.isEmpty
+                            ? invoice.business?.signature ?? ''
+                            : invoice.signature,
                         height: 40,
                       ),
                     ],

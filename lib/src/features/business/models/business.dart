@@ -10,8 +10,8 @@ final class Business {
     this.iban = '',
     this.accountNo = '',
     this.vat = '',
-    this.imageLogo = '',
-    this.imageSignature = '',
+    this.image = '',
+    this.signature = '',
   });
 
   int id;
@@ -24,8 +24,8 @@ final class Business {
   String iban;
   String accountNo;
   String vat;
-  String imageLogo;
-  String imageSignature;
+  String image;
+  String signature;
 
   Map<String, dynamic> toMap() {
     return {
@@ -38,8 +38,8 @@ final class Business {
       'iban': iban,
       'accountNo': accountNo,
       'vat': vat,
-      'imageLogo': imageLogo,
-      'imageSignature': imageSignature,
+      'image': image,
+      'signature': signature,
     };
   }
 
@@ -55,8 +55,8 @@ final class Business {
       iban: map['iban'],
       accountNo: map['accountNo'],
       vat: map['vat'],
-      imageLogo: map['imageLogo'],
-      imageSignature: map['imageSignature'],
+      image: map['image'],
+      signature: map['signature'],
     );
   }
 
@@ -73,8 +73,8 @@ final class Business {
       iban TEXT,
       accountNo TEXT,
       vat TEXT,
-      imageLogo TEXT,
-      imageSignature TEXT
+      image TEXT,
+      signature TEXT
     )
     ''';
 }

@@ -1,6 +1,5 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../core/utils.dart';
 import '../models/business.dart';
 
 abstract interface class BusinessRepository {
@@ -19,51 +18,36 @@ final class BusinessRepositoryImpl implements BusinessRepository {
 
   @override
   Future<List<Business>> getBusiness() async {
-    try {
-      final maps = await _db.query(Business.table);
-      return maps.map((map) => Business.fromMap(map)).toList();
-    } catch (e) {
-      logger(e);
-      return [];
-    }
+    final maps = await _db.query(Business.table);
+    return maps.map((map) {
+      return Business.fromMap(map);
+    }).toList();
   }
 
   @override
   Future<void> addBusiness(Business business) async {
-    try {
-      await _db.insert(
-        Business.table,
-        business.toMap(),
-      );
-    } catch (e) {
-      logger(e);
-    }
+    await _db.insert(
+      Business.table,
+      business.toMap(),
+    );
   }
 
   @override
   Future<void> editBusiness(Business business) async {
-    try {
-      await _db.update(
-        Business.table,
-        business.toMap(),
-        where: 'id = ?',
-        whereArgs: [business.id],
-      );
-    } catch (e) {
-      logger(e);
-    }
+    await _db.update(
+      Business.table,
+      business.toMap(),
+      where: 'id = ?',
+      whereArgs: [business.id],
+    );
   }
 
   @override
   Future<void> deleteBusiness(Business business) async {
-    try {
-      await _db.delete(
-        Business.table,
-        where: 'id = ?',
-        whereArgs: [business.id],
-      );
-    } catch (e) {
-      logger(e);
-    }
+    await _db.delete(
+      Business.table,
+      where: 'id = ?',
+      whereArgs: [business.id],
+    );
   }
 }

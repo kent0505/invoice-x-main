@@ -51,7 +51,7 @@ class ItemTile extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    '$currency${item.discountPrice}',
+                    '$currency${item.discountPrice.isEmpty ? item.price : item.discountPrice}',
                     style: TextStyle(
                       color: colors.text2,
                       fontSize: 14,

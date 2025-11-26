@@ -54,6 +54,7 @@ class Themes {
         backgroundColor: colors.bg,
         elevation: 0,
         insetPadding: const EdgeInsets.symmetric(horizontal: 50),
+        barrierColor: Colors.black.withValues(alpha: 0.2),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),

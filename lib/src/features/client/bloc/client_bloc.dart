@@ -27,24 +27,15 @@ class ClientBloc extends Bloc<ClientEvent, ClientState> {
     GetClients event,
     Emitter<ClientState> emit,
   ) async {
-    if (!state.loading) {
-      emit(state.copyWith(loading: true));
-    }
-
     final clients = await _repository.getClients();
 
-    emit(state.copyWith(
-      clients: clients.reversed.toList(),
-      loading: false,
-    ));
+    emit(state.copyWith(clients: clients.reversed.toList()));
   }
 
   void _addClient(
     AddClient event,
     Emitter<ClientState> emit,
   ) async {
-    emit(state.copyWith(loading: true));
-
     await _repository.addClient(event.client);
 
     add(GetClients());
@@ -54,8 +45,6 @@ class ClientBloc extends Bloc<ClientEvent, ClientState> {
     EditClient event,
     Emitter<ClientState> emit,
   ) async {
-    emit(state.copyWith(loading: true));
-
     await _repository.editClient(event.client);
 
     add(GetClients());
@@ -65,8 +54,6 @@ class ClientBloc extends Bloc<ClientEvent, ClientState> {
     DeleteClient event,
     Emitter<ClientState> emit,
   ) async {
-    emit(state.copyWith(loading: true));
-
     await _repository.deleteClient(event.client);
 
     add(GetClients());

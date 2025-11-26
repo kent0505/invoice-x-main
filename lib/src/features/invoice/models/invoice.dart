@@ -10,13 +10,12 @@ final class Invoice {
     required this.template,
     required this.date,
     required this.dueDate,
-    required this.businessID,
-    required this.clientID,
+    required this.bid,
+    required this.cid,
     this.paymentDate = 0,
-    required this.tax,
     this.paymentMethod = '',
-    required this.imageSignature,
-    required this.isEstimate,
+    required this.tax,
+    required this.signature,
     this.business,
     this.client,
     this.items = const [],
@@ -28,13 +27,13 @@ final class Invoice {
   int template;
   int date;
   int dueDate;
-  int businessID;
-  int clientID;
+  int bid;
+  int cid;
   int paymentDate;
-  String tax;
   String paymentMethod;
-  String imageSignature;
-  bool isEstimate;
+  String tax;
+  String signature;
+
   Business? business;
   Client? client;
   List<Item> items;
@@ -46,13 +45,12 @@ final class Invoice {
       'template': template,
       'date': date,
       'dueDate': dueDate,
-      'businessID': businessID,
-      'clientID': clientID,
+      'bid': bid,
+      'cid': cid,
       'paymentDate': paymentDate,
-      'tax': tax,
       'paymentMethod': paymentMethod,
-      'imageSignature': imageSignature,
-      'isEstimate': isEstimate ? 1 : 0,
+      'tax': tax,
+      'signature': signature,
     };
   }
 
@@ -63,13 +61,12 @@ final class Invoice {
       template: map['template'],
       date: map['date'],
       dueDate: map['dueDate'],
-      businessID: map['businessID'],
-      clientID: map['clientID'],
+      bid: map['bid'],
+      cid: map['cid'],
       paymentDate: map['paymentDate'],
-      tax: map['tax'],
       paymentMethod: map['paymentMethod'],
-      imageSignature: map['imageSignature'],
-      isEstimate: map['isEstimate'] == 1,
+      tax: map['tax'],
+      signature: map['signature'],
     );
   }
 
@@ -81,13 +78,12 @@ final class Invoice {
       template INTEGER,
       date INTEGER,
       dueDate INTEGER,
-      businessID INTEGER,
-      clientID INTEGER,
+      bid INTEGER,
+      cid INTEGER,
       paymentDate INTEGER,
-      tax TEXT,
       paymentMethod TEXT,
-      imageSignature TEXT,
-      isEstimate INTEGER
+      tax TEXT,
+      signature TEXT
     )
     ''';
 }

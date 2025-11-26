@@ -12,7 +12,12 @@ import '../widgets/business_tile.dart';
 import 'edit_business_screen.dart';
 
 class BusinessScreen extends StatefulWidget {
-  const BusinessScreen({super.key});
+  const BusinessScreen({
+    super.key,
+    this.select = false,
+  });
+
+  final bool select;
 
   @override
   State<BusinessScreen> createState() => _BusinessScreenState();
@@ -90,10 +95,12 @@ class _BusinessScreenState extends State<BusinessScreen> {
                             return BusinessTile(
                               business: business,
                               onPressed: () {
-                                context.push(
-                                  EditBusinessScreen.routePath,
-                                  extra: business,
-                                );
+                                widget.select
+                                    ? context.pop(business)
+                                    : context.push(
+                                        EditBusinessScreen.routePath,
+                                        extra: business,
+                                      );
                               },
                             );
                           },

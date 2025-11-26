@@ -1,6 +1,6 @@
 import 'package:sqflite/sqflite.dart';
 
-import '../../../core/utils.dart';
+import '../../invoice/models/invoice.dart';
 import '../models/item.dart';
 
 abstract interface class ItemRepository {
@@ -8,10 +8,10 @@ abstract interface class ItemRepository {
 
   Future<List<Item>> getItems();
   Future<void> addItem(Item item);
-  Future<void> addInvoiceItems(List<Item> items);
   Future<void> editItem(Item item);
   Future<void> deleteItem(Item item);
-  Future<void> deleteInvoiceItems(int id);
+  Future<void> addInvoiceItems(Invoice invoice);
+  Future<void> deleteInvoiceItems(Invoice invoice);
 }
 
 final class ItemRepositoryImpl implements ItemRepository {
@@ -21,78 +21,55 @@ final class ItemRepositoryImpl implements ItemRepository {
 
   @override
   Future<List<Item>> getItems() async {
-    try {
-      final maps = await _db.query(Item.table);
-      return maps.map((map) => Item.fromMap(map)).toList();
-    } catch (e) {
-      logger(e);
-      return [];
-    }
+    final maps = await _db.query(Item.table);
+    return maps.map((map) {
+      return Item.fromMap(map);
+    }).toList();
   }
 
   @override
   Future<void> addItem(Item item) async {
-    try {
-      await _db.insert(
-        Item.table,
-        item.toMap(),
-      );
-    } catch (e) {
-      logger(e);
-    }
-  }
-
-  @override
-  Future<void> addInvoiceItems(List<Item> items) async {
-    try {
-      for (final item in items) {
-        await _db.insert(
-          Item.table,
-          item.toMap(),
-        );
-      }
-    } catch (e) {
-      logger(e);
-    }
+    await _db.insert(
+      Item.table,
+      item.toMap(),
+    );
   }
 
   @override
   Future<void> editItem(Item item) async {
-    try {
-      await _db.update(
-        Item.table,
-        item.toMap(),
-        where: 'id = ?',
-        whereArgs: [item.id],
-      );
-    } catch (e) {
-      logger(e);
-    }
+    await _db.update(
+      Item.table,
+      item.toMap(),
+      where: 'id = ?',
+      whereArgs: [item.id],
+    );
   }
 
   @override
   Future<void> deleteItem(Item item) async {
-    try {
-      await _db.delete(
+    await _db.delete(
+      Item.table,
+      where: 'id = ?',
+      whereArgs: [item.id],
+    );
+  }
+
+  @override
+  Future<void> addInvoiceItems(Invoice invoice) async {
+    for (final item in invoice.items) {
+      await _db.insert(
         Item.table,
-        where: 'id = ?',
-        whereArgs: [item.id],
+        item.toMap(),
       );
-    } catch (e) {
-      logger(e);
     }
   }
 
   @override
-  Future<void> deleteInvoiceItems(int id) async {
-    try {
-      await _db.delete(
-        Item.table,
-        where: 'invoiceID = ?',
-        whereArgs: [id],
-      );
-    } catch (e) {
-      logger(e);
-    }
+  Future<void> deleteInvoiceItems(Invoice invoice) async {
+    await _db.delete(
+      Item.table,
+      where: 'iid = ?',
+      whereArgs: [invoice.id],
+    );
   }
 }

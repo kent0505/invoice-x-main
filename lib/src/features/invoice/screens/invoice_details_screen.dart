@@ -9,7 +9,6 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/utils.dart';
@@ -50,27 +49,7 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
   }
 
   void onPromoPrinter() async {
-    try {
-      if (!await launchUrl(
-        Uri.parse('https://smart-printer.onelink.me/Dw8z/icsdzbwp'),
-      )) {
-        throw 'Could not launch url';
-      }
-    } catch (e) {
-      logger(e);
-    }
-  }
-
-  void onPdfService() async {
-    try {
-      if (!await launchUrl(
-        Uri.parse('https://www.google.com/'),
-      )) {
-        throw 'Could not launch url';
-      }
-    } catch (e) {
-      logger(e);
-    }
+    await launchURL(context, Urls.printerAppPromo);
   }
 
   Future<pw.Document> captureWidget() async {
@@ -78,7 +57,6 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
     final bytes = await screenshotController.capture();
     if (bytes != null) {
       final dir = await getTemporaryDirectory();
-      final name = invoice.isEstimate ? 'estimate' : 'invoice';
       // file = File('${dir.path}/${name}_${invoice.number}.png');
       // await file.writeAsBytes(bytes);
       pdf.addPage(
@@ -95,7 +73,7 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
           },
         ),
       );
-      file = File('${dir.path}/${name}_${invoice.number}.pdf');
+      file = File('${dir.path}/invoice_${invoice.number}.pdf');
       await file.writeAsBytes(await pdf.save());
     }
     return pdf;
@@ -156,13 +134,10 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
     //     .toList();
 
     final state = context.read<InvoiceBloc>().state;
-    if (state is InvoiceLoaded) {
-      invoice.photos = state.photos
-          .where(
-            (element) => element.id == invoice.id,
-          )
-          .toList();
-    }
+
+    invoice.photos = state.photos.where((photo) {
+      return photo.iid == invoice.id;
+    }).toList();
   }
 
   @override
@@ -171,8 +146,8 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
 
     double subtotal = 0;
     for (final item in invoice.items) {
-      if (item.invoiceID == invoice.id) {
-        subtotal += double.tryParse(item.discountPrice) ?? 0;
+      if (item.iid == invoice.id) {
+        subtotal += getItemPrice(item);
       }
     }
 
@@ -319,7 +294,7 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
                 ),
                 const _Divider(),
                 _Data(
-                  title: invoice.isEstimate ? 'Estimate #' : 'Invoice #',
+                  title: 'Invoice #',
                   data: formatInvoiceNumber(invoice.number),
                 ),
                 const SizedBox(height: 30),
@@ -366,7 +341,7 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
               ),
               const SizedBox(height: 22),
               MainButton(
-                title: invoice.isEstimate ? 'Share Estimate' : 'Share Invoice',
+                title: 'Share Invoice',
                 onPressed: onShare,
               ),
             ],

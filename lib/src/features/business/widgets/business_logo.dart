@@ -11,11 +11,11 @@ import '../../../core/widgets/svg_widget.dart';
 class BusinessLogo extends StatelessWidget {
   const BusinessLogo({
     super.key,
-    required this.imageLogo,
+    required this.image,
     required this.onPressed,
   });
 
-  final String imageLogo;
+  final String image;
   final VoidCallback onPressed;
 
   @override
@@ -28,11 +28,11 @@ class BusinessLogo extends StatelessWidget {
         child: SizedBox(
           width: 164,
           height: 164,
-          child: imageLogo.isNotEmpty
+          child: image.isNotEmpty
               ? ClipRRect(
                   borderRadius: BorderRadius.circular(164),
                   child: Image.file(
-                    File(imageLogo),
+                    File(image),
                     errorBuilder: ImageWidget.errorBuilder,
                     frameBuilder: ImageWidget.frameBuilder,
                     height: 164,
