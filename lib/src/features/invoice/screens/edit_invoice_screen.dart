@@ -426,8 +426,7 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                if (invoice.signature.isNotEmpty)
-                  SvgString(string: invoice.signature),
+                SvgString(string: invoice.signature),
               ],
             ),
           ),

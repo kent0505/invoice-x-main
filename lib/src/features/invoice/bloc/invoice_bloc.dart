@@ -56,11 +56,11 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
 
       emit(state.copyWith(iid: iid));
 
-      for (final path in event.paths) {
+      for (final photo in event.invoice.photos) {
         await _photoRepository.addPhoto(
           Photo(
             id: iid.toString(),
-            path: path,
+            path: photo.path,
           ),
         );
       }
@@ -79,11 +79,11 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
       await _invoiceRepository.editInvoice(event.invoice);
       await _photoRepository.deletePhotos(event.invoice.id);
 
-      for (final path in event.paths) {
+      for (final photo in event.invoice.photos) {
         await _photoRepository.addPhoto(
           Photo(
             id: event.invoice.id,
-            path: path,
+            path: photo.path,
           ),
         );
       }

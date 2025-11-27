@@ -10,23 +10,28 @@ class SheetWidget extends StatelessWidget {
     super.key,
     required this.title,
     required this.child,
+    this.expanded = true,
   });
 
   final String title;
   final Widget child;
+  final bool expanded;
 
   static Future<T?> show<T>({
     required BuildContext context,
     required String title,
     required Widget child,
+    bool isScrollControlled = true,
+    bool expanded = true,
   }) {
     return showModalBottomSheet<T>(
       context: context,
-      isScrollControlled: true,
+      isScrollControlled: isScrollControlled,
       useSafeArea: true,
       builder: (context) {
         return SheetWidget(
           title: title,
+          expanded: expanded,
           child: child,
         );
       },
@@ -45,6 +50,7 @@ class SheetWidget extends StatelessWidget {
         ),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             height: 5,
@@ -58,7 +64,14 @@ class SheetWidget extends StatelessWidget {
           Row(
             children: [
               const SizedBox(width: 16),
-              SheetTitle(title: title),
+              Text(
+                title,
+                style: TextStyle(
+                  color: colors.text,
+                  fontSize: 18,
+                  fontFamily: AppFonts.w600,
+                ),
+              ),
               const Spacer(),
               Button(
                 onPressed: () {
@@ -72,28 +85,8 @@ class SheetWidget extends StatelessWidget {
               const SizedBox(width: 16),
             ],
           ),
-          Expanded(child: child),
+          expanded ? Expanded(child: child) : child,
         ],
-      ),
-    );
-  }
-}
-
-class SheetTitle extends StatelessWidget {
-  const SheetTitle({super.key, required this.title});
-
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).extension<MyColors>()!;
-
-    return Text(
-      title,
-      style: TextStyle(
-        color: colors.text,
-        fontSize: 18,
-        fontFamily: AppFonts.w600,
       ),
     );
   }

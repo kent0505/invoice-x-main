@@ -10,6 +10,7 @@ class MainButton extends StatelessWidget {
     this.width,
     this.horizontal = 0,
     this.color,
+    this.buttonColor,
     this.active = true,
     required this.onPressed,
   });
@@ -18,6 +19,7 @@ class MainButton extends StatelessWidget {
   final double? width;
   final double horizontal;
   final Color? color;
+  final Color? buttonColor;
   final bool active;
   final VoidCallback onPressed;
 
@@ -43,7 +45,7 @@ class MainButton extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                color: color == null ? colors.bg : colors.accent,
+                color: color == null ? colors.bg : buttonColor ?? colors.accent,
                 fontSize: 16,
                 fontFamily: AppFonts.w700,
               ),

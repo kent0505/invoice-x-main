@@ -6,23 +6,15 @@ sealed class InvoiceEvent {}
 final class GetInvoices extends InvoiceEvent {}
 
 final class AddInvoice extends InvoiceEvent {
-  AddInvoice({
-    required this.invoice,
-    this.paths = const [],
-  });
+  AddInvoice({required this.invoice});
 
   final Invoice invoice;
-  final List<String> paths;
 }
 
 final class EditInvoice extends InvoiceEvent {
-  EditInvoice({
-    required this.invoice,
-    this.paths = const [],
-  });
+  EditInvoice({required this.invoice});
 
   final Invoice invoice;
-  final List<String> paths;
 }
 
 final class DeleteInvoice extends InvoiceEvent {

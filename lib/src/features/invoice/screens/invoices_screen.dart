@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:invoice_app/src/features/invoice/screens/invoice_details_screen.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/utils.dart';
@@ -10,9 +9,12 @@ import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/no_data.dart';
 import '../../../core/widgets/tab_widget.dart';
 import '../../home/widgets/total_income.dart';
+import '../../item/bloc/item_bloc.dart';
+import '../../profile/data/profile_repository.dart';
 import '../bloc/invoice_bloc.dart';
 import '../models/invoice.dart';
 import 'edit_invoice_screen.dart';
+import 'invoice_details_screen.dart';
 
 class InvoicesScreen extends StatelessWidget {
   const InvoicesScreen({super.key});
@@ -106,7 +108,6 @@ class _Sorted extends StatelessWidget {
                 child: Button(
                   onPressed: () {
                     context.push(
-                      // EditInvoiceScreen.routePath,
                       InvoiceDetailsScreen.routePath,
                       extra: invoice,
                     );
@@ -161,14 +162,31 @@ class _Sorted extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        child: Text(
-                          '1.860.56 USD',
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                            color: colors.text,
-                            fontSize: 20,
-                            fontFamily: AppFonts.w600,
-                          ),
+                        child: BlocBuilder<ItemBloc, ItemState>(
+                          builder: (context, state) {
+                            final currency =
+                                context.read<ProfileRepository>().getCurrency();
+
+                            final items = state.items.where((item) {
+                              return item.iid == invoice.id;
+                            });
+
+                            double amount = 0;
+
+                            for (final item in items) {
+                              amount += getItemPrice(item);
+                            }
+
+                            return Text(
+                              '$currency$amount',
+                              textAlign: TextAlign.end,
+                              style: TextStyle(
+                                color: colors.text,
+                                fontSize: 20,
+                                fontFamily: AppFonts.w600,
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],
