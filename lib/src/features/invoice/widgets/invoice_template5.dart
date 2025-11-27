@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/utils.dart';
 import '../../../core/widgets/image_widget.dart';
+import '../../../core/widgets/svg_widget.dart';
 import '../../item/models/item.dart';
 import '../models/invoice.dart';
 import 'template_body.dart';
@@ -322,8 +322,8 @@ class InvoiceTemplate5 extends StatelessWidget {
                         ],
                       ),
                       const Spacer(),
-                      SvgPicture.string(
-                        invoice.signature.isEmpty
+                      SvgString(
+                        string: invoice.signature.isEmpty
                             ? invoice.business?.signature ?? ''
                             : invoice.signature,
                         height: 40,

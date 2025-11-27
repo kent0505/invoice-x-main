@@ -42,3 +42,25 @@ class SvgWidget extends StatelessWidget {
     );
   }
 }
+
+class SvgString extends StatelessWidget {
+  const SvgString({
+    super.key,
+    required this.string,
+    this.height,
+    this.width,
+  });
+
+  final String string;
+  final double? height;
+  final double? width;
+
+  @override
+  Widget build(BuildContext context) {
+    return SvgPicture.string(
+      string,
+      height: height,
+      width: width,
+    );
+  }
+}

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
@@ -260,7 +259,7 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
                     title: 'Signature',
                     additional: 'Optional',
                   ),
-                  SizedBox(child: SvgPicture.string(signature)),
+                  SvgString(string: signature),
                 ],
               ],
             ),

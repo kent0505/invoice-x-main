@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/widgets/main_button.dart';
@@ -55,12 +56,24 @@ class NoInternetDialog extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 8),
-              Center(
-                child: MainButton(
-                  title: 'Retry',
-                  width: Constants.mainButtonWidth,
-                  onPressed: () {},
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: MainButton(
+                      title: 'Cancel',
+                      color: colors.bg,
+                      onPressed: () {
+                        context.pop();
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: MainButton(
+                      title: 'Retry',
+                      onPressed: () {},
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

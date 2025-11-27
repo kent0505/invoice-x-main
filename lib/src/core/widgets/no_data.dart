@@ -8,12 +8,12 @@ class NoData extends StatelessWidget {
     super.key,
     required this.description,
     required this.buttonTitle,
-    required this.onPressed,
+    this.onPressed,
   });
 
   final String description;
   final String buttonTitle;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -44,15 +44,16 @@ class NoData extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                MainButton(
-                  title: buttonTitle,
-                  onPressed: onPressed,
-                ),
-              ],
-            ),
+            if (onPressed != null)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  MainButton(
+                    title: buttonTitle,
+                    onPressed: onPressed!,
+                  ),
+                ],
+              ),
           ],
         ),
       ),

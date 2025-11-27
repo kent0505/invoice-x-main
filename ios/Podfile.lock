@@ -1,27 +1,14 @@
 PODS:
-  - app_tracking_transparency (0.0.1):
+  - connectivity_plus (0.0.1):
     - Flutter
-  - appsflyer_sdk (6.16.2):
-    - AppsFlyerFramework (= 6.16.2)
-    - Flutter
-  - AppsFlyerFramework (6.16.2):
-    - AppsFlyerFramework/Main (= 6.16.2)
-  - AppsFlyerFramework/Main (6.16.2)
   - Flutter (1.0.0)
-  - flutter_asa_attribution (0.0.1):
-    - Flutter
   - flutter_contacts (0.0.1):
     - Flutter
   - image_picker_ios (0.0.1):
     - Flutter
-  - in_app_review (2.0.0):
-    - Flutter
-  - onesignal_flutter (5.3.4):
-    - Flutter
-    - OneSignalXCFramework (= 5.2.14)
-  - OneSignalXCFramework (5.2.14):
-    - OneSignalXCFramework/OneSignalComplete (= 5.2.14)
-  - OneSignalXCFramework/OneSignal (5.2.14):
+  - OneSignalXCFramework (5.2.15):
+    - OneSignalXCFramework/OneSignalComplete (= 5.2.15)
+  - OneSignalXCFramework/OneSignal (5.2.15):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalLiveActivities
@@ -29,38 +16,38 @@ PODS:
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalComplete (5.2.14):
+  - OneSignalXCFramework/OneSignalComplete (5.2.15):
     - OneSignalXCFramework/OneSignal
     - OneSignalXCFramework/OneSignalInAppMessages
     - OneSignalXCFramework/OneSignalLocation
-  - OneSignalXCFramework/OneSignalCore (5.2.14)
-  - OneSignalXCFramework/OneSignalExtension (5.2.14):
+  - OneSignalXCFramework/OneSignalCore (5.2.15)
+  - OneSignalXCFramework/OneSignalExtension (5.2.15):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalInAppMessages (5.2.14):
+  - OneSignalXCFramework/OneSignalInAppMessages (5.2.15):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLiveActivities (5.2.14):
+  - OneSignalXCFramework/OneSignalLiveActivities (5.2.15):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLocation (5.2.14):
+  - OneSignalXCFramework/OneSignalLocation (5.2.15):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalNotifications (5.2.14):
+  - OneSignalXCFramework/OneSignalNotifications (5.2.15):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalOSCore (5.2.14):
+  - OneSignalXCFramework/OneSignalOSCore (5.2.15):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalOutcomes (5.2.14):
+  - OneSignalXCFramework/OneSignalOutcomes (5.2.15):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalUser (5.2.14):
+  - OneSignalXCFramework/OneSignalUser (5.2.15):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
@@ -70,20 +57,20 @@ PODS:
     - FlutterMacOS
   - printing (1.0.0):
     - Flutter
-  - purchases_flutter (8.10.5):
+  - purchases_flutter (9.9.8):
     - Flutter
-    - PurchasesHybridCommon (= 14.0.2)
-  - purchases_ui_flutter (8.10.5):
+    - PurchasesHybridCommon (= 17.19.1)
+  - purchases_ui_flutter (9.9.8):
     - Flutter
-    - PurchasesHybridCommonUI (= 14.0.2)
-  - PurchasesHybridCommon (14.0.2):
-    - RevenueCat (= 5.30.0)
-  - PurchasesHybridCommonUI (14.0.2):
-    - PurchasesHybridCommon (= 14.0.2)
-    - RevenueCatUI (= 5.30.0)
-  - RevenueCat (5.30.0)
-  - RevenueCatUI (5.30.0):
-    - RevenueCat (= 5.30.0)
+    - PurchasesHybridCommonUI (= 17.19.1)
+  - PurchasesHybridCommon (17.19.1):
+    - RevenueCat (= 5.48.0)
+  - PurchasesHybridCommonUI (17.19.1):
+    - PurchasesHybridCommon (= 17.19.1)
+    - RevenueCatUI (= 5.48.0)
+  - RevenueCat (5.48.0)
+  - RevenueCatUI (5.48.0):
+    - RevenueCat (= 5.48.0)
   - share_plus (0.0.1):
     - Flutter
   - shared_preferences_foundation (0.0.1):
@@ -96,14 +83,10 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
-  - app_tracking_transparency (from `.symlinks/plugins/app_tracking_transparency/ios`)
-  - appsflyer_sdk (from `.symlinks/plugins/appsflyer_sdk/ios`)
+  - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - Flutter (from `Flutter`)
-  - flutter_asa_attribution (from `.symlinks/plugins/flutter_asa_attribution/ios`)
   - flutter_contacts (from `.symlinks/plugins/flutter_contacts/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
-  - in_app_review (from `.symlinks/plugins/in_app_review/ios`)
-  - onesignal_flutter (from `.symlinks/plugins/onesignal_flutter/ios`)
   - OneSignalXCFramework (< 6.0, >= 5.0.0)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - printing (from `.symlinks/plugins/printing/ios`)
@@ -116,7 +99,6 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
-    - AppsFlyerFramework
     - OneSignalXCFramework
     - PurchasesHybridCommon
     - PurchasesHybridCommonUI
@@ -124,22 +106,14 @@ SPEC REPOS:
     - RevenueCatUI
 
 EXTERNAL SOURCES:
-  app_tracking_transparency:
-    :path: ".symlinks/plugins/app_tracking_transparency/ios"
-  appsflyer_sdk:
-    :path: ".symlinks/plugins/appsflyer_sdk/ios"
+  connectivity_plus:
+    :path: ".symlinks/plugins/connectivity_plus/ios"
   Flutter:
     :path: Flutter
-  flutter_asa_attribution:
-    :path: ".symlinks/plugins/flutter_asa_attribution/ios"
   flutter_contacts:
     :path: ".symlinks/plugins/flutter_contacts/ios"
   image_picker_ios:
     :path: ".symlinks/plugins/image_picker_ios/ios"
-  in_app_review:
-    :path: ".symlinks/plugins/in_app_review/ios"
-  onesignal_flutter:
-    :path: ".symlinks/plugins/onesignal_flutter/ios"
   path_provider_foundation:
     :path: ".symlinks/plugins/path_provider_foundation/darwin"
   printing:
@@ -158,29 +132,24 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/url_launcher_ios/ios"
 
 SPEC CHECKSUMS:
-  app_tracking_transparency: e169b653478da7bb15a6c61209015378ca73e375
-  appsflyer_sdk: b8bf0ef73cadbebbad020a719ebc9bb42fe20526
-  AppsFlyerFramework: fe5303bffcdfd941d5f570c2d21eaaea982e7bdc
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  flutter_asa_attribution: a9553209130f5c506cb458c8a5288eacad2810b8
-  flutter_contacts: edb1c5ce76aa433e20e6cb14c615f4c0b66e0983
-  image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
-  in_app_review: a31b5257259646ea78e0e35fc914979b0031d011
-  onesignal_flutter: f69ff09eeaf41cea4b7a841de5a61e79e7fd9a5a
-  OneSignalXCFramework: 7112f3e89563e41ebc23fe807788f11985ac541c
-  path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
-  printing: 233e1b73bd1f4a05615548e9b5a324c98588640b
-  purchases_flutter: bc57bbcda3f0cb21f893cb601a41370b42ae2c9d
-  purchases_ui_flutter: 85d5ea6b7ad985c2933c2e1b4b7bd7995a837088
-  PurchasesHybridCommon: e1dbc7e7105c0845444cf82cf9d7c85eb9dbf918
-  PurchasesHybridCommonUI: e53fcdae687abb7ea9814bd2dac6aa85c19af54a
-  RevenueCat: 16058ecaa0b868e04cc7cf53a5de3fe0b96ca7d1
-  RevenueCatUI: 4fc22b69bc9fcec8bf37fb71396e7b31e819921b
-  share_plus: 8b6f8b3447e494cca5317c8c3073de39b3600d1f
-  shared_preferences_foundation: fcdcbc04712aee1108ac7fda236f363274528f78
-  sqflite_darwin: 5a7236e3b501866c1c9befc6771dfd73ffb8702d
-  url_launcher_ios: 5334b05cef931de560670eeae103fd3e431ac3fe
+  connectivity_plus: cb623214f4e1f6ef8fe7403d580fdad517d2f7dd
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  flutter_contacts: 5383945387e7ca37cf963d4be57c21f2fc15ca9f
+  image_picker_ios: e0ece4aa2a75771a7de3fa735d26d90817041326
+  OneSignalXCFramework: ea9e14a95b92ad48d9b35037cbae88a9542bdea3
+  path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
+  printing: 54ff03f28fe9ba3aa93358afb80a8595a071dd07
+  purchases_flutter: 4cdac45e916440b434ac188e4b973a1ea4969816
+  purchases_ui_flutter: e11d4ef3f60a6e6c788669e5ac7fc7aab579e8f7
+  PurchasesHybridCommon: a4837eebc889b973668af685d6c23b89a038461d
+  PurchasesHybridCommonUI: bf5566763f906429584534a117a7862537b92c0c
+  RevenueCat: 1e61140a343a77dc286f171b3ffab99ca09a4b57
+  RevenueCatUI: 625b2b2f4ee8c052d2e9939c2b906cdaecded253
+  share_plus: 50da8cb520a8f0f65671c6c6a99b3617ed10a58a
+  shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
+  sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
+  url_launcher_ios: 694010445543906933d732453a59da0a173ae33d
 
-PODFILE CHECKSUM: f71ffa72b852e4fdc534b3badfc38f64d08c118b
+PODFILE CHECKSUM: b8f27f70fa3b250561693886cd335798ff4f8e86
 
 COCOAPODS: 1.16.2

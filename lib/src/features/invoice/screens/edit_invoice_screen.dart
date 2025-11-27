@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
@@ -12,6 +11,7 @@ import '../../../core/widgets/dialog_widget.dart';
 import '../../../core/widgets/field.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/sheet_widget.dart';
+import '../../../core/widgets/svg_widget.dart';
 import '../../../core/widgets/title_text.dart';
 import '../../business/bloc/business_bloc.dart';
 import '../../business/models/business.dart';
@@ -205,21 +205,19 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
     context.pop();
   }
 
-  void onDelete() {
-    DialogWidget.show(
-      context,
-      title: 'Delete invoice?',
-      delete: true,
-      onPressed: () {
-        context
-            .read<InvoiceBloc>()
-            .add(DeleteInvoice(invoice: widget.invoice!));
-        context.read<ItemBloc>().add(DeleteItems(items: invoice.items));
-        context.pop();
-        context.pop();
-      },
-    );
-  }
+  // void onDelete() {
+  //   DialogWidget.show(
+  //     context,
+  //     title: 'Delete invoice?',
+  //     delete: true,
+  //     onPressed: () {
+  //       context.read<InvoiceBloc>().add(DeleteInvoice(invoice: invoice));
+  //       context.read<ItemBloc>().add(DeleteItems(items: invoice.items));
+  //       context.pop();
+  //       context.pop();
+  //     },
+  //   );
+  // }
 
   @override
   void initState() {
@@ -252,10 +250,10 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
       client: clientState.clients.firstWhereOrNull((client) {
         return client.id == widget.invoice?.cid;
       }),
-      items: itemState.items.where((item) {
+      items: itemState.items.reversed.where((item) {
         return item.iid == widget.invoice?.id;
       }).toList(),
-      photos: invoiceState.photos.where((photo) {
+      photos: invoiceState.photos.reversed.where((photo) {
         return photo.id == widget.invoice?.id;
       }).toList(),
     );
@@ -429,7 +427,7 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
                 ),
                 const SizedBox(height: 16),
                 if (invoice.signature.isNotEmpty)
-                  SvgPicture.string(invoice.signature),
+                  SvgString(string: invoice.signature),
               ],
             ),
           ),

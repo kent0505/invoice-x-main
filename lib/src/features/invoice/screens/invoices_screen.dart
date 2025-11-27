@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:invoice_app/src/features/invoice/screens/invoice_details_screen.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/utils.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/no_data.dart';
+import '../../../core/widgets/tab_widget.dart';
 import '../../home/widgets/total_income.dart';
 import '../bloc/invoice_bloc.dart';
 import '../models/invoice.dart';
-import '../../../core/widgets/tab_widget.dart';
 import 'edit_invoice_screen.dart';
 
 class InvoicesScreen extends StatelessWidget {
@@ -50,20 +51,19 @@ class InvoicesScreen extends StatelessWidget {
                   _Sorted(invoices: paidInvoices),
                 ],
               ),
-              if (invoices.isNotEmpty)
-                Positioned(
-                  right: 10,
-                  bottom: 10,
-                  child: MainButton(
-                    title: 'Create invoice',
-                    onPressed: () {
-                      context.push(
-                        EditInvoiceScreen.routePath,
-                        extra: null,
-                      );
-                    },
-                  ),
+              Positioned(
+                right: 10,
+                bottom: 10,
+                child: MainButton(
+                  title: 'Create invoice',
+                  onPressed: () {
+                    context.push(
+                      EditInvoiceScreen.routePath,
+                      extra: null,
+                    );
+                  },
                 ),
+              ),
             ],
           ),
         );
@@ -82,16 +82,10 @@ class _Sorted extends StatelessWidget {
     final colors = Theme.of(context).extension<MyColors>()!;
 
     return invoices.isEmpty
-        ? NoData(
+        ? const NoData(
             description:
                 'You haven’t created any invoices yet. Tap the button below to create your first one.',
             buttonTitle: 'Create invoice',
-            onPressed: () {
-              context.push(
-                EditInvoiceScreen.routePath,
-                extra: null,
-              );
-            },
           )
         : ListView.builder(
             padding: const EdgeInsets.all(16),
@@ -111,9 +105,9 @@ class _Sorted extends StatelessWidget {
                 ),
                 child: Button(
                   onPressed: () {
-                    // context.read<InvoiceBloc>().add(DeleteInvoice(invoice: invoice ));
                     context.push(
-                      EditInvoiceScreen.routePath,
+                      // EditInvoiceScreen.routePath,
+                      InvoiceDetailsScreen.routePath,
                       extra: invoice,
                     );
                   },

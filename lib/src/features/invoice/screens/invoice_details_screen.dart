@@ -12,17 +12,17 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/utils.dart';
+import '../../../core/widgets/appbar.dart';
 import '../../../core/widgets/button.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/svg_widget.dart';
-import '../../profile/data/profile_repository.dart';
+import '../../business/bloc/business_bloc.dart';
+import '../../client/bloc/client_bloc.dart';
+import '../../item/bloc/item_bloc.dart';
 import '../widgets/invoice_template.dart';
-import '../widgets/photos_list.dart';
 import '../bloc/invoice_bloc.dart';
 import '../models/invoice.dart';
-import '../widgets/invoice_pay.dart';
 import 'edit_invoice_screen.dart';
-import 'invoice_preview_screen.dart';
 
 class InvoiceDetailsScreen extends StatefulWidget {
   const InvoiceDetailsScreen({super.key, required this.invoice});
@@ -37,28 +37,16 @@ class InvoiceDetailsScreen extends StatefulWidget {
 
 class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
   final screenshotController = ScreenshotController();
+
   late Invoice invoice;
 
   File file = File('');
-
-  void onPreview() {
-    context.push(
-      InvoicePreviewScreen.routePath,
-      extra: invoice,
-    );
-  }
-
-  void onPromoPrinter() async {
-    await launchURL(context, Urls.printerAppPromo);
-  }
 
   Future<pw.Document> captureWidget() async {
     final pdf = pw.Document();
     final bytes = await screenshotController.capture();
     if (bytes != null) {
       final dir = await getTemporaryDirectory();
-      // file = File('${dir.path}/${name}_${invoice.number}.png');
-      // await file.writeAsBytes(bytes);
       pdf.addPage(
         pw.Page(
           margin: pw.EdgeInsets.zero,
@@ -88,12 +76,7 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
   }
 
   void onEdit() {
-    context
-        .push<Invoice>(
-      EditInvoiceScreen.routePath,
-      extra: invoice,
-    )
-        .then(
+    context.push<Invoice>(EditInvoiceScreen.routePath, extra: invoice).then(
       (value) {
         if (value != null) {
           setState(() {
@@ -114,232 +97,76 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
     );
   }
 
+  void onPaid() {}
+
+  void onMenu() {}
+
   @override
   void initState() {
     super.initState();
     invoice = widget.invoice;
-
-    // invoice.business = context
-    //     .read<BusinessBloc>()
-    //     .state
-    //     .firstWhereOrNull((element) => element.id == widget.invoice.businessID);
-    // invoice.client = context
-    //     .read<ClientBloc>()
-    //     .state
-    //     .firstWhereOrNull((element) => element.id == widget.invoice.clientID);
-    // invoice.items = context
-    //     .read<ItemBloc>()
-    //     .state
-    //     .where((element) => element.invoiceID == widget.invoice.id)
-    //     .toList();
-
-    final state = context.read<InvoiceBloc>().state;
-
-    invoice.photos = state.photos.where((photo) {
-      return photo.id == invoice.id;
-    }).toList();
+    invoice.business = context
+        .read<BusinessBloc>()
+        .state
+        .businesses
+        .firstWhereOrNull((element) => element.id == widget.invoice.bid);
+    invoice.client = context
+        .read<ClientBloc>()
+        .state
+        .clients
+        .firstWhereOrNull((element) => element.id == widget.invoice.cid);
+    invoice.items = context
+        .read<ItemBloc>()
+        .state
+        .items
+        .where((element) => element.iid == widget.invoice.id)
+        .toList();
+    invoice.photos = context
+        .read<InvoiceBloc>()
+        .state
+        .photos
+        .where((photo) => photo.id == invoice.id)
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    final currency = context.read<ProfileRepository>().getCurrency();
-
-    double subtotal = 0;
-    for (final item in invoice.items) {
-      if (item.iid == invoice.id) {
-        subtotal += getItemPrice(item);
-      }
-    }
-
-    final taxPercent = double.tryParse(invoice.tax) ?? 0;
-    double taxAmount = subtotal * (taxPercent / 100);
-    double total = subtotal + taxAmount;
+    final colors = Theme.of(context).extension<MyColors>()!;
 
     return Scaffold(
-      // appBar: InvoiceAppbar(
-      //   title: '',
-      //   onPreview: onPreview,
-      // ),
+      appBar: Appbar(
+        right: Button(
+          onPressed: onMenu,
+          child: const SvgWidget(Assets.menu),
+        ),
+        child: _AppbarChild(
+          invoice: invoice,
+          onPressed: onPaid,
+        ),
+      ),
       body: Column(
         children: [
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 44,
+                vertical: 16,
+              ),
               children: [
-                Stack(
-                  children: [
-                    Center(
-                      child: SizedBox(
-                        height: 200,
-                        child: InvoiceTemplate(
-                          invoice: invoice,
-                          controller: screenshotController,
-                        ),
-                      ),
-                    ),
-                    Container(
-                      height: 130,
-                      margin: const EdgeInsets.only(top: 100),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(6),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
-                            blurRadius: 10,
-                          )
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          BlocBuilder<InvoiceBloc, InvoiceState>(
-                            builder: (context, _) {
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    height: 22,
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 10,
-                                    ),
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xffFF4400),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Center(
-                                      child: Text(
-                                        invoice.paymentMethod.isEmpty
-                                            ? 'Not Paid'
-                                            : 'Paid',
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontFamily: AppFonts.w400,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  if (invoice.paymentMethod.isNotEmpty) ...[
-                                    const SizedBox(width: 12),
-                                    Container(
-                                      height: 22,
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xff94A3B8),
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          invoice.paymentMethod,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 12,
-                                            fontFamily: AppFonts.w400,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ],
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            invoice.client?.name ?? '?',
-                            style: const TextStyle(
-                              color: Color(0xff7D81A3),
-                              fontSize: 16,
-                              fontFamily: AppFonts.w400,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            '$currency${total.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 28,
-                              fontFamily: AppFonts.w600,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
+                InvoiceTemplate(
+                  invoice: invoice,
+                  controller: screenshotController,
                 ),
-                const SizedBox(height: 20),
-                InvoicePay(invoice: invoice),
-                BlocBuilder<InvoiceBloc, InvoiceState>(
-                  builder: (context, state) {
-                    return invoice.paymentDate == 0
-                        ? const SizedBox()
-                        : Column(
-                            children: [
-                              _Data(
-                                title: 'Marked as Paid',
-                                data: formatTimestamp(invoice.paymentDate),
-                                asset: Assets.add,
-                              ),
-                              const _Divider(),
-                            ],
-                          );
-                  },
-                ),
-                _Data(
-                  title: 'Issued',
-                  data: formatTimestamp(invoice.date),
-                ),
-                const _Divider(),
-                _Data(
-                  title: 'Invoice #',
-                  data: formatInvoiceNumber(invoice.number),
-                ),
-                const SizedBox(height: 30),
-                BlocBuilder<InvoiceBloc, InvoiceState>(
-                  builder: (context, state) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 30),
-                      child: PhotosList(
-                        photos: invoice.photos.where((element) {
-                          return element.id == invoice.id;
-                        }).toList(),
-                      ),
-                    );
-                  },
-                ),
-                _OtherApp(
-                  title: 'Smart Printer',
-                  onPressed: onPromoPrinter,
-                ),
-                const SizedBox(height: 10),
-                // _OtherApp(
-                //   title: 'PDF service',
-                //   onPressed: onPdfService,
-                // ),
               ],
             ),
           ),
           MainButtonWrapper(
             children: [
-              Row(
-                children: [
-                  // _Button(
-                  //   title: 'Print',
-                  //   asset: Assets.print,
-                  //   onPressed: onPrint,
-                  // ),
-                  const Spacer(),
-                  _Button(
-                    title: 'Edit',
-                    asset: Assets.edit,
-                    onPressed: onEdit,
-                  ),
-                ],
+              MainButton(
+                title: 'Print',
+                color: colors.bg,
+                onPressed: onPrint,
               ),
-              const SizedBox(height: 22),
               MainButton(
                 title: 'Share Invoice',
                 onPressed: onShare,
@@ -352,131 +179,58 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
   }
 }
 
-class _Data extends StatelessWidget {
-  const _Data({
-    required this.title,
-    required this.data,
-    this.asset = '',
-  });
-
-  final String title;
-  final String data;
-  final String asset;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 44,
-      child: Row(
-        children: [
-          Expanded(
-            child: Text(
-              title,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-                fontFamily: AppFonts.w400,
-              ),
-            ),
-          ),
-          Text(
-            data,
-            style: const TextStyle(
-              color: Color(0xff7D81A3),
-              fontSize: 14,
-              fontFamily: AppFonts.w400,
-            ),
-          ),
-          if (asset.isNotEmpty) ...[
-            const SizedBox(width: 6),
-            SvgWidget(asset),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _Divider extends StatelessWidget {
-  const _Divider();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 0.5,
-      color: const Color(0xff7D81A3),
-    );
-  }
-}
-
-class _Button extends StatelessWidget {
-  const _Button({
-    required this.title,
-    required this.asset,
+class _AppbarChild extends StatelessWidget {
+  const _AppbarChild({
+    required this.invoice,
     required this.onPressed,
   });
 
-  final String title;
-  final String asset;
+  final Invoice invoice;
   final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
-    return Button(
-      onPressed: onPressed,
-      child: SizedBox(
-        width: 60,
-        child: Column(
-          children: [
-            SvgWidget(asset),
-            Text(
-              title,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-                fontFamily: AppFonts.w400,
-              ),
+    final colors = Theme.of(context).extension<MyColors>()!;
+
+    bool paid = invoice.paymentMethod.isNotEmpty;
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text('#${formatInvoiceNumber(invoice.number)}'),
+        const SizedBox(width: 8),
+        Button(
+          onPressed: onPressed,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              color: paid ? colors.accent : colors.error,
+              borderRadius: BorderRadius.circular(10),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _OtherApp extends StatelessWidget {
-  const _OtherApp({
-    required this.title,
-    required this.onPressed,
-  });
-
-  final String title;
-  final VoidCallback onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 40,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Button(
-        onPressed: onPressed,
-        child: Row(
-          children: [
-            const SizedBox(width: 8),
-            Text(
-              title,
-              style: const TextStyle(
-                color: Color(0xffFF4400),
-                fontSize: 12,
-                fontFamily: AppFonts.w400,
-              ),
+            height: 20,
+            child: Row(
+              children: [
+                Text(
+                  paid ? 'Paid' : 'Unpaid',
+                  style: TextStyle(
+                    color: colors.bg,
+                    fontSize: 12,
+                    fontFamily: AppFonts.w400,
+                  ),
+                ),
+                const SizedBox(width: 2),
+                RotatedBox(
+                  quarterTurns: 3,
+                  child: SvgWidget(
+                    Assets.back,
+                    color: colors.bg,
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }
