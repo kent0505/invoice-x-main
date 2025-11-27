@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/constants.dart';
-import '../../../core/utils.dart';
-import '../../../core/widgets/image_widget.dart';
-import '../../../core/widgets/svg_widget.dart';
-import '../../item/models/item.dart';
-import '../models/invoice.dart';
-import 'template_body.dart';
+import '../../../../core/constants.dart';
+import '../../../../core/utils.dart';
+import '../../../../core/widgets/image_widget.dart';
+import '../../../../core/widgets/svg_widget.dart';
+import '../../../item/models/item.dart';
+import '../../models/invoice.dart';
+import '../template_body.dart';
 
-class InvoiceTemplate2 extends StatelessWidget {
-  const InvoiceTemplate2({super.key, required this.invoice});
+class Template2 extends StatelessWidget {
+  const Template2({super.key, required this.invoice});
 
   final Invoice invoice;
 

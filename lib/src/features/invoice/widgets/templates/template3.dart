@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/constants.dart';
-import '../../../core/utils.dart';
-import '../../../core/widgets/image_widget.dart';
-import '../../../core/widgets/svg_widget.dart';
-import '../../item/models/item.dart';
-import '../models/invoice.dart';
-import 'template_body.dart';
+import '../../../../core/constants.dart';
+import '../../../../core/utils.dart';
+import '../../../../core/widgets/image_widget.dart';
+import '../../../../core/widgets/svg_widget.dart';
+import '../../../item/models/item.dart';
+import '../../models/invoice.dart';
+import '../template_body.dart';
 
-class InvoiceTemplate6 extends StatelessWidget {
-  const InvoiceTemplate6({
+class Template3 extends StatelessWidget {
+  const Template3({
     super.key,
     required this.invoice,
     required this.color,
-    required this.textColor,
   });
 
   final Invoice invoice;
   final Color color;
-  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -42,24 +40,24 @@ class InvoiceTemplate6 extends StatelessWidget {
     double total = discount + taxAmount;
 
     return TemplateBody(
-      child: Column(
-        children: [
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: 150,
-                  color: color,
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            // image
+            SizedBox(
+              height: 100,
+              child: Row(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         '$type #${invoice.number}',
                         style: TextStyle(
-                          color: textColor,
-                          fontSize: 16,
+                          color: color,
+                          fontSize: 20,
                           fontFamily: AppFonts.w700,
                         ),
                       ),
@@ -67,39 +65,42 @@ class InvoiceTemplate6 extends StatelessWidget {
                       _Data(
                         title: 'Date:  ',
                         data: formatTimestamp2(invoice.date),
-                        color: textColor,
                       ),
                       _Data(
                         title: 'Due Date:  ',
                         data: formatTimestamp2(invoice.dueDate),
-                        color: textColor,
-                      ),
-                      const SizedBox(height: 4),
-                      ImageWidget(
-                        invoice.business?.image ?? '',
-                        file: true,
-                        height: 130,
-                        width: 130,
-                        fit: BoxFit.cover,
                       ),
                     ],
                   ),
-                ),
-                const SizedBox(width: 10),
+                  const Spacer(),
+                  ImageWidget(
+                    invoice.business?.image ?? '',
+                    file: true,
+                    height: 100,
+                    width: 100,
+                    fit: BoxFit.cover,
+                  ),
+                ],
+              ),
+            ),
+
+            // to from
+
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 10),
-                      const Text(
-                        '$type TO:',
+                      Text(
+                        'Billing to:',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: color,
                           fontSize: 12,
-                          fontFamily: AppFonts.w600,
+                          fontFamily: AppFonts.w700,
                         ),
                       ),
-                      const SizedBox(height: 4),
                       _Data(
                         title: '',
                         data: invoice.client?.name ?? '',
@@ -116,16 +117,22 @@ class InvoiceTemplate6 extends StatelessWidget {
                         title: 'Email:  ',
                         data: invoice.client?.email ?? '',
                       ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        '$type FROM:',
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Billing from:',
                         style: TextStyle(
-                          color: Colors.black,
+                          color: color,
                           fontSize: 12,
-                          fontFamily: AppFonts.w600,
+                          fontFamily: AppFonts.w700,
                         ),
                       ),
-                      const SizedBox(height: 4),
                       _Data(
                         title: '',
                         data: invoice.business?.name ?? '',
@@ -163,121 +170,106 @@ class InvoiceTemplate6 extends StatelessWidget {
                         title: 'VAT:  ',
                         data: invoice.business?.vat ?? '',
                       ),
-                      const SizedBox(height: 10),
                     ],
                   ),
                 ),
+                const SizedBox(width: 10),
               ],
             ),
-          ),
 
-          // items table
-          Container(
-            height: 20,
-            color: color,
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 40,
-                  child: _TableTitle('No.', textColor),
-                ),
-                Expanded(
-                  child: _TableTitle('Product Description', textColor),
-                ),
-                SizedBox(
-                  width: 80,
-                  child: _TableTitle('Price', textColor),
-                ),
-                SizedBox(
-                  width: 80,
-                  child: _TableTitle('Quantity', textColor),
-                ),
-                SizedBox(
-                  width: 80,
-                  child: _TableTitle('Total', textColor),
-                ),
-              ],
+            // items table
+            const SizedBox(height: 9),
+            Container(
+              height: 20,
+              color: color,
+              child: const Row(
+                children: [
+                  Expanded(
+                    child: _TableTitle('Name'),
+                  ),
+                  SizedBox(
+                    width: 80,
+                    child: _TableTitle('Price'),
+                  ),
+                  SizedBox(
+                    width: 80,
+                    child: _TableTitle('Quantity'),
+                  ),
+                  SizedBox(
+                    width: 80,
+                    child: _TableTitle('Total'),
+                  ),
+                ],
+              ),
             ),
-          ),
-          Column(
-            children: List.generate(
-              uniqueItems.length,
-              (index) {
-                int qty = 0;
+            Column(
+              children: List.generate(
+                uniqueItems.length,
+                (index) {
+                  int qty = 0;
 
-                for (final item in invoice.items) {
-                  if (item.id == uniqueItems[index].id) {
-                    qty++;
+                  for (final item in invoice.items) {
+                    if (item.id == uniqueItems[index].id) {
+                      qty++;
+                    }
                   }
-                }
 
-                final price = getItemPrice(uniqueItems[index]);
+                  final price = getItemPrice(uniqueItems[index]);
 
-                return Container(
-                  height: 20,
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 1,
-                        color: Color(0xffE0E0E0),
-                      ),
+                  final color = index % 2 == 0 ? null : const Color(0xffEBEBEB);
+
+                  return Container(
+                    height: 20,
+                    decoration: BoxDecoration(color: color),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: _TableData(uniqueItems[index].title),
+                        ),
+                        SizedBox(
+                          width: 80,
+                          child: _TableData('\$${price.toStringAsFixed(2)}'),
+                        ),
+                        SizedBox(
+                          width: 80,
+                          child: _TableData(qty.toString()),
+                        ),
+                        SizedBox(
+                          width: 80,
+                          child: _TableData(
+                              '\$${(price * qty).toStringAsFixed(2)}'),
+                        ),
+                      ],
                     ),
-                  ),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        width: 40,
-                        child:
-                            _TableData((index + 1).toString().padLeft(2, '0')),
-                      ),
-                      Expanded(
-                        child: _TableData(uniqueItems[index].title),
-                      ),
-                      SizedBox(
-                        width: 80,
-                        child: _TableData(price.toStringAsFixed(2)),
-                      ),
-                      SizedBox(
-                        width: 80,
-                        child: _TableData(qty.toString()),
-                      ),
-                      SizedBox(
-                        width: 80,
-                        child: _TableData((price * qty).toStringAsFixed(2)),
-                      ),
-                    ],
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
 
-          Expanded(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 117 * 2,
-                  width: 117 * 3,
-                  child: Wrap(
-                    children: List.generate(
-                      invoice.photos.length,
-                      (index) {
-                        return ImageWidget(
-                          invoice.photos[index].path,
-                          file: true,
-                          width: 117,
-                          height: 117,
-                          fit: BoxFit.cover,
-                        );
-                      },
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 110 * 2,
+                    width: 110 * 3,
+                    child: Wrap(
+                      children: List.generate(
+                        invoice.photos.length,
+                        (index) {
+                          return ImageWidget(
+                            invoice.photos[index].path,
+                            file: true,
+                            width: 110,
+                            height: 110,
+                            fit: BoxFit.cover,
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-                const Spacer(),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: Column(
+                  const Spacer(),
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Column(
@@ -294,10 +286,9 @@ class InvoiceTemplate6 extends StatelessWidget {
                                 '\$${(subtotal - discount).toStringAsFixed(2)}',
                           ),
                           _Data(
-                            title: 'Tax (${invoice.tax}%):  ',
+                            title: 'Tax ${invoice.tax}%:  ',
                             data: '\$${(total - discount).toStringAsFixed(2)}',
                           ),
-                          const SizedBox(height: 4),
                           Container(
                             color: color,
                             padding: const EdgeInsets.symmetric(
@@ -308,7 +299,7 @@ class InvoiceTemplate6 extends StatelessWidget {
                               title: 'Total:  ',
                               data: '\$${total.toStringAsFixed(2)}',
                               fontFamily: AppFonts.w600,
-                              color: textColor,
+                              color: Colors.white,
                             ),
                           ),
                           const SizedBox(height: 10),
@@ -326,14 +317,13 @@ class InvoiceTemplate6 extends StatelessWidget {
                             : invoice.signature,
                         height: 40,
                       ),
-                      const SizedBox(height: 10),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -369,10 +359,9 @@ class _Data extends StatelessWidget {
 }
 
 class _TableTitle extends StatelessWidget {
-  const _TableTitle(this.title, this.color);
+  const _TableTitle(this.title);
 
   final String title;
-  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -380,9 +369,9 @@ class _TableTitle extends StatelessWidget {
       padding: const EdgeInsets.only(left: 10),
       child: Text(
         title,
-        style: TextStyle(
-          color: color,
-          fontSize: 10,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 8,
           fontFamily: AppFonts.w600,
         ),
       ),

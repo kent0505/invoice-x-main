@@ -4,12 +4,12 @@ import 'package:screenshot/screenshot.dart';
 
 import '../bloc/invoice_bloc.dart';
 import '../models/invoice.dart';
-import 'invoice_template1.dart';
-import 'invoice_template2.dart';
-import 'invoice_template3.dart';
-import 'invoice_template4.dart';
-import 'invoice_template5.dart';
-import 'invoice_template6.dart';
+import 'templates/template1.dart';
+import 'templates/template2.dart';
+import 'templates/template3.dart';
+import 'templates/template4.dart';
+import 'templates/template5.dart';
+import 'templates/template6.dart';
 
 class InvoiceTemplate extends StatelessWidget {
   const InvoiceTemplate({
@@ -29,33 +29,33 @@ class InvoiceTemplate extends StatelessWidget {
         child: BlocBuilder<InvoiceBloc, InvoiceState>(
           builder: (context, state) {
             return switch (invoice.template) {
-              1 => InvoiceTemplate1(invoice: invoice),
-              2 => InvoiceTemplate2(invoice: invoice),
-              3 => InvoiceTemplate3(
+              1 => Template1(invoice: invoice),
+              2 => Template2(invoice: invoice),
+              3 => Template3(
                   invoice: invoice,
                   color: const Color(0xff1455CD),
                 ),
-              4 => InvoiceTemplate3(
+              4 => Template3(
                   invoice: invoice,
                   color: const Color(0xff004C08),
                 ),
-              5 => InvoiceTemplate3(
+              5 => Template3(
                   invoice: invoice,
                   color: const Color(0xff4C0001),
                 ),
-              6 => InvoiceTemplate4(invoice: invoice),
-              7 => InvoiceTemplate5(invoice: invoice),
-              8 => InvoiceTemplate6(
+              6 => Template4(invoice: invoice),
+              7 => Template5(invoice: invoice),
+              8 => Template6(
                   invoice: invoice,
                   color: const Color(0xff241E63),
                   textColor: Colors.white,
                 ),
-              9 => InvoiceTemplate6(
+              9 => Template6(
                   invoice: invoice,
                   color: const Color(0xffEAE728),
                   textColor: Colors.black,
                 ),
-              10 => InvoiceTemplate6(
+              10 => Template6(
                   invoice: invoice,
                   color: const Color(0xffFF6464),
                   textColor: Colors.white,
