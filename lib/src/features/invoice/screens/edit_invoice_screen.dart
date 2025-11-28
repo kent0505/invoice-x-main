@@ -31,6 +31,7 @@ import '../models/photo.dart';
 import '../widgets/invoice_dates.dart';
 import '../widgets/invoice_select_data.dart';
 import '../widgets/invoice_selected_data.dart';
+import '../widgets/photos_list.dart';
 import 'invoice_preview_screen.dart';
 
 class EditInvoiceScreen extends StatefulWidget {
@@ -188,23 +189,7 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
   }
 
   void onSave() {
-    invoice = Invoice(
-      id: invoice.id,
-      number: invoice.number,
-      template: invoice.template,
-      date: invoice.date,
-      dueDate: invoice.dueDate,
-      bid: invoice.bid,
-      cid: invoice.cid,
-      paymentMethod: invoice.paymentMethod,
-      paymentDate: invoice.paymentDate,
-      tax: taxController.text,
-      signature: invoice.signature,
-      business: invoice.business,
-      client: invoice.client,
-      items: invoice.items,
-      photos: invoice.photos,
-    );
+    invoice.tax = taxController.text;
 
     final invoiceBloc = context.read<InvoiceBloc>();
     final itemBloc = context.read<ItemBloc>();
@@ -214,14 +199,16 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
         items: invoice.items,
         iid: invoice.id,
       ));
+      context.pop();
     } else {
       invoiceBloc.add(EditInvoice(invoice: invoice));
       itemBloc.add(ReplaceItems(
         items: invoice.items,
         iid: invoice.id,
       ));
+      context.pop();
+      context.pop();
     }
-    context.pop();
   }
 
   @override
@@ -261,6 +248,8 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
         return photo.id == widget.invoice?.id;
       }).toList(),
     );
+
+    logger(invoice.photos.length);
   }
 
   @override
@@ -354,38 +343,48 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
                     color: colors.tertiary1,
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  child: Builder(builder: (context) {
-                    final uniqueInvoiceIDs = <String>{};
-                    final uniqueItems = <Item>[];
+                  child: Builder(
+                    builder: (context) {
+                      final uniqueInvoiceIDs = <String>{};
+                      final uniqueItems = <Item>[];
 
-                    for (final item in invoice.items) {
-                      if (uniqueInvoiceIDs.add(item.id)) {
-                        uniqueItems.add(item);
+                      for (final item in invoice.items) {
+                        if (uniqueInvoiceIDs.add(item.id)) {
+                          uniqueItems.add(item);
+                        }
                       }
-                    }
 
-                    return Column(
-                      children: List.generate(
-                        uniqueItems.length,
-                        (index) {
-                          return InvoiceSelectedData(
-                            title: uniqueItems[index].title,
-                            amount: invoice.items.where((item) {
-                              return item.id == uniqueItems[index].id;
-                            }).length,
-                            onPressed: () {
-                              onRemoveItem(uniqueItems[index]);
-                            },
-                          );
-                        },
-                      ),
-                    );
-                  }),
+                      return Column(
+                        children: List.generate(
+                          uniqueItems.length,
+                          (index) {
+                            return InvoiceSelectedData(
+                              title: uniqueItems[index].title,
+                              amount: invoice.items.where((item) {
+                                return item.id == uniqueItems[index].id;
+                              }).length,
+                              onPressed: () {
+                                onRemoveItem(uniqueItems[index]);
+                              },
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
-                const SizedBox(height: 8),
+                if (invoice.items.isNotEmpty) const SizedBox(height: 8),
                 InvoiceSelectData(
                   title: 'Add item',
                   onPressed: onSelectItems,
+                ),
+                const SizedBox(height: 16),
+                const TitleText(title: 'Photo'),
+                PhotosList(photos: invoice.photos),
+                if (invoice.photos.isNotEmpty) const SizedBox(height: 8),
+                InvoiceSelectData(
+                  title: 'Add photo',
+                  onPressed: onAddPhotos,
                 ),
                 const SizedBox(height: 16),
                 const TitleText(title: 'Tax'),

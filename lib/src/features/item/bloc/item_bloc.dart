@@ -38,6 +38,7 @@ class ItemBloc extends Bloc<ItemEvent, ItemState> {
     Emitter<ItemState> emit,
   ) async {
     for (final item in event.items) {
+      item.iid = event.iid;
       await _repository.addItem(item);
     }
     add(GetItems());

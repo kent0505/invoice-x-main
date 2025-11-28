@@ -129,6 +129,28 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
   void initState() {
     super.initState();
     invoice = widget.invoice;
+    invoice.business = context
+        .read<BusinessBloc>()
+        .state
+        .businesses
+        .firstWhereOrNull((element) => element.id == invoice.bid);
+    invoice.client = context
+        .read<ClientBloc>()
+        .state
+        .clients
+        .firstWhereOrNull((element) => element.id == invoice.cid);
+    invoice.items = context
+        .read<ItemBloc>()
+        .state
+        .items
+        .where((element) => element.iid == invoice.id)
+        .toList();
+    invoice.photos = context
+        .read<InvoiceBloc>()
+        .state
+        .photos
+        .where((photo) => photo.id == invoice.id)
+        .toList();
   }
 
   @override
@@ -193,35 +215,6 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
               children: [
                 BlocBuilder<InvoiceBloc, InvoiceState>(
                   builder: (context, state) {
-                    invoice = state.invoices.firstWhere(
-                      (element) => element.id == invoice.id,
-                    );
-
-                    invoice.business = context
-                        .read<BusinessBloc>()
-                        .state
-                        .businesses
-                        .firstWhereOrNull(
-                            (element) => element.id == invoice.bid);
-                    invoice.client = context
-                        .read<ClientBloc>()
-                        .state
-                        .clients
-                        .firstWhereOrNull(
-                            (element) => element.id == invoice.cid);
-                    invoice.items = context
-                        .read<ItemBloc>()
-                        .state
-                        .items
-                        .where((element) => element.iid == invoice.id)
-                        .toList();
-                    invoice.photos = context
-                        .read<InvoiceBloc>()
-                        .state
-                        .photos
-                        .where((photo) => photo.id == invoice.id)
-                        .toList();
-
                     return InvoiceTemplate(
                       invoice: invoice,
                       controller: screenshotController,
