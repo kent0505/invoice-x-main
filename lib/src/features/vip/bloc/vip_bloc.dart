@@ -29,7 +29,10 @@ class VipBloc extends Bloc<VipEvent, VipState> {
     Emitter<VipState> emit,
   ) async {
     if (isIOS()) {
-      emit(state.copyWith(loading: true));
+      emit(state.copyWith(
+        loading: true,
+        free: _repository.getFree(),
+      ));
 
       try {
         final customerInfo = await Purchases.getCustomerInfo().timeout(
