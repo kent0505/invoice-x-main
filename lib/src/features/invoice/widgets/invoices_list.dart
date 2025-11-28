@@ -8,6 +8,7 @@ import '../../../core/widgets/button.dart';
 import '../../../core/widgets/no_data.dart';
 import '../../item/bloc/item_bloc.dart';
 import '../../profile/data/profile_repository.dart';
+import '../bloc/invoice_bloc.dart';
 import '../models/invoice.dart';
 import '../screens/invoice_details_screen.dart';
 
@@ -45,6 +46,12 @@ class _InvoiceTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<MyColors>()!;
 
+    final photos = context.read<InvoiceBloc>().state.photos.where((photo) {
+      return photo.id == invoice.id;
+    }).toList();
+
+    final type = photos.isEmpty ? 'Invoice' : 'Estimate';
+
     final paid = invoice.paymentMethod.isNotEmpty;
 
     return Container(
@@ -69,7 +76,7 @@ class _InvoiceTile extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '#${formatInvoiceNumber(invoice.number)} Invoice',
+                    '#${formatInvoiceNumber(invoice.number)} $type',
                     style: TextStyle(
                       color: colors.text,
                       fontSize: 16,

@@ -25,7 +25,10 @@ class VipScreen extends StatelessWidget {
   }
 
   static void open(BuildContext context) {
+    // final state = context.read<VipBloc>().state;
+    // if (!state.loading && !state.isVip) {
     context.push(VipScreen.routePath);
+    // }
   }
 
   @override

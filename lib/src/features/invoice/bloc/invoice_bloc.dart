@@ -38,9 +38,11 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
       final invoices = await _invoiceRepository.getInvoices();
       final photos = await _photoRepository.getPhotos();
 
+      logger(photos.length);
+
       emit(state.copyWith(
         invoices: invoices.reversed.toList(),
-        photos: photos.reversed.toList(),
+        photos: photos.toList(),
       ));
     } catch (e) {
       logger(e);
@@ -52,17 +54,10 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     Emitter<InvoiceState> emit,
   ) async {
     try {
-      final iid = await _invoiceRepository.addInvoice(event.invoice);
-
-      emit(state.copyWith(iid: iid));
+      await _invoiceRepository.addInvoice(event.invoice);
 
       for (final photo in event.invoice.photos) {
-        await _photoRepository.addPhoto(
-          Photo(
-            id: iid.toString(),
-            path: photo.path,
-          ),
-        );
+        await _photoRepository.addPhoto(photo);
       }
 
       add(GetInvoices());
@@ -80,12 +75,7 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
       await _photoRepository.deletePhotos(event.invoice.id);
 
       for (final photo in event.invoice.photos) {
-        await _photoRepository.addPhoto(
-          Photo(
-            id: event.invoice.id,
-            path: photo.path,
-          ),
-        );
+        await _photoRepository.addPhoto(photo);
       }
 
       add(GetInvoices());
@@ -100,7 +90,7 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
   ) async {
     try {
       await _invoiceRepository.deleteInvoice(event.invoice);
-
+      await _photoRepository.deletePhotos(event.invoice.id);
       add(GetInvoices());
     } catch (e) {
       logger(e);

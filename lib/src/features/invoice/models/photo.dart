@@ -4,8 +4,8 @@ final class Photo {
     required this.path,
   });
 
-  final String id;
-  final String path;
+  String id;
+  String path;
 
   Map<String, dynamic> toMap() {
     return {

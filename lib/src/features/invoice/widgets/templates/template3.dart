@@ -20,7 +20,7 @@ class Template3 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const type = 'INVOICE';
+    final type = invoice.photos.isEmpty ? 'INVOICE' : 'ESTIMATE';
 
     final uniqueInvoiceIDs = <String>{};
     final uniqueItems = <Item>[];

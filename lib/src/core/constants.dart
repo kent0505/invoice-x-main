@@ -32,6 +32,7 @@ abstract final class Assets {
   static const String paid3 = 'assets/icons/paid3.svg';
   static const String paid4 = 'assets/icons/paid4.svg';
   static const String person = 'assets/icons/person.svg';
+  static const String premium = 'assets/icons/premium.svg';
   static const String search = 'assets/icons/search.svg';
   static const String tab1 = 'assets/icons/tab1.svg';
   static const String tab2 = 'assets/icons/tab2.svg';

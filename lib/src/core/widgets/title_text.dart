@@ -6,12 +6,14 @@ class TitleText extends StatelessWidget {
   const TitleText({
     super.key,
     required this.title,
+    this.right,
     this.additional = '',
     this.left = 0,
   });
 
   final String title;
   final String additional;
+  final Widget? right;
   final double left;
 
   @override
@@ -42,6 +44,7 @@ class TitleText extends StatelessWidget {
               fontFamily: AppFonts.w400,
             ),
           ),
+          right ?? const SizedBox(),
         ],
       ),
     );

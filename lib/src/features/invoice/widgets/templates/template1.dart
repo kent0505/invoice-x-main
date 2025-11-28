@@ -15,7 +15,7 @@ class Template1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const type = 'INVOICE';
+    final type = invoice.photos.isEmpty ? 'INVOICE' : 'ESTIMATE';
 
     final uniqueInvoiceIDs = <String>{};
     final uniqueItems = <Item>[];
@@ -88,9 +88,9 @@ class Template1 extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         '$type TO:',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 14,
                           fontFamily: AppFonts.w700,
@@ -120,9 +120,9 @@ class Template1 extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         '$type FROM:',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 14,
                           fontFamily: AppFonts.w700,

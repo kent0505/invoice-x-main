@@ -25,6 +25,7 @@ import '../../item/screens/items_screen.dart';
 import '../../onboard/data/onboard_repository.dart';
 import '../../profile/data/profile_repository.dart';
 import '../../signature/widgets/signature_widget.dart';
+import '../../vip/widgets/vip_widget.dart';
 import '../bloc/invoice_bloc.dart';
 import '../models/invoice.dart';
 import '../models/photo.dart';
@@ -244,12 +245,10 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
       items: itemState.items.reversed.where((item) {
         return item.iid == widget.invoice?.id;
       }).toList(),
-      photos: invoiceState.photos.reversed.where((photo) {
+      photos: invoiceState.photos.where((photo) {
         return photo.id == widget.invoice?.id;
       }).toList(),
     );
-
-    logger(invoice.photos.length);
   }
 
   @override
@@ -379,7 +378,10 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
                   onPressed: onSelectItems,
                 ),
                 const SizedBox(height: 16),
-                const TitleText(title: 'Photo'),
+                const TitleText(
+                  title: 'Photo',
+                  right: VipWidget(),
+                ),
                 PhotosList(photos: invoice.photos),
                 if (invoice.photos.isNotEmpty) const SizedBox(height: 8),
                 InvoiceSelectData(

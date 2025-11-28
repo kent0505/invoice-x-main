@@ -7,7 +7,7 @@ abstract interface class InvoiceRepository {
   const InvoiceRepository();
 
   Future<List<Invoice>> getInvoices();
-  Future<int> addInvoice(Invoice invoice);
+  Future<void> addInvoice(Invoice invoice);
   Future<void> editInvoice(Invoice invoice);
   Future<void> deleteInvoice(Invoice invoice);
 }
@@ -26,8 +26,8 @@ final class InvoiceRepositoryImpl implements InvoiceRepository {
   }
 
   @override
-  Future<int> addInvoice(Invoice invoice) async {
-    return await _db.insert(
+  Future<void> addInvoice(Invoice invoice) async {
+    await _db.insert(
       Invoice.table,
       invoice.toMap(),
     );
