@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/utils.dart';
-import '../../invoice/bloc/invoice_bloc.dart';
+import '../bloc/invoice_bloc.dart';
 import '../../item/bloc/item_bloc.dart';
 import '../../profile/data/profile_repository.dart';
 

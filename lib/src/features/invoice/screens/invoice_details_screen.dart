@@ -101,7 +101,7 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
       delete: true,
       onPressed: () {
         context.read<InvoiceBloc>().add(DeleteInvoice(invoice: invoice));
-        context.read<ItemBloc>().add(DeleteItems(iid: invoice.id));
+        context.read<ItemBloc>().add(ReplaceItems(iid: invoice.id));
         context.pop();
         context.pop();
         context.pop();
@@ -111,12 +111,16 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
 
   void onShare() async {
     await captureWidget();
-    await SharePlus.instance.share(
-      ShareParams(
-        files: [XFile(file.path)],
-        sharePositionOrigin: const Rect.fromLTWH(100, 100, 200, 200),
-      ),
-    );
+    try {
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path)],
+          sharePositionOrigin: const Rect.fromLTWH(100, 100, 200, 200),
+        ),
+      );
+    } catch (e) {
+      logger(e);
+    }
   }
 
   void onPaid() {}
@@ -180,46 +184,53 @@ class _InvoiceDetailsScreenState extends State<InvoiceDetailsScreen> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 44,
-              vertical: 16,
-            ),
-            child: BlocBuilder<InvoiceBloc, InvoiceState>(
-              builder: (context, state) {
-                invoice.business = context
-                    .read<BusinessBloc>()
-                    .state
-                    .businesses
-                    .firstWhereOrNull(
-                        (element) => element.id == widget.invoice.bid);
-                invoice.client = context
-                    .read<ClientBloc>()
-                    .state
-                    .clients
-                    .firstWhereOrNull(
-                        (element) => element.id == widget.invoice.cid);
-                invoice.items = context
-                    .read<ItemBloc>()
-                    .state
-                    .items
-                    .where((element) => element.iid == widget.invoice.id)
-                    .toList();
-                invoice.photos = context
-                    .read<InvoiceBloc>()
-                    .state
-                    .photos
-                    .where((photo) => photo.id == invoice.id)
-                    .toList();
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 44,
+                vertical: 16,
+              ),
+              children: [
+                BlocBuilder<InvoiceBloc, InvoiceState>(
+                  builder: (context, state) {
+                    invoice = state.invoices.firstWhere(
+                      (element) => element.id == invoice.id,
+                    );
 
-                return InvoiceTemplate(
-                  invoice: invoice,
-                  controller: screenshotController,
-                );
-              },
+                    invoice.business = context
+                        .read<BusinessBloc>()
+                        .state
+                        .businesses
+                        .firstWhereOrNull(
+                            (element) => element.id == invoice.bid);
+                    invoice.client = context
+                        .read<ClientBloc>()
+                        .state
+                        .clients
+                        .firstWhereOrNull(
+                            (element) => element.id == invoice.cid);
+                    invoice.items = context
+                        .read<ItemBloc>()
+                        .state
+                        .items
+                        .where((element) => element.iid == invoice.id)
+                        .toList();
+                    invoice.photos = context
+                        .read<InvoiceBloc>()
+                        .state
+                        .photos
+                        .where((photo) => photo.id == invoice.id)
+                        .toList();
+
+                    return InvoiceTemplate(
+                      invoice: invoice,
+                      controller: screenshotController,
+                    );
+                  },
+                ),
+              ],
             ),
           ),
-          const Spacer(),
           MainButtonWrapper(
             children: [
               MainButton(

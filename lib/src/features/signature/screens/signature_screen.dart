@@ -19,8 +19,6 @@ class SignatureScreen extends StatefulWidget {
 class _SignatureScreenState extends State<SignatureScreen> {
   late SignatureController signatureController;
 
-  bool active = false;
-
   void onUndo() {
     if (signatureController.canUndo) {
       signatureController.undo();
@@ -30,9 +28,7 @@ class _SignatureScreenState extends State<SignatureScreen> {
 
   void onSave() {
     final signature = signatureController.toRawSVG();
-    if (signature != null) {
-      context.pop(signature);
-    }
+    context.pop(signature);
   }
 
   @override
@@ -41,7 +37,6 @@ class _SignatureScreenState extends State<SignatureScreen> {
     signatureController = SignatureController(
       penStrokeWidth: 3,
       penColor: Colors.black,
-      exportBackgroundColor: Colors.white,
       onDrawEnd: () {
         setState(() {});
       },
@@ -94,7 +89,6 @@ class _SignatureScreenState extends State<SignatureScreen> {
               ),
               MainButton(
                 title: 'Save',
-                active: signatureController.canUndo,
                 onPressed: onSave,
               ),
             ],

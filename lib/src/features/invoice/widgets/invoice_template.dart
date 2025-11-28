@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:screenshot/screenshot.dart';
 
-import '../bloc/invoice_bloc.dart';
 import '../models/invoice.dart';
 import 'templates/template1.dart';
 import 'templates/template2.dart';
@@ -26,44 +24,40 @@ class InvoiceTemplate extends StatelessWidget {
     return FittedBox(
       child: Screenshot(
         controller: controller,
-        child: BlocBuilder<InvoiceBloc, InvoiceState>(
-          builder: (context, state) {
-            return switch (invoice.template) {
-              1 => Template1(invoice: invoice),
-              2 => Template2(invoice: invoice),
-              3 => Template3(
-                  invoice: invoice,
-                  color: const Color(0xff1455CD),
-                ),
-              4 => Template3(
-                  invoice: invoice,
-                  color: const Color(0xff004C08),
-                ),
-              5 => Template3(
-                  invoice: invoice,
-                  color: const Color(0xff4C0001),
-                ),
-              6 => Template4(invoice: invoice),
-              7 => Template5(invoice: invoice),
-              8 => Template6(
-                  invoice: invoice,
-                  color: const Color(0xff241E63),
-                  textColor: Colors.white,
-                ),
-              9 => Template6(
-                  invoice: invoice,
-                  color: const Color(0xffEAE728),
-                  textColor: Colors.black,
-                ),
-              10 => Template6(
-                  invoice: invoice,
-                  color: const Color(0xffFF6464),
-                  textColor: Colors.white,
-                ),
-              _ => const SizedBox(),
-            };
-          },
-        ),
+        child: switch (invoice.template) {
+          1 => Template1(invoice: invoice),
+          2 => Template2(invoice: invoice),
+          3 => Template3(
+              invoice: invoice,
+              color: const Color(0xff1455CD),
+            ),
+          4 => Template3(
+              invoice: invoice,
+              color: const Color(0xff004C08),
+            ),
+          5 => Template3(
+              invoice: invoice,
+              color: const Color(0xff4C0001),
+            ),
+          6 => Template4(invoice: invoice),
+          7 => Template5(invoice: invoice),
+          8 => Template6(
+              invoice: invoice,
+              color: const Color(0xff241E63),
+              textColor: Colors.white,
+            ),
+          9 => Template6(
+              invoice: invoice,
+              color: const Color(0xffEAE728),
+              textColor: Colors.black,
+            ),
+          10 => Template6(
+              invoice: invoice,
+              color: const Color(0xffFF6464),
+              textColor: Colors.white,
+            ),
+          _ => const SizedBox(),
+        },
       ),
     );
   }

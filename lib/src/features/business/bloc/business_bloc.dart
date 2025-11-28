@@ -36,9 +36,7 @@ class BusinessBloc extends Bloc<BusinessEvent, BusinessState> {
     AddBusiness event,
     Emitter<BusinessState> emit,
   ) async {
-    final business = event.business;
-
-    await _repository.addBusiness(business);
+    await _repository.addBusiness(event.business);
 
     add(GetBusiness());
   }

@@ -31,6 +31,8 @@ class _EditClientScreenState extends State<EditClientScreen> {
   final phoneController = TextEditingController();
   final addressController = TextEditingController();
 
+  late Client client;
+
   bool active = true;
 
   void onChanged(String _) {
@@ -65,36 +67,34 @@ class _EditClientScreenState extends State<EditClientScreen> {
   }
 
   void onEdit() {
-    if (widget.client == null) {
-      context.read<ClientBloc>().add(
-            AddClient(
-              client: Client(
-                name: nameController.text,
-                email: emailController.text,
-                phone: phoneController.text,
-                address: addressController.text,
-              ),
-            ),
-          );
-    } else {
-      widget.client!.name = nameController.text;
-      widget.client!.email = emailController.text;
-      widget.client!.phone = phoneController.text;
-      widget.client!.address = addressController.text;
-      context.read<ClientBloc>().add(EditClient(client: widget.client!));
-    }
+    client.name = nameController.text;
+    client.email = emailController.text;
+    client.phone = phoneController.text;
+    client.address = addressController.text;
+
+    context.read<ClientBloc>().add(
+          widget.client == null
+              ? AddClient(client: client)
+              : EditClient(client: client),
+        );
     context.pop();
   }
 
   @override
   void initState() {
     super.initState();
-    if (widget.client != null) {
-      nameController.text = widget.client!.name;
-      emailController.text = widget.client!.email;
-      phoneController.text = widget.client!.phone;
-      addressController.text = widget.client!.address;
-    }
+    nameController.text = widget.client?.name ?? '';
+    emailController.text = widget.client?.email ?? '';
+    phoneController.text = widget.client?.phone ?? '';
+    addressController.text = widget.client?.address ?? '';
+
+    client = Client(
+      id: widget.client?.id ?? 0,
+      name: nameController.text,
+      email: emailController.text,
+      phone: phoneController.text,
+      address: addressController.text,
+    );
   }
 
   @override

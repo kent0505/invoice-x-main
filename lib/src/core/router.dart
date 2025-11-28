@@ -2,13 +2,13 @@ import 'package:go_router/go_router.dart';
 
 import '../features/business/models/business.dart';
 import '../features/business/screens/edit_business_screen.dart';
-import '../features/business/screens/signature_screen.dart';
+import '../features/invoice/screens/invoice_search_screen.dart';
+import '../features/signature/screens/signature_screen.dart';
 import '../features/client/models/client.dart';
 import '../features/client/screens/edit_client_screen.dart';
 import '../features/home/screens/home_screen.dart';
 import '../features/invoice/models/invoice.dart';
 import '../features/invoice/models/photo.dart';
-import '../features/invoice/screens/default_template_screen.dart';
 import '../features/invoice/screens/edit_invoice_screen.dart';
 import '../features/invoice/screens/invoice_customize_screen.dart';
 import '../features/invoice/screens/invoice_details_screen.dart';
@@ -47,8 +47,8 @@ final routerConfig = GoRouter(
 
     // invoice
     GoRoute(
-      path: DefaultTemplateScreen.routePath,
-      builder: (context, state) => const DefaultTemplateScreen(),
+      path: InvoiceSearchScreen.routePath,
+      builder: (context, state) => const InvoiceSearchScreen(),
     ),
     GoRoute(
       path: InvoiceDetailsScreen.routePath,
@@ -88,10 +88,6 @@ final routerConfig = GoRouter(
         business: state.extra as Business?,
       ),
     ),
-    GoRoute(
-      path: SignatureScreen.routePath,
-      builder: (context, state) => const SignatureScreen(),
-    ),
 
     // client
     GoRoute(
@@ -107,6 +103,12 @@ final routerConfig = GoRouter(
       builder: (context, state) => EditItemScreen(
         item: state.extra as Item?,
       ),
+    ),
+
+    // signature
+    GoRoute(
+      path: SignatureScreen.routePath,
+      builder: (context, state) => const SignatureScreen(),
     ),
 
     // vip

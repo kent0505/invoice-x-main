@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants.dart';
 import '../../../../core/utils.dart';
 import '../../../../core/widgets/image_widget.dart';
-import '../../../../core/widgets/svg_widget.dart';
 import '../../../item/models/item.dart';
+import '../../../signature/widgets/signature_widget.dart';
 import '../../models/invoice.dart';
 import '../template_body.dart';
 
@@ -311,11 +311,12 @@ class Template3 extends StatelessWidget {
                         ],
                       ),
                       const Spacer(),
-                      SvgString(
+                      SignatureWidget(
                         string: invoice.signature.isEmpty
                             ? invoice.business?.signature ?? ''
                             : invoice.signature,
                         height: 40,
+                        width: 40,
                       ),
                     ],
                   ),

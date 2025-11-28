@@ -21,10 +21,16 @@ final class EditItem extends ItemEvent {
   final Item item;
 }
 
-final class DeleteItems extends ItemEvent {
-  DeleteItems({
+final class DeleteItem extends ItemEvent {
+  DeleteItem({required this.item});
+
+  final Item item;
+}
+
+final class ReplaceItems extends ItemEvent {
+  ReplaceItems({
     this.items = const [],
-    this.iid = '',
+    required this.iid,
   });
 
   final List<Item> items;

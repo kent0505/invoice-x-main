@@ -37,6 +37,7 @@ class Themes {
       // SCAFFOLD
       scaffoldBackgroundColor: colors.bg,
 
+      // APPBAR
       appBarTheme: AppBarTheme(
         backgroundColor: colors.bg,
         elevation: 0,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/widgets/button.dart';
@@ -8,6 +9,7 @@ import '../../../core/widgets/svg_widget.dart';
 import '../../client/screens/clients_screen.dart';
 import '../../internet/bloc/internet_bloc.dart';
 import '../../internet/widgets/no_internet_dialog.dart';
+import '../../invoice/screens/invoice_search_screen.dart';
 import '../../invoice/screens/invoices_screen.dart';
 import '../../profile/screens/profile_screen.dart';
 import '../../vip/bloc/vip_bloc.dart';
@@ -56,7 +58,9 @@ class HomeScreen extends StatelessWidget {
           },
           right: index == 0
               ? Button(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.push(InvoiceSearchScreen.routePath);
+                  },
                   child: SvgWidget(
                     Assets.search,
                     color: colors.text2,

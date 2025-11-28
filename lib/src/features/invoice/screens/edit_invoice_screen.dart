@@ -11,12 +11,11 @@ import '../../../core/widgets/dialog_widget.dart';
 import '../../../core/widgets/field.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/sheet_widget.dart';
-import '../../../core/widgets/svg_widget.dart';
 import '../../../core/widgets/title_text.dart';
 import '../../business/bloc/business_bloc.dart';
 import '../../business/models/business.dart';
 import '../../business/screens/business_screen.dart';
-import '../../business/screens/signature_screen.dart';
+import '../../signature/screens/signature_screen.dart';
 import '../../client/bloc/client_bloc.dart';
 import '../../client/models/client.dart';
 import '../../client/screens/clients_screen.dart';
@@ -25,6 +24,7 @@ import '../../item/models/item.dart';
 import '../../item/screens/items_screen.dart';
 import '../../onboard/data/onboard_repository.dart';
 import '../../profile/data/profile_repository.dart';
+import '../../signature/widgets/signature_widget.dart';
 import '../bloc/invoice_bloc.dart';
 import '../models/invoice.dart';
 import '../models/photo.dart';
@@ -52,11 +52,9 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
   void onAddSignature() async {
     context.push<String?>(SignatureScreen.routePath).then(
       (value) {
-        if (value != null) {
-          setState(() {
-            invoice.signature = value;
-          });
-        }
+        setState(() {
+          invoice.signature = value ?? '';
+        });
       },
     );
   }
@@ -190,39 +188,45 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
   }
 
   void onSave() {
+    invoice = Invoice(
+      id: invoice.id,
+      number: invoice.number,
+      template: invoice.template,
+      date: invoice.date,
+      dueDate: invoice.dueDate,
+      bid: invoice.bid,
+      cid: invoice.cid,
+      paymentMethod: invoice.paymentMethod,
+      paymentDate: invoice.paymentDate,
+      tax: taxController.text,
+      signature: invoice.signature,
+      business: invoice.business,
+      client: invoice.client,
+      items: invoice.items,
+      photos: invoice.photos,
+    );
+
     final invoiceBloc = context.read<InvoiceBloc>();
     final itemBloc = context.read<ItemBloc>();
     if (widget.invoice == null) {
       invoiceBloc.add(AddInvoice(invoice: invoice));
+      itemBloc.add(AddItems(
+        items: invoice.items,
+        iid: invoice.id,
+      ));
     } else {
-      itemBloc.add(DeleteItems(iid: invoice.id));
       invoiceBloc.add(EditInvoice(invoice: invoice));
+      itemBloc.add(ReplaceItems(
+        items: invoice.items,
+        iid: invoice.id,
+      ));
     }
-    itemBloc.add(AddItems(
-      items: invoice.items,
-      iid: invoice.id,
-    ));
     context.pop();
   }
-
-  // void onDelete() {
-  //   DialogWidget.show(
-  //     context,
-  //     title: 'Delete invoice?',
-  //     delete: true,
-  //     onPressed: () {
-  //       context.read<InvoiceBloc>().add(DeleteInvoice(invoice: invoice));
-  //       context.read<ItemBloc>().add(DeleteItems(items: invoice.items));
-  //       context.pop();
-  //       context.pop();
-  //     },
-  //   );
-  // }
 
   @override
   void initState() {
     super.initState();
-
     taxController.text = widget.invoice?.tax ?? '';
 
     final template = context.read<OnboardRepository>().getTemplate();
@@ -426,7 +430,7 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                SvgString(string: invoice.signature),
+                SignatureWidget(string: invoice.signature),
               ],
             ),
           ),

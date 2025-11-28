@@ -31,8 +31,9 @@ class _EditItemScreenState extends State<EditItemScreen> {
   final priceController = TextEditingController();
   final discountPriceController = TextEditingController();
 
+  late Item item;
+
   bool active = false;
-  bool saveToItems = false;
 
   void onChanged(String _) {
     setState(() {
@@ -43,19 +44,13 @@ class _EditItemScreenState extends State<EditItemScreen> {
     });
   }
 
-  void onSaveToItems() {
-    setState(() {
-      saveToItems = !saveToItems;
-    });
-  }
-
   void onDelete() {
     DialogWidget.show(
       context,
       title: 'Delete item?',
       delete: true,
       onPressed: () {
-        context.read<ItemBloc>().add(DeleteItems(items: [widget.item!]));
+        context.read<ItemBloc>().add(DeleteItem(item: widget.item!));
         context.pop();
         context.pop();
       },
@@ -63,35 +58,39 @@ class _EditItemScreenState extends State<EditItemScreen> {
   }
 
   void onSave() {
+    item.title = titleController.text;
+    item.type = typeController.text;
+    item.price = priceController.text;
+    item.discountPrice = discountPriceController.text;
+
+    final bloc = context.read<ItemBloc>();
+
     if (widget.item == null) {
-      final item = Item(
-        id: getID(),
-        title: titleController.text,
-        type: typeController.text,
-        price: priceController.text,
-        discountPrice: discountPriceController.text,
-      );
-      context.read<ItemBloc>().add(AddItems(items: [item]));
+      bloc.add(AddItems(items: [item]));
     } else {
-      final item = widget.item!;
-      item.title = titleController.text;
-      item.type = typeController.text;
-      item.price = priceController.text;
-      item.discountPrice = discountPriceController.text;
-      context.read<ItemBloc>().add(EditItem(item: item));
+      bloc.add(EditItem(item: item));
     }
+
     context.pop();
   }
 
   @override
   void initState() {
     super.initState();
-    if (widget.item != null) {
-      titleController.text = widget.item!.title;
-      typeController.text = widget.item!.type;
-      priceController.text = widget.item!.price;
-      discountPriceController.text = widget.item!.discountPrice;
-    }
+
+    titleController.text = widget.item?.title ?? '';
+    typeController.text = widget.item?.type ?? '';
+    priceController.text = widget.item?.price ?? '';
+    discountPriceController.text = widget.item?.discountPrice ?? '';
+
+    item = Item(
+      id: widget.item?.id ?? getID(),
+      title: titleController.text,
+      type: typeController.text,
+      price: priceController.text,
+      discountPrice: discountPriceController.text,
+      iid: widget.item?.iid ?? '',
+    );
   }
 
   @override

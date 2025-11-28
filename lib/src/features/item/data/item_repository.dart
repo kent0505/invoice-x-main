@@ -38,8 +38,8 @@ final class ItemRepositoryImpl implements ItemRepository {
     await _db.update(
       Item.table,
       item.toMap(),
-      where: 'id = ?',
-      whereArgs: [item.id],
+      where: 'id = ? AND iid = ?',
+      whereArgs: [item.id, item.iid],
     );
   }
 

@@ -11,10 +11,11 @@ import '../../../core/widgets/field.dart';
 import '../../../core/widgets/main_button.dart';
 import '../../../core/widgets/svg_widget.dart';
 import '../../../core/widgets/title_text.dart';
+import '../../signature/screens/signature_screen.dart';
+import '../../signature/widgets/signature_widget.dart';
 import '../bloc/business_bloc.dart';
 import '../models/business.dart';
 import '../widgets/business_logo.dart';
-import 'signature_screen.dart';
 
 class EditBusinessScreen extends StatefulWidget {
   const EditBusinessScreen({super.key, required this.business});
@@ -38,8 +39,8 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
   final accountNoController = TextEditingController();
   final vatController = TextEditingController();
 
-  String image = '';
-  String signature = '';
+  late Business business;
+
   bool active = true;
 
   void onChanged(String _) {
@@ -49,18 +50,16 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
   }
 
   void onAddLogo() async {
-    image = await pickImage();
+    business.image = await pickImage();
     onChanged('');
   }
 
   void onSignature() async {
     context.push<String?>(SignatureScreen.routePath).then(
       (value) {
-        if (value != null) {
-          setState(() {
-            signature = value;
-          });
-        }
+        setState(() {
+          business.signature = value ?? '';
+        });
       },
     );
   }
@@ -81,55 +80,49 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
   }
 
   void onSave() {
-    if (widget.business == null) {
-      final business = Business(
-        name: nameController.text,
-        phone: phoneController.text,
-        email: emailController.text,
-        address: addressController.text,
-        bank: bankController.text,
-        swift: swiftController.text,
-        iban: ibanController.text,
-        accountNo: accountNoController.text,
-        vat: vatController.text,
-        image: image,
-        signature: signature,
-      );
-      context.read<BusinessBloc>().add(AddBusiness(business: business));
-    } else {
-      final business = widget.business!;
-      business.name = nameController.text;
-      business.phone = phoneController.text;
-      business.email = emailController.text;
-      business.address = addressController.text;
-      business.bank = bankController.text;
-      business.iban = ibanController.text;
-      business.swift = swiftController.text;
-      business.accountNo = accountNoController.text;
-      business.vat = vatController.text;
-      business.image = image;
-      business.signature = signature;
-      context.read<BusinessBloc>().add(EditBusiness(business: business));
-    }
+    business.name = nameController.text;
+    business.email = emailController.text;
+    business.phone = phoneController.text;
+    business.address = addressController.text;
+    business.bank = bankController.text;
+    business.swift = swiftController.text;
+    business.iban = ibanController.text;
+    business.accountNo = accountNoController.text;
+    business.vat = vatController.text;
+
+    context.read<BusinessBloc>().add(widget.business == null
+        ? AddBusiness(business: business)
+        : EditBusiness(business: business));
     context.pop();
   }
 
   @override
   void initState() {
     super.initState();
-    if (widget.business != null) {
-      nameController.text = widget.business!.name;
-      phoneController.text = widget.business!.phone;
-      emailController.text = widget.business!.email;
-      addressController.text = widget.business!.address;
-      bankController.text = widget.business!.bank;
-      swiftController.text = widget.business!.swift;
-      ibanController.text = widget.business!.iban;
-      accountNoController.text = widget.business!.accountNo;
-      vatController.text = widget.business!.vat;
-      image = widget.business!.image;
-      signature = widget.business!.signature;
-    }
+    nameController.text = widget.business?.name ?? '';
+    phoneController.text = widget.business?.phone ?? '';
+    emailController.text = widget.business?.email ?? '';
+    addressController.text = widget.business?.address ?? '';
+    bankController.text = widget.business?.bank ?? '';
+    swiftController.text = widget.business?.swift ?? '';
+    ibanController.text = widget.business?.iban ?? '';
+    accountNoController.text = widget.business?.accountNo ?? '';
+    vatController.text = widget.business?.vat ?? '';
+
+    business = Business(
+      id: widget.business?.id ?? 0,
+      name: nameController.text,
+      email: emailController.text,
+      phone: phoneController.text,
+      address: addressController.text,
+      bank: bankController.text,
+      swift: swiftController.text,
+      iban: ibanController.text,
+      accountNo: accountNoController.text,
+      vat: vatController.text,
+      image: widget.business?.image ?? '',
+      signature: widget.business?.signature ?? '',
+    );
   }
 
   @override
@@ -170,7 +163,7 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
               padding: const EdgeInsets.all(16),
               children: [
                 BusinessLogo(
-                  image: image,
+                  image: business.image,
                   onPressed: onAddLogo,
                 ),
                 const SizedBox(height: 16),
@@ -253,14 +246,8 @@ class _EditBusinessScreenState extends State<EditBusinessScreen> {
                   controller: vatController,
                   hintText: 'VAT',
                 ),
-                if (signature.isNotEmpty) ...[
-                  const SizedBox(height: 16),
-                  const TitleText(
-                    title: 'Signature',
-                    additional: 'Optional',
-                  ),
-                  SvgString(string: signature),
-                ],
+                const SizedBox(height: 16),
+                SignatureWidget(string: business.signature),
               ],
             ),
           ),
