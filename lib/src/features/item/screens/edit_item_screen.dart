@@ -29,7 +29,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
   final titleController = TextEditingController();
   final typeController = TextEditingController();
   final priceController = TextEditingController();
-  final discountPriceController = TextEditingController();
+  final discountController = TextEditingController();
 
   late Item item;
 
@@ -61,7 +61,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
     item.title = titleController.text;
     item.type = typeController.text;
     item.price = priceController.text;
-    item.discountPrice = discountPriceController.text;
+    item.discount = discountController.text;
 
     final bloc = context.read<ItemBloc>();
 
@@ -81,14 +81,14 @@ class _EditItemScreenState extends State<EditItemScreen> {
     titleController.text = widget.item?.title ?? '';
     typeController.text = widget.item?.type ?? '';
     priceController.text = widget.item?.price ?? '';
-    discountPriceController.text = widget.item?.discountPrice ?? '';
+    discountController.text = widget.item?.discount ?? '';
 
     item = Item(
       id: widget.item?.id ?? getID(),
       title: titleController.text,
       type: typeController.text,
       price: priceController.text,
-      discountPrice: discountPriceController.text,
+      discount: discountController.text,
       iid: widget.item?.iid ?? '',
     );
   }
@@ -98,7 +98,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
     titleController.dispose();
     typeController.dispose();
     priceController.dispose();
-    discountPriceController.dispose();
+    discountController.dispose();
     super.dispose();
   }
 
@@ -170,7 +170,7 @@ class _EditItemScreenState extends State<EditItemScreen> {
                 // const SizedBox(height: 6),
                 // if (hasDiscount)
                 Field(
-                  controller: discountPriceController,
+                  controller: discountController,
                   hintText: '0',
                   fieldType: FieldType.decimal,
                   onChanged: onChanged,

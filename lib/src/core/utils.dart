@@ -27,8 +27,12 @@ int getTimestamp() {
 }
 
 double getItemPrice(Item item) {
-  final price = item.discountPrice.isNotEmpty ? item.discountPrice : item.price;
-  return double.tryParse(price) ?? 0;
+  final original = double.tryParse(item.price) ?? 0;
+  final percent = double.tryParse(item.discount) ?? 0;
+
+  final discountAmount = original * (percent / 100);
+
+  return original - discountAmount;
 }
 
 String formatTimestamp(int timestamp) {

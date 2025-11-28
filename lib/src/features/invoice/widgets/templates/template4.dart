@@ -3,37 +3,23 @@ import 'package:flutter/material.dart';
 import '../../../../core/constants.dart';
 import '../../../../core/utils.dart';
 import '../../../../core/widgets/image_widget.dart';
-import '../../../item/models/item.dart';
 import '../../../signature/widgets/signature_widget.dart';
 import '../../models/invoice.dart';
+import '../../models/template_data.dart';
 import '../template_body.dart';
 
 class Template4 extends StatelessWidget {
-  const Template4({super.key, required this.invoice});
+  const Template4({
+    super.key,
+    required this.invoice,
+    required this.data,
+  });
 
   final Invoice invoice;
+  final TemplateData data;
 
   @override
   Widget build(BuildContext context) {
-    final type = invoice.photos.isEmpty ? 'INVOICE' : 'ESTIMATE';
-
-    final uniqueInvoiceIDs = <String>{};
-    final uniqueItems = <Item>[];
-    double subtotal = 0;
-    double discount = 0;
-
-    for (final item in invoice.items) {
-      subtotal += double.tryParse(item.price) ?? 0;
-      discount += double.tryParse(item.discountPrice) ?? 0;
-      if (uniqueInvoiceIDs.add(item.id)) {
-        uniqueItems.add(item);
-      }
-    }
-
-    final taxPercent = double.tryParse(invoice.tax) ?? 0;
-    double taxAmount = discount * (taxPercent / 100);
-    double total = discount + taxAmount;
-
     return TemplateBody(
       child: Stack(
         children: [
@@ -65,7 +51,7 @@ class Template4 extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '$type #${invoice.number}',
+                          '${data.type} #${invoice.number}',
                           style: const TextStyle(
                             color: Colors.black,
                             fontSize: 20,
@@ -211,17 +197,17 @@ class Template4 extends StatelessWidget {
               ),
               Column(
                 children: List.generate(
-                  uniqueItems.length,
+                  data.uniqueItems.length,
                   (index) {
                     int qty = 0;
 
                     for (final item in invoice.items) {
-                      if (item.id == uniqueItems[index].id) {
+                      if (item.id == data.uniqueItems[index].id) {
                         qty++;
                       }
                     }
 
-                    final price = getItemPrice(uniqueItems[index]);
+                    final price = getItemPrice(data.uniqueItems[index]);
 
                     final color =
                         index % 2 == 0 ? const Color(0xffD7D9E5) : Colors.white;
@@ -232,7 +218,7 @@ class Template4 extends StatelessWidget {
                       child: Row(
                         children: [
                           Expanded(
-                            child: _TableData(uniqueItems[index].title),
+                            child: _TableData(data.uniqueItems[index].title),
                           ),
                           SizedBox(
                             width: 80,
@@ -266,20 +252,19 @@ class Template4 extends StatelessWidget {
                         children: [
                           _Data(
                             title: 'Subtotal:  ',
-                            data: '\$${subtotal.toStringAsFixed(2)}',
+                            data: '\$${data.subtotal.toStringAsFixed(2)}',
                           ),
                           _Data(
                             title: 'Discount:  ',
-                            data:
-                                '\$${(subtotal - discount).toStringAsFixed(2)}',
+                            data: '\$${(data.discount).toStringAsFixed(2)}',
                           ),
                           _Data(
                             title: 'Tax (${invoice.tax}%):  ',
-                            data: '\$${(total - discount).toStringAsFixed(2)}',
+                            data: '\$${(data.tax).toStringAsFixed(2)}',
                           ),
                           _Data(
                             title: 'Total:  ',
-                            data: '\$${total.toStringAsFixed(2)}',
+                            data: '\$${data.total.toStringAsFixed(2)}',
                             fontFamily: AppFonts.w600,
                           ),
                           const SizedBox(height: 20),
@@ -332,7 +317,7 @@ class _Data extends StatelessWidget {
   const _Data({
     required this.title,
     required this.data,
-    this.fontFamily = AppFonts.w400,
+    this.fontFamily = AppFonts.w500,
   });
 
   final String title;
@@ -394,7 +379,7 @@ class _TableData extends StatelessWidget {
         style: const TextStyle(
           color: Colors.black,
           fontSize: 8,
-          fontFamily: AppFonts.w400,
+          fontFamily: AppFonts.w500,
         ),
       ),
     );

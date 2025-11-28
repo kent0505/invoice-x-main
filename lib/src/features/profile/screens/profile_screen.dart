@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:in_app_review/in_app_review.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/utils.dart';
@@ -94,12 +95,16 @@ class ProfileScreen extends StatelessWidget {
         _Tile(
           title: 'Rate App',
           onPressed: () async {
-            // final InAppReview inAppReview = InAppReview.instance;
-            // if (await inAppReview.isAvailable()) {
-            //   await inAppReview.requestReview();
-            // } else {
-            //   await inAppReview.openStoreListing();
-            // }
+            try {
+              final InAppReview inAppReview = InAppReview.instance;
+              if (await inAppReview.isAvailable()) {
+                await inAppReview.requestReview();
+              } else {
+                await inAppReview.openStoreListing();
+              }
+            } catch (e) {
+              logger(e);
+            }
           },
         ),
       ],

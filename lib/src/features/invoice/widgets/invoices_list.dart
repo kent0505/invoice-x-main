@@ -134,8 +134,12 @@ class _InvoiceTile extends StatelessWidget {
                     amount += getItemPrice(item);
                   }
 
+                  final taxPercent = double.tryParse(invoice.tax) ?? 0;
+                  final taxAmount = amount * (taxPercent / 100);
+                  final total = amount + taxAmount;
+
                   return Text(
-                    '$currency$amount',
+                    '$currency${total.toStringAsFixed(2)}',
                     textAlign: TextAlign.end,
                     style: TextStyle(
                       color: colors.text,

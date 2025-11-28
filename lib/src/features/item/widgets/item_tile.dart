@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:invoice_app/src/core/utils.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/widgets/button.dart';
@@ -51,7 +52,7 @@ class ItemTile extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    '$currency${item.discountPrice.isEmpty ? item.price : item.discountPrice}',
+                    '$currency${getItemPrice(item).toStringAsFixed(2)}',
                     style: TextStyle(
                       color: colors.text2,
                       fontSize: 14,

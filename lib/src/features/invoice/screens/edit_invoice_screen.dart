@@ -154,7 +154,7 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
           title: value.title,
           type: value.type,
           price: value.price,
-          discountPrice: value.discountPrice,
+          discount: value.discount,
         ),
       );
     } else {
