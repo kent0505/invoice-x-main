@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:invoice_app/src/features/vip/screens/vip_screen.dart';
 
 import '../../../core/constants.dart';
 import '../../../core/utils.dart';
@@ -25,6 +26,7 @@ import '../../item/screens/items_screen.dart';
 import '../../onboard/data/onboard_repository.dart';
 import '../../profile/data/profile_repository.dart';
 import '../../signature/widgets/signature_widget.dart';
+import '../../vip/bloc/vip_bloc.dart';
 import '../../vip/widgets/vip_widget.dart';
 import '../bloc/invoice_bloc.dart';
 import '../models/invoice.dart';
@@ -194,7 +196,12 @@ class _EditInvoiceScreenState extends State<EditInvoiceScreen> {
 
     final invoiceBloc = context.read<InvoiceBloc>();
     final itemBloc = context.read<ItemBloc>();
+    final vipBloc = context.read<VipBloc>();
+
     if (widget.invoice == null) {
+      if (vipBloc.state.free <= 0) return VipScreen.open(context);
+
+      vipBloc.add(UseFree());
       invoiceBloc.add(AddInvoice(invoice: invoice));
       itemBloc.add(AddItems(
         items: invoice.items,

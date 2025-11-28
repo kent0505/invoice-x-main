@@ -10,3 +10,5 @@ final class CheckPurchased extends VipEvent {
 
   final CustomerInfo customerInfo;
 }
+
+final class UseFree extends VipEvent {}

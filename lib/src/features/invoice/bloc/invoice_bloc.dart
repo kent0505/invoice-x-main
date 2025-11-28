@@ -38,8 +38,6 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
       final invoices = await _invoiceRepository.getInvoices();
       final photos = await _photoRepository.getPhotos();
 
-      logger(photos.length);
-
       emit(state.copyWith(
         invoices: invoices.reversed.toList(),
         photos: photos.toList(),

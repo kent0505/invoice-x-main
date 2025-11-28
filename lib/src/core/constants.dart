@@ -12,6 +12,7 @@ abstract final class Constants {
   static const double navBarHeight = 74;
   static const double mainButtonWidth = 168;
   static const int milliseconds = 400;
+  static const int free = 2;
 }
 
 abstract final class Assets {
@@ -53,7 +54,7 @@ abstract final class Assets {
 abstract final class Keys {
   static const String onboard = 'onboard';
   // static const String showCount = 'showCount'; // amount of displayed paywalls
-  // static const String available = 'available'; // free create invoice amount
+  static const String free = 'free'; // free create invoice amount
   static const String currency = 'currency';
   static const String template = 'template';
   static const String userID = 'userID';

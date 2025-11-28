@@ -29,6 +29,7 @@ import 'src/features/item/models/item.dart';
 import 'src/features/onboard/data/onboard_repository.dart';
 import 'src/features/profile/data/profile_repository.dart';
 import 'src/features/vip/bloc/vip_bloc.dart';
+import 'src/features/vip/data/vip_repository.dart';
 import 'src/features/vip/screens/vip_screen.dart';
 
 // final colors = Theme.of(context).extension<MyColors>()!;
@@ -82,6 +83,9 @@ void main() async {
         RepositoryProvider<ProfileRepository>(
           create: (context) => ProfileRepositoryImpl(prefs: prefs),
         ),
+        RepositoryProvider<VipRepository>(
+          create: (context) => VipRepositoryImpl(prefs: prefs),
+        ),
         RepositoryProvider<InvoiceRepository>(
           create: (context) => InvoiceRepositoryImpl(db: db),
         ),
@@ -105,7 +109,9 @@ void main() async {
             create: (context) => InternetBloc()..add(CheckInternet()),
           ),
           BlocProvider(
-            create: (context) => VipBloc()..add(CheckVip()),
+            create: (context) => VipBloc(
+              repository: context.read<VipRepository>(),
+            )..add(CheckVip()),
           ),
           BlocProvider(
             create: (context) => InvoiceBloc(
